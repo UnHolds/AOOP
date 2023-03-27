@@ -20,7 +20,6 @@ public class ServerClient implements IServerClient, Runnable{
     private boolean stop;
     private static final int DATA_SIZE = 512;
 
-    private MessageSender sender;
 
     private IServer server;
 
@@ -28,11 +27,10 @@ public class ServerClient implements IServerClient, Runnable{
     private ConcurrentLinkedQueue<IMessage> messagesReceived = new ConcurrentLinkedQueue<>();
     private static Logger log = LogManager.getLogger(ServerClient.class);
 
-    public ServerClient(Socket client, MessageSender sender, IServer server) throws IOException {
+    public ServerClient(Socket client, IServer server) throws IOException {
         this.client = client;
         this.input = new DataInputStream(client.getInputStream());
         this.output = new DataOutputStream(client.getOutputStream());
-        this.sender = sender;
         this.server = server;
     }
 
@@ -62,15 +60,10 @@ public class ServerClient implements IServerClient, Runnable{
     }
 
     @Override
-    public void sendMessage(IMessage message) {
-        this.messagesToSent.add(message);
+    public void sendMessage(IMessage message) throws IOException {
+        this.output.write(message.toBytes());
     }
 
-    @Override
-    public void sendMessageNow(IMessage message) {
-        this.sendMessage(message);
-        this.sender.sendDataNow();
-    }
 
     private IMessage readMessage(){
         byte[] data = new byte[DATA_SIZE];
@@ -95,7 +88,6 @@ public class ServerClient implements IServerClient, Runnable{
     @Override
     public void run() {
         this.log.debug("Attach message sender to sever client: " + this.client.getInetAddress().getHostAddress());
-        this.sender.addSendWatch(new MessageSenderHandler(this.output, this.messagesToSent));
         mainServerClientLoop();
         this.log.info("Client: " + this.client.getInetAddress().getHostAddress() + " thread stopped");
     }
