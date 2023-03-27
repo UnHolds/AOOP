@@ -6,11 +6,15 @@ import java.net.Socket;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 public class Server implements IServer, Runnable{
 
     private ServerSocket socket;
     private List<ServerClient> clients = new ArrayList<>();
     private int numPlayers;
+    private static Logger log = LogManager.getLogger(Server.class);
 
     private void waitForClients() {
         for(int i = 0; i < this.numPlayers; i++) {
@@ -18,7 +22,7 @@ public class Server implements IServer, Runnable{
                 Socket client = this.socket.accept();
                 this.clients.add(new ServerClient(client));
             }catch (IOException e){
-
+                log.debug("Could not accept client", e);
             }
         }
     }
