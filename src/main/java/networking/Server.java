@@ -21,10 +21,13 @@ public class Server implements IServer, Runnable{
             try {
                 Socket client = this.socket.accept();
                 this.clients.add(new ServerClient(client));
+                this.log.info("Client num " + (i+1) +" of " + this.numPlayers + " has connected with address " + client.getInetAddress().getHostAddress());
             }catch (IOException e){
-                log.debug("Could not accept client", e);
+                this.log.debug("Could not accept client", e);
+                i--;
             }
         }
+        this.log.info("All clients have connected to the server");
     }
 
     @Override
@@ -38,6 +41,6 @@ public class Server implements IServer, Runnable{
 
     @Override
     public void run() {
-
+        waitForClients();
     }
 }
