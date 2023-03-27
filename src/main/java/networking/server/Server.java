@@ -17,12 +17,14 @@ public class Server implements IServer, Runnable{
     private static Logger log = LogManager.getLogger(Server.class);
     private boolean stopped = false;
 
+    private MessageSender sender;
+
     private void waitForClients() {
         this.log.info("Waiting for clients");
         while(this.acceptClients && this.stopped == false) {
             try {
                 Socket client = this.socket.accept();
-                IServerClient serverClient = new ServerClient(client);
+                IServerClient serverClient = new ServerClient(client, this.sender);
                 this.clients.add(serverClient);
                 serverClient.dispatch();
                 this.log.info("Client has connected with address " + client.getInetAddress().getHostAddress());
@@ -45,6 +47,7 @@ public class Server implements IServer, Runnable{
         this.log.info("starting server on port: " + port);
         this.socket = new ServerSocket(port);
         this.acceptClients = true;
+        this.sender = new MessageSender();
         Thread t = new Thread(this);
         t.start();
         return t;
