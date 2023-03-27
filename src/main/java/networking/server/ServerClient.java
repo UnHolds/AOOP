@@ -1,5 +1,6 @@
 package networking.server;
 
+import networking.IMessage;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -16,13 +17,12 @@ public class ServerClient implements IServerClient, Runnable{
     private DataInputStream input;
     private  DataOutputStream output;
     private Thread thread;
-    private boolean stopped;
+    private boolean stop;
+    private static final int DATA_SIZE = 512;
 
     private MessageSender sender;
 
-    private ConcurrentLinkedQueue<String> receivedData = new ConcurrentLinkedQueue<>();
-    private ConcurrentLinkedQueue<String> sendData = new ConcurrentLinkedQueue<>();
-
+    private ConcurrentLinkedQueue<IMessage> messagesToSent = new ConcurrentLinkedQueue<>();
     private static Logger log = LogManager.getLogger(ServerClient.class);
 
     public ServerClient(Socket client, MessageSender sender) throws IOException {
@@ -44,6 +44,7 @@ public class ServerClient implements IServerClient, Runnable{
 
     @Override
     public void stop() {
+        this.stop = true;
         try {
             this.client.close();
         } catch (IOException e) {
@@ -51,15 +52,29 @@ public class ServerClient implements IServerClient, Runnable{
         }
     }
 
+    private IMessage readMessage(){
+        byte[] data = new byte[DATA_SIZE];
+        try {
+            this.input.read(data);
+        } catch (IOException e) {
+            this.log.error("Could not read from data input stream, client: " + this.client.getInetAddress().getHostAddress());
+        }
+
+        //TODO ADD MESSAGE PARSER TO GET IMESSAGE
+
+        return null;
+    }
+
     private void mainServerClientLoop(){
-        while(this.stopped == false){
+        while(this.stop == false){
+            readMessage();
         }
     }
 
     @Override
     public void run() {
         this.log.debug("Attach message sender to sever client: " + this.client.getInetAddress().getHostAddress());
-        this.sender.addSendWatch(new MessageSenderHandler(this.output, this.sendData));
+        this.sender.addSendWatch(new MessageSenderHandler(this.output, this.messagesToSent));
         mainServerClientLoop();
         this.log.info("Client: " + this.client.getInetAddress().getHostAddress() + " thread stopped");
     }

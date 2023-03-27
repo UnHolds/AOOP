@@ -13,7 +13,7 @@ public class MessageSender implements Runnable{
     private boolean stop = false;
     private Logger log = LogManager.getLogger(MessageSender.class);
 
-    private ConcurrentLinkedQueue<MessageSenderHandler> handlers;
+    private ConcurrentLinkedQueue<MessageSenderHandler> handlers = new ConcurrentLinkedQueue<>();
 
     public MessageSender(){
         this.thread = new Thread(this);
@@ -27,7 +27,7 @@ public class MessageSender implements Runnable{
     }
 
     public void sendDataNow(){
-        this.thread.interrupt();
+        this.notify();
     }
 
     public void stop(){
@@ -37,8 +37,9 @@ public class MessageSender implements Runnable{
     @Override
     public void run() {
         while(this.stop == false) {
+
             try {
-                Thread.sleep(100);
+                this.wait(100);
             } catch (InterruptedException e) {
                 // ignored
             }
