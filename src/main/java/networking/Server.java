@@ -42,6 +42,7 @@ public class Server implements IServer, Runnable{
 
     @Override
     public Thread start(int port) throws IOException {
+        this.log.info("starting server on port: " + port);
         this.socket = new ServerSocket(port);
         this.acceptClients = true;
         Thread t = new Thread(this);
@@ -84,5 +85,6 @@ public class Server implements IServer, Runnable{
     public void run() {
         waitForClients();
         mainServerLoop();
+        this.log.info("Server thread stopped");
     }
 }

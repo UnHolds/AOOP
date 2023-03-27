@@ -10,10 +10,12 @@ public class ServerTest {
 
     @Test
     @DisplayName("Just start the server and close the server when the server waits for clients")
-    public void testStartServerAndStopServerWhenServerWaitsForClients() throws IOException {
+    public void testStartServerAndStopServerWhenServerWaitsForClients() throws IOException, InterruptedException {
         IServer server = new Server();
         server.start(18899);
+        Thread.sleep(100);
         server.stop();
+        Thread.sleep(100);
     }
 
     @Test
@@ -21,8 +23,9 @@ public class ServerTest {
         IServer server = new Server();
         server.start(18899);
         new Socket("127.0.0.1", 18899);
-        Thread.sleep(1000);
+        Thread.sleep(100);
         server.stop();
+        Thread.sleep(100);
     }
 
     @Test
@@ -30,9 +33,10 @@ public class ServerTest {
         IServer server = new Server();
         server.start(18899);
         new Socket("127.0.0.1", 18899);
-        Thread.sleep(500);
+        Thread.sleep(100);
         server.startGame();
-        Thread.sleep(500);
+        Thread.sleep(100);
         server.stop();
+        Thread.sleep(100);
     }
 }
