@@ -24,7 +24,6 @@ public class ServerClient implements IServerClient, Runnable{
 
     private IServer server;
 
-    private ConcurrentLinkedQueue<IMessage> messagesToSent = new ConcurrentLinkedQueue<>();
     private ConcurrentLinkedQueue<IMessage> messagesReceived = new ConcurrentLinkedQueue<>();
     private static Logger log = LogManager.getLogger(ServerClient.class);
 
@@ -91,7 +90,7 @@ public class ServerClient implements IServerClient, Runnable{
 
     @Override
     public void run() {
-        this.log.debug("Attach message sender to sever client: " + this.client.getInetAddress().getHostAddress());
+        this.log.debug("Executing main server client loop for client: " + this.client.getInetAddress().getHostAddress());
         mainServerClientLoop();
         this.log.info("Client: " + this.client.getInetAddress().getHostAddress() + " thread stopped");
     }

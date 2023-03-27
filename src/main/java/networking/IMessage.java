@@ -4,4 +4,7 @@ public interface IMessage {
 
 
     byte[] toBytes();
+
+    MessageType getMessageType();
+
 }
