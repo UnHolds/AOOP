@@ -1,5 +1,7 @@
 package networking;
 
+import networking.server.IServer;
+import networking.server.Server;
 import org.junit.Test;
 import org.junit.jupiter.api.DisplayName;
 

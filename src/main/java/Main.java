@@ -1,4 +1,4 @@
-import networking.Server;
+import networking.server.Server;
 
 import java.io.IOException;
 
