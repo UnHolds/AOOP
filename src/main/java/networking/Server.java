@@ -12,9 +12,15 @@ public class Server implements IServer, Runnable{
     private List<ServerClient> clients = new ArrayList<>();
     private int numPlayers;
 
-    private void waitForClients() throws IOException {
-        Socket client = this.socket.accept();
-        this.clients.add(new ServerClient(client));
+    private void waitForClients() {
+        for(int i = 0; i < this.numPlayers; i++) {
+            try {
+                Socket client = this.socket.accept();
+                this.clients.add(new ServerClient(client));
+            }catch (IOException e){
+
+            }
+        }
     }
 
     @Override
