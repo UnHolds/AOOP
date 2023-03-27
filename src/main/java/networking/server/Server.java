@@ -20,14 +20,14 @@ public class Server implements IServer, Runnable{
     private MessageSender sender;
 
     private void waitForClients() {
-        this.log.info("Waiting for clients");
+        log.info("Waiting for clients");
         while(this.acceptClients && this.stop == false) {
             try {
                 Socket client = this.socket.accept();
                 IServerClient serverClient = new ServerClient(client, this.sender, this);
                 this.clients.add(serverClient);
                 serverClient.dispatch();
-                this.log.info("Client has connected with address " + client.getInetAddress().getHostAddress());
+                log.info("Client has connected with address " + client.getInetAddress().getHostAddress());
             }catch (IOException e){
                 if(this.socket.isClosed() && this.stop){
                     return;
@@ -35,16 +35,16 @@ public class Server implements IServer, Runnable{
                     break;
                 }
                 else{
-                    this.log.debug("Could not accept client", e);
+                    log.debug("Could not accept client", e);
                 }
             }
         }
-        this.log.info("No longer accepting clients");
+        log.info("No longer accepting clients");
     }
 
     @Override
     public Thread start(int port) throws IOException {
-        this.log.info("starting server on port: " + port);
+        log.info("starting server on port: " + port);
         this.socket = new ServerSocket(port);
         this.acceptClients = true;
         this.sender = new MessageSender();
@@ -59,7 +59,7 @@ public class Server implements IServer, Runnable{
         try {
             this.socket.close();
         } catch (IOException e) {
-            this.log.error("Could not close serverSocket", e);
+            log.error("Could not close serverSocket", e);
         }
     }
 
@@ -70,7 +70,7 @@ public class Server implements IServer, Runnable{
 
     @Override
     public void stop() throws IOException {
-        this.log.info("Stopping server");
+        log.info("Stopping server");
         this.stop = true;
         this.acceptClients = false;
 
@@ -84,7 +84,7 @@ public class Server implements IServer, Runnable{
     }
 
     private void mainServerLoop(){
-        this.log.info("Starting main server loop");
+        log.info("Starting main server loop");
 
         while(this.stop == false){
             try {
@@ -103,6 +103,6 @@ public class Server implements IServer, Runnable{
     public void run() {
         waitForClients();
         mainServerLoop();
-        this.log.info("Server thread stopped");
+        log.info("Server thread stopped");
     }
 }
