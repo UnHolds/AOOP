@@ -12,4 +12,6 @@ public interface IClient {
 
     List<IMessage> getMessages();
 
+    void sendMessage(IMessage message);
+
 }

@@ -84,6 +84,11 @@ public class Server implements IServer, Runnable{
         //TODO maybe do more stop
     }
 
+    @Override
+    public List<IServerClient> getClients() {
+        return this.clients;
+    }
+
     private void sendToAllClients(IMessage message){
         for(IServerClient client : this.clients){
             try {

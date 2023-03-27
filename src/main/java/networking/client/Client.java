@@ -62,6 +62,15 @@ public class Client implements IClient, Runnable{
         }
     }
 
+    @Override
+    public void sendMessage(IMessage message) {
+        try {
+            this.output.println(message.toBase64String());
+        } catch (IOException e) {
+            log.error("Could not send message to server", e);
+        }
+    }
+
 
     @Override
     public void run() {
