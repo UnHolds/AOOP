@@ -20,7 +20,6 @@ public class Client implements IClient, Runnable{
     private DataInputStream input;
     private  DataOutputStream output;
     private Socket server;
-    private static final int DATA_SIZE = 512;
     private boolean stop = false;
     private List<IMessage> messages = new ArrayList<>();
     private static Logger log = LogManager.getLogger(Server.class);
@@ -43,7 +42,7 @@ public class Client implements IClient, Runnable{
 
     private void mainClientLoop(){
         while(this.stop == false && this.server.isClosed() == false) {
-            byte[] data = new byte[DATA_SIZE];
+            byte[] data = new byte[IMessage.SIZE];
             try {
                 input.readFully(data);
 

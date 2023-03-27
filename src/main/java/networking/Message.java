@@ -14,7 +14,7 @@ public class Message implements IMessage{
 
     @Override
     public byte[] toBytes() {
-        return new byte[0];
+        return new byte[SIZE];
     }
 
     @Override

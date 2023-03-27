@@ -19,7 +19,6 @@ public class ServerClient implements IServerClient, Runnable{
     private  DataOutputStream output;
     private Thread thread;
     private boolean stop;
-    private static final int DATA_SIZE = 512;
 
 
     private IServer server;
@@ -71,9 +70,9 @@ public class ServerClient implements IServerClient, Runnable{
 
 
     private IMessage readMessage(){
-        byte[] data = new byte[DATA_SIZE];
+        byte[] data = new byte[IMessage.SIZE];
         try {
-            this.input.read(data);
+            this.input.readFully(data);
         } catch (IOException e) {
             this.log.error("Could not read from data input stream, client: " + this.client.getInetAddress().getHostAddress());
         }
