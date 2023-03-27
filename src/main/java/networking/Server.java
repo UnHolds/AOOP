@@ -12,7 +12,7 @@ import org.apache.logging.log4j.Logger;
 public class Server implements IServer, Runnable{
 
     private ServerSocket socket;
-    private List<ServerClient> clients = new ArrayList<>();
+    private List<IServerClient> clients = new ArrayList<>();
     private int numPlayers;
     private static Logger log = LogManager.getLogger(Server.class);
 
@@ -20,7 +20,9 @@ public class Server implements IServer, Runnable{
         for(int i = 0; i < this.numPlayers; i++) {
             try {
                 Socket client = this.socket.accept();
-                this.clients.add(new ServerClient(client));
+                IServerClient serverClient = new ServerClient(client);
+                this.clients.add(serverClient);
+                serverClient.dispatch();
                 this.log.info("Client num " + (i+1) +" of " + this.numPlayers + " has connected with address " + client.getInetAddress().getHostAddress());
             }catch (IOException e){
                 this.log.debug("Could not accept client", e);
