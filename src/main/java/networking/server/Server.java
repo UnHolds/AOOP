@@ -97,7 +97,9 @@ public class Server implements IServer, Runnable{
 
         while(this.stop == false){
             try {
-                this.wait();
+                synchronized (this) {
+                    this.wait();
+                }
             } catch (InterruptedException e) {
                 //ignored
             }
