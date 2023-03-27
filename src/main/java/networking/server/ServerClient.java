@@ -64,6 +64,11 @@ public class ServerClient implements IServerClient, Runnable{
         this.output.write(message.toBytes());
     }
 
+    @Override
+    public String getAddress() {
+        return this.client.getInetAddress().getHostAddress();
+    }
+
 
     private IMessage readMessage(){
         byte[] data = new byte[DATA_SIZE];

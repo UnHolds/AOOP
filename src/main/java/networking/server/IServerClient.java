@@ -16,4 +16,6 @@ public interface IServerClient {
     ConcurrentLinkedQueue<IMessage> getMessages();
 
     void sendMessage(IMessage message) throws IOException;
+
+    String getAddress();
 }

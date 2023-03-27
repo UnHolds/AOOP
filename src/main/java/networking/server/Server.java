@@ -6,6 +6,7 @@ import java.net.Socket;
 import java.util.ArrayList;
 import java.util.List;
 
+import networking.IMessage;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -79,6 +80,16 @@ public class Server implements IServer, Runnable{
             serverClient.stop();
         }
         //TODO maybe do more stop
+    }
+
+    private void sendToAllClients(IMessage message){
+        for(IServerClient client : this.clients){
+            try {
+                client.sendMessage(message);
+            } catch (IOException e) {
+                log.error("Could not send message to client: " + client.getAddress(), e);
+            }
+        }
     }
 
     private void mainServerLoop(){
