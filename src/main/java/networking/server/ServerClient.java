@@ -69,10 +69,12 @@ public class ServerClient implements IServerClient, Runnable{
 
     private void fetchMessages(){
         try {
-            this.messagesReceived.add(new Message(this.input.readLine()));
+            this.messagesReceived.add(Message.parse(this.input.readLine()));
             this.server.notifyNewMessages();
         } catch (IOException e) {
             this.log.error("Could not read from data input stream, client: " + this.client.getInetAddress().getHostAddress());
+        } catch (ClassNotFoundException e) {
+            this.log.error("Could not convert base64 string to class, client: "  + this.client.getInetAddress().getHostAddress(), e);
         }
     }
 

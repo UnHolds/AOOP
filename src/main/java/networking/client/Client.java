@@ -43,10 +43,12 @@ public class Client implements IClient, Runnable{
             try {
                 String data = input.readLine();
                 synchronized (this) {
-                    messages.add(new Message(data));
+                    messages.add(Message.parse(data));
                 }
             } catch (IOException e) {
                 log.error("Could not read from server", e);
+            } catch (ClassNotFoundException e) {
+                this.log.error("Could not convert base64 string to class", e);
             }
         }
     }
