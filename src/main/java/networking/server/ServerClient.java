@@ -1,6 +1,7 @@
 package networking.server;
 
 import networking.IMessage;
+import networking.Message;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -78,9 +79,7 @@ public class ServerClient implements IServerClient, Runnable{
             this.log.error("Could not read from data input stream, client: " + this.client.getInetAddress().getHostAddress());
         }
 
-        //TODO ADD MESSAGE PARSER TO GET IMESSAGE
-
-        return null;
+        return new Message(data);
     }
 
     private void mainServerClientLoop(){

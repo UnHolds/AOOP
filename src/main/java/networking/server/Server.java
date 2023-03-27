@@ -64,7 +64,9 @@ public class Server implements IServer, Runnable{
 
     @Override
     public void notifyNewMessages() {
-        this.notify();
+        synchronized (this) {
+            this.notify();
+        }
     }
 
     @Override
