@@ -7,6 +7,8 @@ public class Message implements IMessage, Serializable {
 
 
     private MessageType type;
+    private long currentGameTick;
+    
 
     public static IMessage parse(String base64) throws IOException, ClassNotFoundException {
         byte[] data = Base64.getDecoder().decode(base64);
