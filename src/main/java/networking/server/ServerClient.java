@@ -22,14 +22,18 @@ public class ServerClient implements IServerClient, Runnable{
 
     private MessageSender sender;
 
+    private IServer server;
+
     private ConcurrentLinkedQueue<IMessage> messagesToSent = new ConcurrentLinkedQueue<>();
+    private ConcurrentLinkedQueue<IMessage> messagesReceived = new ConcurrentLinkedQueue<>();
     private static Logger log = LogManager.getLogger(ServerClient.class);
 
-    public ServerClient(Socket client, MessageSender sender) throws IOException {
+    public ServerClient(Socket client, MessageSender sender, IServer server) throws IOException {
         this.client = client;
         this.input = new DataInputStream(client.getInputStream());
         this.output = new DataOutputStream(client.getOutputStream());
         this.sender = sender;
+        this.server = server;
     }
 
     public void dispatch(){
@@ -52,6 +56,22 @@ public class ServerClient implements IServerClient, Runnable{
         }
     }
 
+    @Override
+    public ConcurrentLinkedQueue<IMessage> getMessages() {
+        return this.messagesReceived;
+    }
+
+    @Override
+    public void sendMessage(IMessage message) {
+        this.messagesToSent.add(message);
+    }
+
+    @Override
+    public void sendMessageNow(IMessage message) {
+        this.sendMessage(message);
+        this.sender.sendDataNow();
+    }
+
     private IMessage readMessage(){
         byte[] data = new byte[DATA_SIZE];
         try {
@@ -67,7 +87,8 @@ public class ServerClient implements IServerClient, Runnable{
 
     private void mainServerClientLoop(){
         while(this.stop == false){
-            readMessage();
+            this.messagesReceived.add(readMessage());
+            this.server.notifyNewMessages();
         }
     }
 

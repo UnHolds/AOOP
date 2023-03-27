@@ -15,21 +15,21 @@ public class Server implements IServer, Runnable{
     private List<IServerClient> clients = new ArrayList<>();
     private boolean acceptClients;
     private static Logger log = LogManager.getLogger(Server.class);
-    private boolean stopped = false;
+    private boolean stop = false;
 
     private MessageSender sender;
 
     private void waitForClients() {
         this.log.info("Waiting for clients");
-        while(this.acceptClients && this.stopped == false) {
+        while(this.acceptClients && this.stop == false) {
             try {
                 Socket client = this.socket.accept();
-                IServerClient serverClient = new ServerClient(client, this.sender);
+                IServerClient serverClient = new ServerClient(client, this.sender, this);
                 this.clients.add(serverClient);
                 serverClient.dispatch();
                 this.log.info("Client has connected with address " + client.getInetAddress().getHostAddress());
             }catch (IOException e){
-                if(this.socket.isClosed() && this.stopped){
+                if(this.socket.isClosed() && this.stop){
                     return;
                 }else if(this.socket.isClosed() && this.acceptClients == false){
                     break;
@@ -64,9 +64,14 @@ public class Server implements IServer, Runnable{
     }
 
     @Override
+    public void notifyNewMessages() {
+        this.notify();
+    }
+
+    @Override
     public void stop() throws IOException {
         this.log.info("Stopping server");
-        this.stopped = true;
+        this.stop = true;
         this.acceptClients = false;
 
         if(this.socket.isClosed() == false){
@@ -80,6 +85,16 @@ public class Server implements IServer, Runnable{
 
     private void mainServerLoop(){
         this.log.info("Starting main server loop");
+
+        while(this.stop == false){
+            try {
+                this.wait();
+            } catch (InterruptedException e) {
+                //ignored
+            }
+
+            //TODO HANDLE NEW MESSAGES
+        }
     }
 
 

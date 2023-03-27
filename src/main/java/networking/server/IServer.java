@@ -18,5 +18,7 @@ public interface IServer extends Runnable{
 
     void startGame();
 
+    void notifyNewMessages();
+
     void stop() throws IOException;
 }
