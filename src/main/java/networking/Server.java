@@ -15,6 +15,7 @@ public class Server implements IServer, Runnable{
     private List<IServerClient> clients = new ArrayList<>();
     private boolean acceptClients;
     private static Logger log = LogManager.getLogger(Server.class);
+    private boolean stopped = false;
 
     private void waitForClients() {
         while(this.acceptClients) {
@@ -50,9 +51,24 @@ public class Server implements IServer, Runnable{
         }
     }
 
+    @Override
+    public void stop() throws IOException {
+        this.stopped = true;
+
+        if(this.socket.isClosed() == false){
+            this.socket.close();
+        }
+        for(IServerClient serverClient : this.clients){
+            serverClient.stop();
+        }
+        //TODO maybe do more stop
+    }
+
     private void mainServerLoop(){
 
     }
+
+
 
     @Override
     public void run() {

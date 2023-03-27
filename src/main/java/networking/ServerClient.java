@@ -31,6 +31,11 @@ public class ServerClient implements IServerClient, Runnable{
     }
 
     @Override
+    public void stop() {
+
+    }
+
+    @Override
     public void run() {
 
     }

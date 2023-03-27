@@ -17,4 +17,6 @@ public interface IServer extends Runnable{
     Thread start(int port) throws IOException;
 
     void startGame();
+
+    void stop() throws IOException;
 }
