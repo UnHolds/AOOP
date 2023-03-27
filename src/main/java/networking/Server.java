@@ -13,36 +13,50 @@ public class Server implements IServer, Runnable{
 
     private ServerSocket socket;
     private List<IServerClient> clients = new ArrayList<>();
-    private int numPlayers;
+    private boolean acceptClients;
     private static Logger log = LogManager.getLogger(Server.class);
 
     private void waitForClients() {
-        for(int i = 0; i < this.numPlayers; i++) {
+        while(this.acceptClients) {
             try {
                 Socket client = this.socket.accept();
                 IServerClient serverClient = new ServerClient(client);
                 this.clients.add(serverClient);
                 serverClient.dispatch();
-                this.log.info("Client num " + (i+1) +" of " + this.numPlayers + " has connected with address " + client.getInetAddress().getHostAddress());
+                this.log.info("Client has connected with address " + client.getInetAddress().getHostAddress());
             }catch (IOException e){
-                this.log.debug("Could not accept client", e);
-                i--;
+                this.log.debug("Could not accept client or socket closed", e);
             }
         }
-        this.log.info("All clients have connected to the server");
+        this.log.info("Connections to the server has ben closed");
     }
 
     @Override
-    public Thread start(int port, int numPlayers) throws IOException {
-        this.numPlayers = numPlayers;
+    public Thread start(int port) throws IOException {
         this.socket = new ServerSocket(port);
+        this.acceptClients = true;
         Thread t = new Thread(this);
         t.start();
         return t;
     }
 
     @Override
+    public void startGame() {
+        this.acceptClients = false;
+        try {
+            this.socket.close();
+        } catch (IOException e) {
+            this.log.error("Could not close serverSocket", e);
+        }
+    }
+
+    private void mainServerLoop(){
+
+    }
+
+    @Override
     public void run() {
         waitForClients();
+        mainServerLoop();
     }
 }
