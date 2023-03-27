@@ -18,7 +18,8 @@ public class Server implements IServer, Runnable{
     private boolean stopped = false;
 
     private void waitForClients() {
-        while(this.acceptClients) {
+        this.log.info("Waiting for clients");
+        while(this.acceptClients && this.stopped == false) {
             try {
                 Socket client = this.socket.accept();
                 IServerClient serverClient = new ServerClient(client);
@@ -26,10 +27,17 @@ public class Server implements IServer, Runnable{
                 serverClient.dispatch();
                 this.log.info("Client has connected with address " + client.getInetAddress().getHostAddress());
             }catch (IOException e){
-                this.log.debug("Could not accept client or socket closed", e);
+                if(this.socket.isClosed() && this.stopped){
+                    return;
+                }else if(this.socket.isClosed() && this.acceptClients == false){
+                    break;
+                }
+                else{
+                    this.log.debug("Could not accept client", e);
+                }
             }
         }
-        this.log.info("Connections to the server has ben closed");
+        this.log.info("No longer accepting clients");
     }
 
     @Override
@@ -53,7 +61,9 @@ public class Server implements IServer, Runnable{
 
     @Override
     public void stop() throws IOException {
+        this.log.info("Stopping server");
         this.stopped = true;
+        this.acceptClients = false;
 
         if(this.socket.isClosed() == false){
             this.socket.close();
@@ -65,7 +75,7 @@ public class Server implements IServer, Runnable{
     }
 
     private void mainServerLoop(){
-
+        this.log.info("Starting main server loop");
     }
 
 
