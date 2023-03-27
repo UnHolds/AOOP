@@ -5,9 +5,7 @@ import networking.Message;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import java.io.DataInputStream;
-import java.io.DataOutputStream;
-import java.io.IOException;
+import java.io.*;
 import java.net.Socket;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
@@ -15,8 +13,8 @@ public class ServerClient implements IServerClient, Runnable{
 
 
     private Socket client;
-    private DataInputStream input;
-    private  DataOutputStream output;
+    private BufferedReader input;
+    private  PrintWriter output;
     private Thread thread;
     private boolean stop;
 
@@ -28,8 +26,8 @@ public class ServerClient implements IServerClient, Runnable{
 
     public ServerClient(Socket client, IServer server) throws IOException {
         this.client = client;
-        this.input = new DataInputStream(client.getInputStream());
-        this.output = new DataOutputStream(client.getOutputStream());
+        this.input = new BufferedReader(new InputStreamReader(this.client.getInputStream()));
+        this.output = new PrintWriter(this.client.getOutputStream(), true);
         this.server = server;
     }
 
@@ -60,7 +58,7 @@ public class ServerClient implements IServerClient, Runnable{
 
     @Override
     public void sendMessage(IMessage message) throws IOException {
-        this.output.write(message.toBytes());
+        this.output.println(message.toBase64String());
     }
 
     @Override
@@ -69,21 +67,18 @@ public class ServerClient implements IServerClient, Runnable{
     }
 
 
-    private IMessage readMessage(){
-        byte[] data = new byte[IMessage.SIZE];
+    private void fetchMessages(){
         try {
-            this.input.readFully(data);
+            this.messagesReceived.add(new Message(this.input.readLine()));
+            this.server.notifyNewMessages();
         } catch (IOException e) {
             this.log.error("Could not read from data input stream, client: " + this.client.getInetAddress().getHostAddress());
         }
-
-        return new Message(data);
     }
 
     private void mainServerClientLoop(){
         while(this.stop == false){
-            this.messagesReceived.add(readMessage());
-            this.server.notifyNewMessages();
+            fetchMessages();
         }
     }
 

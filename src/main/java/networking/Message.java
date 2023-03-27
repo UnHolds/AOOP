@@ -2,9 +2,10 @@ package networking;
 
 public class Message implements IMessage{
 
+
     private MessageType type;
 
-    public Message(byte[] data){
+    public Message(String dataBase64){
 
     }
 
@@ -12,9 +13,10 @@ public class Message implements IMessage{
         this.type = MessageType.NO_MESSAGE;
     }
 
+
     @Override
-    public byte[] toBytes() {
-        return new byte[SIZE];
+    public String toBase64String() {
+        return null;
     }
 
     @Override
