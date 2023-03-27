@@ -22,6 +22,16 @@ public class Game implements IGame{
         // TODO implement
     }
 
+    @Override
+    public void showWinningScreen() {
+
+    }
+
+    @Override
+    public void deconnectFromNetwork() {
+
+    }
+
     public static void main(String[] args){
         System.out.println("Please call the other methods here when implemented");
     }
