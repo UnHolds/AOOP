@@ -5,33 +5,31 @@ import networking.Message;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import java.io.DataInputStream;
-import java.io.DataOutputStream;
-import java.io.IOException;
+import java.io.*;
 import java.net.Socket;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
 public class ServerClient implements IServerClient, Runnable{
 
 
     private Socket client;
-    private DataInputStream input;
-    private  DataOutputStream output;
+    private BufferedReader input;
+    private  PrintWriter output;
     private Thread thread;
     private boolean stop;
-    private static final int DATA_SIZE = 512;
 
 
     private IServer server;
 
-    private ConcurrentLinkedQueue<IMessage> messagesToSent = new ConcurrentLinkedQueue<>();
     private ConcurrentLinkedQueue<IMessage> messagesReceived = new ConcurrentLinkedQueue<>();
     private static Logger log = LogManager.getLogger(ServerClient.class);
 
     public ServerClient(Socket client, IServer server) throws IOException {
         this.client = client;
-        this.input = new DataInputStream(client.getInputStream());
-        this.output = new DataOutputStream(client.getOutputStream());
+        this.input = new BufferedReader(new InputStreamReader(this.client.getInputStream()));
+        this.output = new PrintWriter(this.client.getOutputStream(), true);
         this.server = server;
     }
 
@@ -56,13 +54,15 @@ public class ServerClient implements IServerClient, Runnable{
     }
 
     @Override
-    public ConcurrentLinkedQueue<IMessage> getMessages() {
-        return this.messagesReceived;
+    public List<IMessage> getMessages() {
+        List<IMessage> messages = this.messagesReceived.stream().toList();
+        this.messagesReceived.clear();
+        return messages;
     }
 
     @Override
     public void sendMessage(IMessage message) throws IOException {
-        this.output.write(message.toBytes());
+        this.output.println(message.toBase64String());
     }
 
     @Override
@@ -70,28 +70,32 @@ public class ServerClient implements IServerClient, Runnable{
         return this.client.getInetAddress().getHostAddress();
     }
 
+    @Override
+    public boolean isDisconnected() {
+        return this.client.isConnected() == false || this.client.isClosed();
+    }
 
-    private IMessage readMessage(){
-        byte[] data = new byte[DATA_SIZE];
+
+    private void fetchMessages(){
         try {
-            this.input.read(data);
+            this.messagesReceived.add(Message.parse(this.input.readLine()));
+            this.server.notifyNewMessages();
         } catch (IOException e) {
             this.log.error("Could not read from data input stream, client: " + this.client.getInetAddress().getHostAddress());
+        } catch (ClassNotFoundException e) {
+            this.log.error("Could not convert base64 string to class, client: "  + this.client.getInetAddress().getHostAddress(), e);
         }
-
-        return new Message(data);
     }
 
     private void mainServerClientLoop(){
         while(this.stop == false){
-            this.messagesReceived.add(readMessage());
-            this.server.notifyNewMessages();
+            fetchMessages();
         }
     }
 
     @Override
     public void run() {
-        this.log.debug("Attach message sender to sever client: " + this.client.getInetAddress().getHostAddress());
+        this.log.debug("Executing main server client loop for client: " + this.client.getInetAddress().getHostAddress());
         mainServerClientLoop();
         this.log.info("Client: " + this.client.getInetAddress().getHostAddress() + " thread stopped");
     }

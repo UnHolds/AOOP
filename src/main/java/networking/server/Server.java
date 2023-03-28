@@ -18,6 +18,10 @@ public class Server implements IServer, Runnable{
     private static Logger log = LogManager.getLogger(Server.class);
     private boolean stop = false;
 
+    private Thread thread;
+
+    public boolean skipAllClientHandling = false;
+
 
     private void waitForClients() {
         log.info("Waiting for clients");
@@ -43,13 +47,12 @@ public class Server implements IServer, Runnable{
     }
 
     @Override
-    public Thread start(int port) throws IOException {
+    public void start(int port) throws IOException {
         log.info("starting server on port: " + port);
         this.socket = new ServerSocket(port);
         this.acceptClients = true;
-        Thread t = new Thread(this);
-        t.start();
-        return t;
+        this.thread = new Thread(this);
+        this.thread.start();
     }
 
     @Override
@@ -84,7 +87,13 @@ public class Server implements IServer, Runnable{
         //TODO maybe do more stop
     }
 
-    private void sendToAllClients(IMessage message){
+    @Override
+    public List<IServerClient> getClients() {
+        return this.clients;
+    }
+
+    @Override
+    public void sendToAllClients(IMessage message){
         for(IServerClient client : this.clients){
             try {
                 client.sendMessage(message);
@@ -92,6 +101,21 @@ public class Server implements IServer, Runnable{
                 log.error("Could not send message to client: " + client.getAddress(), e);
             }
         }
+    }
+
+    @Override
+    public Thread getThread() {
+        return this.thread;
+    }
+
+    private List<IMessage> filterClientMessages(List<IMessage> messages){
+        //TODO filter duplicated messages
+        return messages;
+    }
+
+    private List<IMessage> handleMessages(List<IMessage> messages){
+        //TODO handle messages
+        return messages;
     }
 
     private void mainServerLoop(){
@@ -106,7 +130,27 @@ public class Server implements IServer, Runnable{
                 //ignored
             }
 
-            //TODO HANDLE NEW MESSAGES
+            if(this.skipAllClientHandling){
+                continue;
+            }
+
+            List<IMessage> messages = new ArrayList<>();
+
+            for(IServerClient client : this.clients){
+
+                //remove disconnected clients
+                if(client.isDisconnected()){
+                    client.stop();
+                    this.clients.remove(client);
+                }
+                messages.addAll(filterClientMessages(client.getMessages()));
+            }
+
+            messages = handleMessages(messages);
+
+            for(IMessage message : messages){
+                sendToAllClients(message);
+            }
         }
     }
 
