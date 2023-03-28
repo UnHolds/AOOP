@@ -45,7 +45,7 @@ public interface IServerClient {
     String getAddress();
 
     /**
-     * returns whether the client is disconnected or not 
+     * returns whether the client is disconnected or not
      * @return whether the client is disconnected or not
      */
     boolean isDisconnected();
