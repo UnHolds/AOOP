@@ -1,5 +1,7 @@
 package networking.server;
 
+import networking.IMessage;
+
 import java.io.IOException;
 import java.util.List;
 
@@ -24,4 +26,6 @@ public interface IServer extends Runnable{
     void stop() throws IOException;
 
     List<IServerClient> getClients();
+
+    void sendToAllClients(IMessage message);
 }

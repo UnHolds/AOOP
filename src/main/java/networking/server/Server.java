@@ -89,7 +89,8 @@ public class Server implements IServer, Runnable{
         return this.clients;
     }
 
-    private void sendToAllClients(IMessage message){
+    @Override
+    public void sendToAllClients(IMessage message){
         for(IServerClient client : this.clients){
             try {
                 client.sendMessage(message);

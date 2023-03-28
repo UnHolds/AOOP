@@ -21,11 +21,15 @@ public class Client implements IClient, Runnable{
     private boolean stop = false;
     private List<IMessage> messages = new ArrayList<>();
     private static Logger log = LogManager.getLogger(Server.class);
+
+    private Thread thread;
     @Override
     public void connect(String address, int port) throws IOException {
         this.server = new Socket(address, port);
         this.input = new BufferedReader(new InputStreamReader(this.server.getInputStream()));
         this.output = new PrintWriter(this.server.getOutputStream(), true);
+        this.thread = new Thread(this);
+        this.thread.start();
     }
 
     @Override
@@ -74,6 +78,7 @@ public class Client implements IClient, Runnable{
 
     @Override
     public void run() {
+        log.info("Executing main client loop");
         mainClientLoop();
         log.debug("Client thread exited");
     }

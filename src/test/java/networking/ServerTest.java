@@ -54,7 +54,7 @@ public class ServerTest {
         IServer server = new Server();
         server.start(18899);
         IClient client = new Client();
-        client.connect("127.0.0.1", 18899);
+        client.connect("127.02.0.1", 18899);
         Thread.sleep(100);
         server.startGame();
         Thread.sleep(100);
@@ -67,5 +67,24 @@ public class ServerTest {
         IMessage message = messages.stream().toList().get(0);
         assertEquals(message.getMessageType(), MessageType.GAME_TICK_UPDATE);
         assertEquals(message.getCurrentGameTick(), 69);
+    }
+
+    @Test
+    public void testSendMessageToClients() throws IOException, InterruptedException {
+        IServer server = new Server();
+        server.start(18899);
+        IClient client = new Client();
+        client.connect("127.02.0.1", 18899);
+        Thread.sleep(100);
+        server.startGame();
+        Thread.sleep(100);
+        server.sendToAllClients(new Message(420));
+        Thread.sleep(100);
+        List<IMessage> messages = client.getMessages();
+        assertEquals(messages.size(), 1);
+        IMessage message = messages.get(0);
+        assertEquals(message.getMessageType(), MessageType.GAME_TICK_UPDATE);
+        assertEquals(message.getCurrentGameTick(), 420);
+
     }
 }
