@@ -9,6 +9,10 @@ public interface IMessage {
 
     MessageType getMessageType();
 
+    String getSenderId();
+
+    String getSenderName();
+
     long getCurrentGameTick();
 
 }

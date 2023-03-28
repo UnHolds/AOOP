@@ -10,6 +10,7 @@ import java.io.*;
 import java.net.Socket;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 
 public class Client implements IClient, Runnable{
@@ -21,7 +22,15 @@ public class Client implements IClient, Runnable{
     private List<IMessage> messages = new ArrayList<>();
     private static Logger log = LogManager.getLogger(Server.class);
 
+    private String id = UUID.randomUUID().toString();
+
+    private String name;
+
     private Thread thread;
+
+    public Client(String name){
+        this.name = name;
+    }
     @Override
     public void connect(String address, int port) throws IOException {
         this.server = new Socket(address, port);
@@ -72,6 +81,16 @@ public class Client implements IClient, Runnable{
         } catch (IOException e) {
             log.error("Could not send message to server", e);
         }
+    }
+
+    @Override
+    public String getId() {
+        return this.id;
+    }
+
+    @Override
+    public String getName() {
+        return this.name;
     }
 
 

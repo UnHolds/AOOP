@@ -53,14 +53,14 @@ public class ServerTest {
     public void testSendMessageToServer() throws IOException, InterruptedException {
         IServer server = new Server();
         server.start(18899);
-        IClient client = new Client();
+        IClient client = new Client("Client");
         client.connect("127.02.0.1", 18899);
         Thread.sleep(100);
         server.startGame();
         Thread.sleep(100);
         List<IServerClient> clients = server.getClients();
         ((Server)server).skipAllClientHandling = true;
-        client.sendMessage(new Message(69));
+        client.sendMessage(new Message(client,69));
         Thread.sleep(100);
         assertEquals(clients.size(), 1);
         List<IMessage> messages = clients.get(0).getMessages();
@@ -74,12 +74,12 @@ public class ServerTest {
     public void testSendMessageToClients() throws IOException, InterruptedException {
         IServer server = new Server();
         server.start(18899);
-        IClient client = new Client();
+        IClient client = new Client("Client");
         client.connect("127.02.0.1", 18899);
         Thread.sleep(100);
         server.startGame();
         Thread.sleep(100);
-        server.sendToAllClients(new Message(420));
+        server.sendToAllClients(new Message(client,420));
         Thread.sleep(100);
         List<IMessage> messages = client.getMessages();
         assertEquals(messages.size(), 1);
@@ -93,14 +93,14 @@ public class ServerTest {
     public void testSendMessageToServerAndCheckIfOtherClientGetsMessage() throws IOException, InterruptedException {
         IServer server = new Server();
         server.start(18899);
-        IClient clientSender = new Client();
+        IClient clientSender = new Client("Sender");
         clientSender.connect("127.02.0.1", 18899);
-        IClient clientReceiver = new Client();
+        IClient clientReceiver = new Client("Receiver");
         clientReceiver.connect("127.02.0.1", 18899);
         Thread.sleep(100);
         server.startGame();
         Thread.sleep(100);
-        clientSender.sendMessage(new Message(666));
+        clientSender.sendMessage(new Message(clientSender, 666));
         Thread.sleep(100);
 
         List<IMessage> messagesReceiver = clientReceiver.getMessages();
@@ -108,11 +108,15 @@ public class ServerTest {
         IMessage messageReceiver = messagesReceiver.get(0);
         assertEquals(messageReceiver.getMessageType(), MessageType.GAME_TICK_UPDATE);
         assertEquals(messageReceiver.getCurrentGameTick(), 666);
+        assertEquals(messageReceiver.getSenderId(), clientSender.getId());
+        assertEquals(messageReceiver.getSenderName(), "Sender");
 
         List<IMessage> messagesSender = clientSender.getMessages();
         assertEquals(messagesSender.size(), 1);
         IMessage messageSender = messagesSender.get(0);
         assertEquals(messageSender.getMessageType(), MessageType.GAME_TICK_UPDATE);
         assertEquals(messageSender.getCurrentGameTick(), 666);
+        assertEquals(messageSender.getSenderId(), clientSender.getId());
+        assertEquals(messageSender.getSenderName(), "Sender");
     }
 }

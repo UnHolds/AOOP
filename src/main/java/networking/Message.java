@@ -1,5 +1,7 @@
 package networking;
 
+import networking.client.IClient;
+
 import java.io.*;
 import java.util.Base64;
 
@@ -8,6 +10,9 @@ public class Message implements IMessage, Serializable {
 
     private MessageType type;
     private long currentGameTick;
+
+    private String senderId;
+    private String senderName;
 
 
     public static IMessage parse(String base64) throws IOException, ClassNotFoundException {
@@ -20,9 +25,12 @@ public class Message implements IMessage, Serializable {
     }
 
 
-    public Message(long currentGameTick){
+    public Message(IClient client, long currentGameTick){
         this.type = MessageType.GAME_TICK_UPDATE;
         this.currentGameTick = currentGameTick;
+        this.senderId = client.getId();
+        this.senderName = client.getName();
+
     }
 
 
@@ -40,6 +48,16 @@ public class Message implements IMessage, Serializable {
     @Override
     public MessageType getMessageType() {
         return this.type;
+    }
+
+    @Override
+    public String getSenderId() {
+        return this.senderId;
+    }
+
+    @Override
+    public String getSenderName() {
+        return this.senderName;
     }
 
     @Override

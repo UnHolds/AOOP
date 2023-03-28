@@ -14,4 +14,8 @@ public interface IClient {
 
     void sendMessage(IMessage message);
 
+    String getId();
+
+    String getName();
+
 }
