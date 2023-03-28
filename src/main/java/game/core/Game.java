@@ -1,6 +1,8 @@
 package game.core;
 
 
+import game.ui.GameWindow;
+
 public class Game implements IGame{
     @Override
     public void showStartScreen() {
@@ -34,5 +36,8 @@ public class Game implements IGame{
 
     public static void main(String[] args){
         System.out.println("Please call the other methods here when implemented");
+
+        GameWindow gameWindow = new GameWindow();
+        gameWindow.initWindow();
     }
 }
