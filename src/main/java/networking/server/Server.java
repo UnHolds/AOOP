@@ -108,6 +108,16 @@ public class Server implements IServer, Runnable{
         return this.thread;
     }
 
+    private List<IMessage> filterClientMessages(List<IMessage> messages){
+        //TODO filter duplicated messages
+        return messages;
+    }
+
+    private List<IMessage> handleMessages(List<IMessage> messages){
+        //TODO handle messages
+        return messages;
+    }
+
     private void mainServerLoop(){
         log.info("Starting main server loop");
 
@@ -124,6 +134,8 @@ public class Server implements IServer, Runnable{
                 continue;
             }
 
+            List<IMessage> messages = new ArrayList<>();
+
             for(IServerClient client : this.clients){
 
                 //remove disconnected clients
@@ -131,13 +143,14 @@ public class Server implements IServer, Runnable{
                     client.stop();
                     this.clients.remove(client);
                 }
-
-                for(IMessage message : client.getMessages()) {
-                    //TODO HANDLE MESSAGE
-                }
-
+                messages.addAll(filterClientMessages(client.getMessages()));
             }
-            //TODO HANDLE NEW MESSAGES
+
+            messages = handleMessages(messages);
+
+            for(IMessage message : messages){
+                sendToAllClients(message);
+            }
         }
     }
 
