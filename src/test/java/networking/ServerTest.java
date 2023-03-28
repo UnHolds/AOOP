@@ -88,4 +88,31 @@ public class ServerTest {
         assertEquals(message.getCurrentGameTick(), 420);
 
     }
+
+    @Test
+    public void testSendMessageToServerAndCheckIfOtherClientGetsMessage() throws IOException, InterruptedException {
+        IServer server = new Server();
+        server.start(18899);
+        IClient clientSender = new Client();
+        clientSender.connect("127.02.0.1", 18899);
+        IClient clientReceiver = new Client();
+        clientReceiver.connect("127.02.0.1", 18899);
+        Thread.sleep(100);
+        server.startGame();
+        Thread.sleep(100);
+        clientSender.sendMessage(new Message(666));
+        Thread.sleep(100);
+
+        List<IMessage> messagesReceiver = clientReceiver.getMessages();
+        assertEquals(messagesReceiver.size(), 1);
+        IMessage messageReceiver = messagesReceiver.get(0);
+        assertEquals(messageReceiver.getMessageType(), MessageType.GAME_TICK_UPDATE);
+        assertEquals(messageReceiver.getCurrentGameTick(), 666);
+
+        List<IMessage> messagesSender = clientSender.getMessages();
+        assertEquals(messagesSender.size(), 1);
+        IMessage messageSender = messagesSender.get(0);
+        assertEquals(messageSender.getMessageType(), MessageType.GAME_TICK_UPDATE);
+        assertEquals(messageSender.getCurrentGameTick(), 666);
+    }
 }
