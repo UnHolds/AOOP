@@ -8,7 +8,7 @@ public class Message implements IMessage, Serializable {
 
     private MessageType type;
     private long currentGameTick;
-    
+
 
     public static IMessage parse(String base64) throws IOException, ClassNotFoundException {
         byte[] data = Base64.getDecoder().decode(base64);
@@ -20,8 +20,9 @@ public class Message implements IMessage, Serializable {
     }
 
 
-    public Message(){
-        this.type = MessageType.NO_MESSAGE;
+    public Message(long currentGameTick){
+        this.type = MessageType.GAME_TICK_UPDATE;
+        this.currentGameTick = currentGameTick;
     }
 
 
@@ -39,6 +40,11 @@ public class Message implements IMessage, Serializable {
     @Override
     public MessageType getMessageType() {
         return this.type;
+    }
+
+    @Override
+    public long getCurrentGameTick() {
+        return this.currentGameTick;
     }
 
 }

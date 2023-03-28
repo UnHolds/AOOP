@@ -1,5 +1,5 @@
 package networking;
 
 public enum MessageType {
-    NO_MESSAGE
+    GAME_TICK_UPDATE
 }

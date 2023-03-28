@@ -58,12 +58,14 @@ public class ServerTest {
         Thread.sleep(100);
         server.startGame();
         Thread.sleep(100);
-        client.sendMessage(new Message());
+        client.sendMessage(new Message(69));
         Thread.sleep(100);
         List<IServerClient> clients = server.getClients();
         assertEquals(clients.size(), 1);
         ConcurrentLinkedQueue<IMessage> messages = clients.get(0).getMessages();
         assertEquals(messages.size(), 1);
-        assertEquals(messages.stream().toList().get(0).getMessageType(), MessageType.NO_MESSAGE);
+        IMessage message = messages.stream().toList().get(0);
+        assertEquals(message.getMessageType(), MessageType.GAME_TICK_UPDATE);
+        assertEquals(message.getCurrentGameTick(), 69);
     }
 }

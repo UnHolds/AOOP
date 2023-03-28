@@ -9,4 +9,6 @@ public interface IMessage {
 
     MessageType getMessageType();
 
+    long getCurrentGameTick();
+
 }
