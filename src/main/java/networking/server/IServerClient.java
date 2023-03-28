@@ -3,6 +3,7 @@ package networking.server;
 import networking.IMessage;
 
 import java.io.IOException;
+import java.util.List;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
 public interface IServerClient {
@@ -13,9 +14,11 @@ public interface IServerClient {
 
     void stop();
 
-    ConcurrentLinkedQueue<IMessage> getMessages();
+    List<IMessage> getMessages();
 
     void sendMessage(IMessage message) throws IOException;
 
     String getAddress();
+
+    boolean isDisconnected();
 }

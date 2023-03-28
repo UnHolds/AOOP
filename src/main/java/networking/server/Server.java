@@ -18,6 +18,10 @@ public class Server implements IServer, Runnable{
     private static Logger log = LogManager.getLogger(Server.class);
     private boolean stop = false;
 
+    private Thread thread;
+
+    public boolean skipAllClientHandling = false;
+
 
     private void waitForClients() {
         log.info("Waiting for clients");
@@ -43,13 +47,12 @@ public class Server implements IServer, Runnable{
     }
 
     @Override
-    public Thread start(int port) throws IOException {
+    public void start(int port) throws IOException {
         log.info("starting server on port: " + port);
         this.socket = new ServerSocket(port);
         this.acceptClients = true;
-        Thread t = new Thread(this);
-        t.start();
-        return t;
+        this.thread = new Thread(this);
+        this.thread.start();
     }
 
     @Override
@@ -100,6 +103,11 @@ public class Server implements IServer, Runnable{
         }
     }
 
+    @Override
+    public Thread getThread() {
+        return this.thread;
+    }
+
     private void mainServerLoop(){
         log.info("Starting main server loop");
 
@@ -112,6 +120,23 @@ public class Server implements IServer, Runnable{
                 //ignored
             }
 
+            if(this.skipAllClientHandling){
+                continue;
+            }
+
+            for(IServerClient client : this.clients){
+
+                //remove disconnected clients
+                if(client.isDisconnected()){
+                    client.stop();
+                    this.clients.remove(client);
+                }
+
+                for(IMessage message : client.getMessages()) {
+                    //TODO HANDLE MESSAGE
+                }
+
+            }
             //TODO HANDLE NEW MESSAGES
         }
     }

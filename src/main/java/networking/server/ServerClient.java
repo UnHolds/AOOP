@@ -7,6 +7,8 @@ import org.apache.logging.log4j.Logger;
 
 import java.io.*;
 import java.net.Socket;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
 public class ServerClient implements IServerClient, Runnable{
@@ -52,8 +54,10 @@ public class ServerClient implements IServerClient, Runnable{
     }
 
     @Override
-    public ConcurrentLinkedQueue<IMessage> getMessages() {
-        return this.messagesReceived;
+    public List<IMessage> getMessages() {
+        List<IMessage> messages = this.messagesReceived.stream().toList();
+        this.messagesReceived.clear();
+        return messages;
     }
 
     @Override
@@ -64,6 +68,11 @@ public class ServerClient implements IServerClient, Runnable{
     @Override
     public String getAddress() {
         return this.client.getInetAddress().getHostAddress();
+    }
+
+    @Override
+    public boolean isDisconnected() {
+        return this.client.isConnected() == false || this.client.isClosed();
     }
 
 
