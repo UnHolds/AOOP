@@ -5,20 +5,52 @@ import networking.client.IClient;
 import networking.server.IServer;
 import networking.server.IServerClient;
 import networking.server.Server;
+import org.junit.After;
+import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.jupiter.api.DisplayName;
 
 import java.io.IOException;
 import java.net.Socket;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 
 public class ServerTest {
 
     public static int SERVER_PORT = 18899;
     public static String LOCALHOST = "127.0.0.1";
+    public boolean exceptionThrownInThread = false;
+    public static ConcurrentLinkedQueue<Throwable> exceptions;
+
+    @Before
+    public void setExceptionHandler(){
+
+        exceptions = new ConcurrentLinkedQueue<>();
+        Thread.setDefaultUncaughtExceptionHandler(new Thread.UncaughtExceptionHandler() {
+            @Override
+            public void uncaughtException(Thread t, Throwable e) {
+                exceptionThrownInThread = true;
+                exceptions.add(e);
+            }
+        });
+    }
+
+    @After
+    public void checkIfThreadHasThrownException() throws InterruptedException {
+        Thread.sleep(100);
+        if(exceptionThrownInThread == true){
+            for(Throwable e : exceptions){
+                System.err.println(e.getMessage());
+                e.printStackTrace();
+            }
+        }
+        assertFalse(exceptionThrownInThread);
+    }
 
     @Test
     @DisplayName("Just start the server and close the server when the server waits for clients")
@@ -142,6 +174,19 @@ public class ServerTest {
         assertEquals("server", message.getSenderName());
         assertEquals("server", message.getSenderId());
         assertEquals(System.currentTimeMillis() / 10000, message.getCurrentGameTick() / 10000);
+
+    }
+
+    @Test
+    public void testServerStartAndStopIfClientIsConnected() throws IOException, InterruptedException {
+        IServer server = new Server();
+        server.start(SERVER_PORT);
+        IClient client = new Client("Client");
+        client.connect(LOCALHOST, SERVER_PORT);
+        Thread.sleep(100);
+        server.startGame();
+        Thread.sleep(100);
+        server.stop();
 
     }
 }

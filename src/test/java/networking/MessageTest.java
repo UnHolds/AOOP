@@ -12,6 +12,9 @@ import org.junit.jupiter.api.BeforeEach;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.concurrent.ConcurrentLinkedQueue;
+
+import static org.junit.Assert.assertFalse;
 
 
 public class MessageTest {
@@ -23,6 +26,22 @@ public class MessageTest {
     private IClient receiver;
 
     private IMessageFactory messageFactorySender;
+
+    public boolean exceptionThrownInThread = false;
+    public static ConcurrentLinkedQueue<Throwable> exceptions;
+
+    @Before
+    public void setExceptionHandler(){
+
+        exceptions = new ConcurrentLinkedQueue<>();
+        Thread.setDefaultUncaughtExceptionHandler(new Thread.UncaughtExceptionHandler() {
+            @Override
+            public void uncaughtException(Thread t, Throwable e) {
+                exceptionThrownInThread = true;
+                exceptions.add(e);
+            }
+        });
+    }
 
     @Before
     public void serverSetup() throws IOException, InterruptedException {
@@ -49,6 +68,16 @@ public class MessageTest {
         this.server.stop();
         this.sender.stop();
         this.receiver.stop();
+
+        Thread.sleep(100);
+        if(exceptionThrownInThread == true){
+            for(Throwable e : exceptions){
+                System.err.println(e.getMessage());
+                e.printStackTrace();
+            }
+        }
+        assertFalse(exceptionThrownInThread);
+
     }
 
     @Test
