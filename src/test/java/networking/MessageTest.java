@@ -11,10 +11,11 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
-import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.*;
 
 
 public class MessageTest {
@@ -28,7 +29,7 @@ public class MessageTest {
     private IMessageFactory messageFactorySender;
 
     public boolean exceptionThrownInThread = false;
-    public static ConcurrentLinkedQueue<Throwable> exceptions;
+    public ConcurrentLinkedQueue<Throwable> exceptions;
 
     @Before
     public void setExceptionHandler(){
@@ -82,8 +83,16 @@ public class MessageTest {
 
     @Test
     public void testIfCatPositionMessageReturnsRightXCoordinate() throws InterruptedException {
+        ((Server)this.server).forwardEverythingWithoutHandling = true;
         this.sender.sendMessage(this.messageFactorySender.createCatPositionMessage(System.currentTimeMillis(), 1, 2, 3));
         Thread.sleep(100);
-        List<IMessage> message = this.receiver.getMessages();
+        List<IMessage> messages = this.receiver.getMessages();
+        assertEquals(1, messages.size());
+        IMessage message = messages.get(0);
+        assertEquals(1, message.getCatPositionX());
+        assertEquals(2, message.getCatPositionY());
+        assertEquals(3, message.getCatPositionZ());
+        assertEquals(3, message.getCatPosition().length);
+        assertTrue(Arrays.equals(new int[] { 1, 2, 3}, message.getCatPosition()));
     }
 }

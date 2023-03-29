@@ -25,7 +25,7 @@ public class ServerTest {
     public static int SERVER_PORT = 18899;
     public static String LOCALHOST = "127.0.0.1";
     public boolean exceptionThrownInThread = false;
-    public static ConcurrentLinkedQueue<Throwable> exceptions;
+    public ConcurrentLinkedQueue<Throwable> exceptions;
 
     @Before
     public void setExceptionHandler(){

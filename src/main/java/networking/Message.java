@@ -83,7 +83,7 @@ public class Message implements IMessage, Serializable {
         if(this.type != MessageType.CAT_POSITION){
             return -1;
         }
-        return Integer.parseInt(data.split("|")[0]);
+        return Integer.parseInt(data.split("\\|")[0]);
     }
 
     @Override
@@ -91,7 +91,7 @@ public class Message implements IMessage, Serializable {
         if(this.type != MessageType.CAT_POSITION){
             return -1;
         }
-        return Integer.parseInt(data.split("|")[1]);
+        return Integer.parseInt(data.split("\\|")[1]);
     }
 
     @Override
@@ -99,7 +99,7 @@ public class Message implements IMessage, Serializable {
         if(this.type != MessageType.CAT_POSITION){
             return -1;
         }
-        return Integer.parseInt(data.split("|")[2]);
+        return Integer.parseInt(data.split("\\|")[2]);
     }
 
     @Override
@@ -107,7 +107,7 @@ public class Message implements IMessage, Serializable {
         if(this.type != MessageType.CAT_POSITION){
             return new int[0];
         }
-        return Arrays.stream(this.data.split("|")).mapToInt(Integer::parseInt).toArray();
+        return Arrays.stream(this.data.split("\\|")).mapToInt(Integer::parseInt).toArray();
     }
 
 }
