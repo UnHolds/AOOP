@@ -62,6 +62,12 @@ public class ServerClient implements IServerClient, Runnable{
 
     @Override
     public void sendMessage(IMessage message) throws IOException {
+
+        if(this.stop || this.client.isClosed()){
+            log.debug("Didn't send message to client: " + getAddress() + ", because stopped or socket closed (client disconnect)");
+            return;
+        }
+
         this.output.println(message.toBase64String());
     }
 

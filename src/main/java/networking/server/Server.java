@@ -24,6 +24,8 @@ public class Server implements IServer, Runnable{
 
     public boolean skipAllClientHandling = false;
 
+    public boolean forwardEverythingWithoutHandling = false;
+
     private MessageFactory messageFactory = new MessageFactory(this);
 
     public long gameTick = 0;
@@ -152,6 +154,13 @@ public class Server implements IServer, Runnable{
                     this.clients.remove(client);
                 }
                 messages.addAll(filterClientMessages(client.getMessages()));
+            }
+
+            if(this.forwardEverythingWithoutHandling){
+                for(IMessage message : messages){
+                    sendToAllClients(message);
+                }
+                return;
             }
 
             messages = handleMessages(messages);

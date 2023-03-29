@@ -128,6 +128,7 @@ public class ServerTest {
     @Test
     public void testSendMessageToServerAndCheckIfOtherClientGetsMessage() throws IOException, InterruptedException {
         IServer server = new Server();
+        ((Server)server).forwardEverythingWithoutHandling = true;
         server.start(SERVER_PORT);
         IClient clientSender = new Client("Sender");
         clientSender.connect(LOCALHOST, SERVER_PORT);
