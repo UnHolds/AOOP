@@ -89,7 +89,7 @@ public class ServerClient implements IServerClient, Runnable{
             if(data == null){
                 //client == disconnected
                 log.info("Client has disconnected stopping server client");
-                this.stop = true;
+                stop();
                 return;
             }
 

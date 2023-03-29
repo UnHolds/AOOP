@@ -230,4 +230,46 @@ public class ServerTest {
         assertEquals(123, messagesClientConnected.get(0).getCurrentGameTick());
 
     }
+
+    @Test
+    public void testSendMessageToServerIfServerIsStopped() throws InterruptedException, IOException {
+        IServer server = new Server();
+        server.start(SERVER_PORT);
+        IClient client = new Client("Client");
+        client.connect(LOCALHOST, SERVER_PORT);
+        Thread.sleep(100);
+        server.startGame();
+        Thread.sleep(100);
+        server.stop();
+        Thread.sleep(100);
+        client.sendMessage(new Message(client.getId(), client.getName(), 555));
+    }
+
+    @Test
+    public void testSendMessageFromServerIfServerHasStopped() throws InterruptedException, IOException {
+        IServer server = new Server();
+        server.start(SERVER_PORT);
+        IClient client = new Client("Client");
+        client.connect(LOCALHOST, SERVER_PORT);
+        Thread.sleep(100);
+        server.startGame();
+        Thread.sleep(100);
+        server.stop();
+        Thread.sleep(100);
+        server.sendToAllClients(new Message(client.getId(), client.getName(), 555));
+    }
+
+    @Test
+    public void testSendMessageToServerIfClientHasStopped() throws InterruptedException, IOException {
+        IServer server = new Server();
+        server.start(SERVER_PORT);
+        IClient client = new Client("Client");
+        client.connect(LOCALHOST, SERVER_PORT);
+        Thread.sleep(100);
+        server.startGame();
+        Thread.sleep(100);
+        client.stop();
+        Thread.sleep(100);
+        server.sendToAllClients(new Message(client.getId(), client.getName(), 555));
+    }
 }

@@ -101,6 +101,12 @@ public class Server implements IServer, Runnable{
 
     @Override
     public void sendToAllClients(IMessage message){
+
+        if(this.stop){
+            log.info("Didn't send message because server has stopped");
+            return;
+        }
+
         for(IServerClient client : this.clients){
             try {
                 client.sendMessage(message);

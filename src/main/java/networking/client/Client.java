@@ -57,6 +57,7 @@ public class Client implements IClient, Runnable{
                 String data = this.input.readLine();
 
                 if(data == null){
+                    stop();
                     break;
                 }
 
@@ -87,6 +88,13 @@ public class Client implements IClient, Runnable{
 
     @Override
     public void sendMessage(IMessage message) {
+
+
+        if(this.stop){
+            log.info("Didn't send message to server because client has stopped");
+            return;
+        }
+
         try {
             this.output.println(message.toBase64String());
         } catch (IOException e) {
