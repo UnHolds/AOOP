@@ -4,6 +4,7 @@ import networking.client.IClient;
 import networking.server.IServer;
 
 import java.io.*;
+import java.util.Arrays;
 import java.util.Base64;
 
 public class Message implements IMessage, Serializable {
@@ -109,6 +110,14 @@ public class Message implements IMessage, Serializable {
             return -1;
         }
         return Integer.parseInt(data.split("|")[2]);
+    }
+
+    @Override
+    public int[] getCatPosition() {
+        if(this.type != MessageType.CAT_POSITION){
+            return new int[0];
+        }
+        return Arrays.stream(this.data.split("|")).mapToInt(Integer::parseInt).toArray();
     }
 
 }

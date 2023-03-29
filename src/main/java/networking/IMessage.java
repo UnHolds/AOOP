@@ -57,4 +57,11 @@ public interface IMessage {
      */
     int getCatPositionZ();
 
+    /**
+     * returns the position of the cat as a array (x,y,z) if the message is of type CAT_POSITION otherwise the array
+     * will be of size 0
+     * @return (x, y, z) array of cat position or array with size 0
+     */
+    int[] getCatPosition();
+
 }
