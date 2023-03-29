@@ -5,18 +5,19 @@ import networking.server.IServer;
 
 public class MessageFactory implements IMessageFactory{
 
-    private IClient client;
-    public MessageFactory(IClient client){
-        this.client = client;
+    private INetworkEntity entity;
+
+    public MessageFactory(INetworkEntity entity){
+        this.entity = entity;
     }
 
     @Override
     public IMessage createGameTickUpdateMessage(long gameTick) {
-        return new Message(this.client, gameTick);
+        return new Message(this.entity.getId(), this.entity.getName(), gameTick);
     }
 
     @Override
     public IMessage createCatPositionMessage(long gameTick, int x, int y, int z) {
-        return new Message(MessageType.CAT_POSITION, this.client, gameTick, x + "|" + y + "|" + z);
+        return new Message(MessageType.CAT_POSITION, this.entity.getId(), this.entity.getName(), gameTick, x + "|" + y + "|" + z);
     }
 }

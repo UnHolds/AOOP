@@ -1,11 +1,12 @@
 package networking.client;
 
 import networking.IMessage;
+import networking.INetworkEntity;
 
 import java.io.IOException;
 import java.util.List;
 
-public interface IClient {
+public interface IClient extends INetworkEntity {
 
 
     /**
@@ -33,16 +34,6 @@ public interface IClient {
      */
     void sendMessage(IMessage message);
 
-    /**
-     * returns the id of the client
-     * @return id of client
-     */
-    String getId();
 
-    /**
-     * returns the name of the client
-     * @return name of the clients
-     */
-    String getName();
 
 }

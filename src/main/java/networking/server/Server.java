@@ -24,7 +24,7 @@ public class Server implements IServer, Runnable{
 
     public boolean skipAllClientHandling = false;
 
-    private MessageFactory messageFactory = new MessageFactory(null);
+    private MessageFactory messageFactory = new MessageFactory(this);
 
     public long gameTick = 0;
 
@@ -169,5 +169,15 @@ public class Server implements IServer, Runnable{
         waitForClients();
         mainServerLoop();
         log.info("Server thread stopped");
+    }
+
+    @Override
+    public String getId() {
+        return "server";
+    }
+
+    @Override
+    public String getName() {
+        return "server";
     }
 }

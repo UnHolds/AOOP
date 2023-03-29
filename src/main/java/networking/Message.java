@@ -29,30 +29,20 @@ public class Message implements IMessage, Serializable {
     }
 
 
-    public Message(IClient client, long currentGameTick){
+    public Message(String senderId, String senderName, long currentGameTick){
         this.type = MessageType.GAME_TICK_UPDATE;
         this.currentGameTick = currentGameTick;
-        if(client != null) {
-            this.senderId = client.getId();
-            this.senderName = client.getName();
-        }else {
-            this.senderId = "server";
-            this.senderName = "server";
-        }
+        this.senderId = senderId;
+        this.senderName = senderName;
     }
 
-    public Message(MessageType type, IClient client, long currentGameTick, String data){
+    public Message(MessageType type, String senderId, String senderName, long currentGameTick, String data){
         this.type = MessageType.GAME_TICK_UPDATE;
         this.currentGameTick = currentGameTick;
         this.data = data;
         this.type = type;
-        if(client != null) {
-            this.senderId = client.getId();
-            this.senderName = client.getName();
-        }else {
-            this.senderId = "server";
-            this.senderName = "server";
-        }
+        this.senderId = senderId;
+        this.senderName = senderName;
     }
 
 
