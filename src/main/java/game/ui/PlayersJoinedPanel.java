@@ -10,15 +10,16 @@ public class PlayersJoinedPanel extends JPanel {
 
     private ArrayList<String> joinedPlayers;
     private ArrayList<JPanel> playerPanels;
+    private ArrayList<Image> catImages;
     private Image unknown;
-    private Image cat1;
-    private Image cat2;
-    private Image cat3;
-    private Image cat4;
+
+    private int nextEmptySlot;
 
     public PlayersJoinedPanel(int width, int height){
         this.joinedPlayers = new ArrayList<>();
         this.playerPanels = new ArrayList<>();
+        this.catImages = new ArrayList<>();
+        this.nextEmptySlot = 1;
 
         this.setMaximumSize(new Dimension(width, height));
         this.setOpaque(false);
@@ -31,6 +32,8 @@ public class PlayersJoinedPanel extends JPanel {
             this.add(panel);
             this.playerPanels.add(panel);
         }
+
+        addPlayer("test");
 
     }
 
@@ -59,7 +62,34 @@ public class PlayersJoinedPanel extends JPanel {
     }
 
     public void addPlayer(String name){
-        this.joinedPlayers.add(name);
+        if (nextEmptySlot < 4){
+            this.joinedPlayers.add(name);
+            JPanel panel = this.playerPanels.get(nextEmptySlot);
+
+            JLabel nameLabel = (JLabel) panel.getComponent(0);
+            nameLabel.setText(name);
+
+            panel.remove(1);
+            JLabel image = new JLabel(new ImageIcon(catImages.get(nextEmptySlot).getScaledInstance(50, 50, Image.SCALE_SMOOTH)));
+
+            GridBagConstraints c = new GridBagConstraints();
+            c.fill = GridBagConstraints.VERTICAL;
+            c.weighty = 0.5;
+            c.gridx = 0;
+            c.gridy = 1;
+            panel.add(image,c);
+
+            this.nextEmptySlot ++;
+
+            this.revalidate();
+            this.repaint();
+        }
+    }
+
+    public void removePlayer(String name){
+        if(joinedPlayers.contains(name)){
+            // TODO implement
+        }
 
         this.revalidate();
         this.repaint();
@@ -69,10 +99,10 @@ public class PlayersJoinedPanel extends JPanel {
     private void loadResources(){
         try {
             unknown = ImageIO.read(getClass().getClassLoader().getResourceAsStream("question_mark2.png"));
-            cat1 = ImageIO.read(getClass().getClassLoader().getResourceAsStream("cat1.png"));
-            cat2 = ImageIO.read(getClass().getClassLoader().getResourceAsStream("cat2.png"));
-            cat3 = ImageIO.read(getClass().getClassLoader().getResourceAsStream("cat3.png"));
-            cat4 = ImageIO.read(getClass().getClassLoader().getResourceAsStream("cat4.png"));
+            catImages.add(ImageIO.read(getClass().getClassLoader().getResourceAsStream("cat1.png")));
+            catImages.add(ImageIO.read(getClass().getClassLoader().getResourceAsStream("cat2.png")));
+            catImages.add(ImageIO.read(getClass().getClassLoader().getResourceAsStream("cat3.png")));
+            catImages.add(ImageIO.read(getClass().getClassLoader().getResourceAsStream("cat4.png")));
 
         } catch (IOException e) {
             e.printStackTrace(); // TODO use another way of error handling
