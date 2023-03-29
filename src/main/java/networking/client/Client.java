@@ -41,7 +41,7 @@ public class Client implements IClient, Runnable{
     }
 
     @Override
-    public void close(){
+    public void stop(){
         this.stop = true;
         try {
             this.server.close();

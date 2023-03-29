@@ -19,7 +19,7 @@ public interface IClient {
     /**
      * closes the connection to the server
      */
-    void close();
+    void stop();
 
     /**
      * Returns the received messages from the server

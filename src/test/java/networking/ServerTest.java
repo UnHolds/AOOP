@@ -17,11 +17,14 @@ import static org.junit.Assert.assertEquals;
 
 public class ServerTest {
 
+    public static int SERVER_PORT = 18899;
+    public static String LOCALHOST = "127.0.0.1";
+
     @Test
     @DisplayName("Just start the server and close the server when the server waits for clients")
     public void testStartServerAndStopServerWhenServerWaitsForClients() throws IOException, InterruptedException {
         IServer server = new Server();
-        server.start(18899);
+        server.start(SERVER_PORT);
         Thread.sleep(100);
         server.stop();
         Thread.sleep(100);
@@ -30,8 +33,8 @@ public class ServerTest {
     @Test
     public void testStartServerAndStopServerWhenServerAcceptsOneClientAndThenWaitsForOtherClients() throws IOException, InterruptedException {
         IServer server = new Server();
-        server.start(18899);
-        new Socket("127.0.0.1", 18899);
+        server.start(SERVER_PORT);
+        new Socket(LOCALHOST, SERVER_PORT);
         Thread.sleep(100);
         server.stop();
         Thread.sleep(100);
@@ -40,8 +43,8 @@ public class ServerTest {
     @Test
     public void testStartServerAndConnectClientAndStartGameAndStopServer() throws IOException, InterruptedException {
         IServer server = new Server();
-        server.start(18899);
-        new Socket("127.0.0.1", 18899);
+        server.start(SERVER_PORT);
+        new Socket(LOCALHOST, SERVER_PORT);
         Thread.sleep(100);
         server.startGame();
         Thread.sleep(100);
@@ -52,9 +55,9 @@ public class ServerTest {
     @Test
     public void testSendMessageToServer() throws IOException, InterruptedException {
         IServer server = new Server();
-        server.start(18899);
+        server.start(SERVER_PORT);
         IClient client = new Client("Client");
-        client.connect("127.02.0.1", 18899);
+        client.connect(LOCALHOST, SERVER_PORT);
         Thread.sleep(100);
         server.startGame();
         Thread.sleep(100);
@@ -73,9 +76,9 @@ public class ServerTest {
     @Test
     public void testSendMessageToClients() throws IOException, InterruptedException {
         IServer server = new Server();
-        server.start(18899);
+        server.start(SERVER_PORT);
         IClient client = new Client("Client");
-        client.connect("127.02.0.1", 18899);
+        client.connect(LOCALHOST, SERVER_PORT);
         Thread.sleep(100);
         server.startGame();
         Thread.sleep(100);
@@ -93,11 +96,11 @@ public class ServerTest {
     @Test
     public void testSendMessageToServerAndCheckIfOtherClientGetsMessage() throws IOException, InterruptedException {
         IServer server = new Server();
-        server.start(18899);
+        server.start(SERVER_PORT);
         IClient clientSender = new Client("Sender");
-        clientSender.connect("127.02.0.1", 18899);
+        clientSender.connect(LOCALHOST, SERVER_PORT);
         IClient clientReceiver = new Client("Receiver");
-        clientReceiver.connect("127.02.0.1", 18899);
+        clientReceiver.connect(LOCALHOST, SERVER_PORT);
         Thread.sleep(100);
         server.startGame();
         Thread.sleep(100);
@@ -126,9 +129,9 @@ public class ServerTest {
     @Test
     public void testIfGameTickUpdateIsSentToClientsOnStart() throws IOException, InterruptedException {
         IServer server = new Server();
-        server.start(18899);
+        server.start(SERVER_PORT);
         IClient client = new Client("Client");
-        client.connect("127.02.0.1", 18899);
+        client.connect(LOCALHOST, SERVER_PORT);
         Thread.sleep(100);
         server.startGame();
         Thread.sleep(100);
