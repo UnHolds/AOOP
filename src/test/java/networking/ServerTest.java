@@ -141,6 +141,8 @@ public class ServerTest {
         clientSender.sendMessage(new Message(clientSender.getId(), clientSender.getName(), 666));
         Thread.sleep(100);
 
+
+
         List<IMessage> messagesReceiver = clientReceiver.getMessages();
         assertEquals(1, messagesReceiver.size());
         IMessage messageReceiver = messagesReceiver.get(0);
@@ -199,5 +201,32 @@ public class ServerTest {
         server.startGame();
         Thread.sleep(100);
         client.stop();
+    }
+
+    @Test
+    public void testServerStartAndDisconnectClientAndOtherClientStillConnectedSeverSendMessageToAllClients() throws IOException, InterruptedException {
+        IServer server = new Server();
+        server.start(SERVER_PORT);
+        IClient clientDisconnect = new Client("ClientDisconnect");
+        IClient clientConnected = new Client("ClientConnected");
+        clientDisconnect.connect(LOCALHOST, SERVER_PORT);
+        clientConnected.connect(LOCALHOST, SERVER_PORT);
+        Thread.sleep(100);
+        server.startGame();
+        Thread.sleep(100);
+        clientConnected.getMessages();
+        clientDisconnect.getMessages();
+        Thread.sleep(100);
+        clientDisconnect.stop();
+        Thread.sleep(100);
+        server.sendToAllClients(new Message("server", "server", 123));
+        Thread.sleep(100);
+
+        List<IMessage> messagesClientConnected = clientConnected.getMessages();
+        List<IMessage> messagesClientDisconnected = clientConnected.getMessages();
+        assertEquals(0, messagesClientDisconnected.size());
+        assertEquals(1, messagesClientConnected.size());
+        assertEquals(123, messagesClientConnected.get(0).getCurrentGameTick());
+
     }
 }
