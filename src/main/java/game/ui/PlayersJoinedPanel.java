@@ -9,7 +9,7 @@ import java.util.ArrayList;
 public class PlayersJoinedPanel extends JPanel {
 
     private ArrayList<String> joinedPlayers;
-    private ArrayList<JLabel> playerIconLabels;
+    private ArrayList<JPanel> playerPanels;
     private Image unknown;
     private Image cat1;
     private Image cat2;
@@ -18,25 +18,44 @@ public class PlayersJoinedPanel extends JPanel {
 
     public PlayersJoinedPanel(int width, int height){
         this.joinedPlayers = new ArrayList<>();
-        this.playerIconLabels = new ArrayList<>();
+        this.playerPanels = new ArrayList<>();
 
         this.setMaximumSize(new Dimension(width, height));
         this.setOpaque(false);
-        this.setLayout(new BoxLayout(this, BoxLayout.LINE_AXIS));
-        this.setAlignmentX(JPanel.CENTER_ALIGNMENT);
-
+        this.setLayout(new GridLayout(1,4));
 
         loadResources();
 
         for (int i = 0; i < 4; i++) {
-            JLabel image = new JLabel(new ImageIcon(unknown.getScaledInstance(100, 100, Image.SCALE_SMOOTH)));
-            image.setMaximumSize(new Dimension(100,100));
-            image.setHorizontalAlignment(JLabel.CENTER);
-            image.setVerticalAlignment(JLabel.CENTER);
-            this.add(image);
-            this.playerIconLabels.add(image);
+            JPanel panel = anonymousPlayerPanel();
+            this.add(panel);
+            this.playerPanels.add(panel);
         }
 
+    }
+
+    private JPanel anonymousPlayerPanel(){
+        JPanel panel = new JPanel();
+        panel.setMaximumSize(new Dimension(100,100));
+        panel.setOpaque(false);
+        panel.setLayout(new GridBagLayout());
+
+        GridBagConstraints c = new GridBagConstraints();
+        c.fill = GridBagConstraints.VERTICAL;
+
+        JLabel name = new JLabel("No player");
+        c.weighty = 0.5;
+        c.gridx = 0;
+        c.gridy = 2;
+        panel.add(name, c);
+
+        JLabel image = new JLabel(new ImageIcon(unknown.getScaledInstance(50, 50, Image.SCALE_SMOOTH)));
+        c.weighty = 0.5;
+        c.gridx = 0;
+        c.gridy = 1;
+        panel.add(image,c);
+
+        return panel;
     }
 
     public void addPlayer(String name){
@@ -49,7 +68,12 @@ public class PlayersJoinedPanel extends JPanel {
     // todo extract into resourceHandler
     private void loadResources(){
         try {
-            unknown = ImageIO.read(getClass().getClassLoader().getResourceAsStream("question_mark.png"));
+            unknown = ImageIO.read(getClass().getClassLoader().getResourceAsStream("question_mark2.png"));
+            cat1 = ImageIO.read(getClass().getClassLoader().getResourceAsStream("cat1.png"));
+            cat2 = ImageIO.read(getClass().getClassLoader().getResourceAsStream("cat2.png"));
+            cat3 = ImageIO.read(getClass().getClassLoader().getResourceAsStream("cat3.png"));
+            cat4 = ImageIO.read(getClass().getClassLoader().getResourceAsStream("cat4.png"));
+
         } catch (IOException e) {
             e.printStackTrace(); // TODO use another way of error handling
         }
