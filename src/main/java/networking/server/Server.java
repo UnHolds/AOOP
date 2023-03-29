@@ -7,6 +7,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import networking.IMessage;
+import networking.Message;
+import networking.MessageFactory;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -22,6 +24,9 @@ public class Server implements IServer, Runnable{
 
     public boolean skipAllClientHandling = false;
 
+    private MessageFactory messageFactory = new MessageFactory(null);
+
+    public long gameTick = 0;
 
     private void waitForClients() {
         log.info("Waiting for clients");
@@ -120,6 +125,9 @@ public class Server implements IServer, Runnable{
 
     private void mainServerLoop(){
         log.info("Starting main server loop");
+
+        this.gameTick = System.currentTimeMillis();
+        sendToAllClients(messageFactory.createGameTickUpdateMessage(this.gameTick));
 
         while(this.stop == false){
             try {

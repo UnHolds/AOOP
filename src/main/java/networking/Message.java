@@ -1,6 +1,7 @@
 package networking;
 
 import networking.client.IClient;
+import networking.server.IServer;
 
 import java.io.*;
 import java.util.Base64;
@@ -28,10 +29,15 @@ public class Message implements IMessage, Serializable {
     public Message(IClient client, long currentGameTick){
         this.type = MessageType.GAME_TICK_UPDATE;
         this.currentGameTick = currentGameTick;
-        this.senderId = client.getId();
-        this.senderName = client.getName();
-
+        if(client != null) {
+            this.senderId = client.getId();
+            this.senderName = client.getName();
+        }else {
+            this.senderId = "server";
+            this.senderName = "server";
+        }
     }
+
 
 
     @Override

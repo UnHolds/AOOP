@@ -79,6 +79,7 @@ public class ServerTest {
         Thread.sleep(100);
         server.startGame();
         Thread.sleep(100);
+        client.getMessages();
         server.sendToAllClients(new Message(client,420));
         Thread.sleep(100);
         List<IMessage> messages = client.getMessages();
@@ -100,6 +101,8 @@ public class ServerTest {
         Thread.sleep(100);
         server.startGame();
         Thread.sleep(100);
+        clientSender.getMessages();
+        clientReceiver.getMessages();
         clientSender.sendMessage(new Message(clientSender, 666));
         Thread.sleep(100);
 
@@ -118,5 +121,24 @@ public class ServerTest {
         assertEquals(messageSender.getCurrentGameTick(), 666);
         assertEquals(messageSender.getSenderId(), clientSender.getId());
         assertEquals(messageSender.getSenderName(), "Sender");
+    }
+
+    @Test
+    public void testIfGameTickUpdateIsSentToClientsOnStart() throws IOException, InterruptedException {
+        IServer server = new Server();
+        server.start(18899);
+        IClient client = new Client("Client");
+        client.connect("127.02.0.1", 18899);
+        Thread.sleep(100);
+        server.startGame();
+        Thread.sleep(100);
+        List<IMessage> messages = client.getMessages();
+        assertEquals(messages.size(), 1);
+        IMessage message = messages.get(0);
+        assertEquals(message.getMessageType(), MessageType.GAME_TICK_UPDATE);
+        assertEquals(message.getSenderName(), "server");
+        assertEquals(message.getSenderId(), "server");
+        assertEquals(message.getCurrentGameTick() / 10000, System.currentTimeMillis() / 10000);
+
     }
 }
