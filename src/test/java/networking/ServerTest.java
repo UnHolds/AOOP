@@ -63,14 +63,14 @@ public class ServerTest {
         Thread.sleep(100);
         List<IServerClient> clients = server.getClients();
         ((Server)server).skipAllClientHandling = true;
-        client.sendMessage(new Message(client,69));
+        client.sendMessage(new Message(client.getId(), client.getName(), 69));
         Thread.sleep(100);
-        assertEquals(clients.size(), 1);
+        assertEquals(1, clients.size());
         List<IMessage> messages = clients.get(0).getMessages();
-        assertEquals(messages.size(), 1);
+        assertEquals(1, messages.size());
         IMessage message = messages.get(0);
-        assertEquals(message.getMessageType(), MessageType.GAME_TICK_UPDATE);
-        assertEquals(message.getCurrentGameTick(), 69);
+        assertEquals(MessageType.GAME_TICK_UPDATE, message.getMessageType());
+        assertEquals(69, message.getCurrentGameTick());
     }
 
     @Test
@@ -83,13 +83,13 @@ public class ServerTest {
         server.startGame();
         Thread.sleep(100);
         client.getMessages();
-        server.sendToAllClients(new Message(client,420));
+        server.sendToAllClients(new Message(client.getId(), client.getName(), 420));
         Thread.sleep(100);
         List<IMessage> messages = client.getMessages();
-        assertEquals(messages.size(), 1);
+        assertEquals(1, messages.size());
         IMessage message = messages.get(0);
-        assertEquals(message.getMessageType(), MessageType.GAME_TICK_UPDATE);
-        assertEquals(message.getCurrentGameTick(), 420);
+        assertEquals(MessageType.GAME_TICK_UPDATE, message.getMessageType());
+        assertEquals(420, message.getCurrentGameTick());
 
     }
 
@@ -106,24 +106,24 @@ public class ServerTest {
         Thread.sleep(100);
         clientSender.getMessages();
         clientReceiver.getMessages();
-        clientSender.sendMessage(new Message(clientSender, 666));
+        clientSender.sendMessage(new Message(clientSender.getId(), clientSender.getName(), 666));
         Thread.sleep(100);
 
         List<IMessage> messagesReceiver = clientReceiver.getMessages();
-        assertEquals(messagesReceiver.size(), 1);
+        assertEquals(1, messagesReceiver.size());
         IMessage messageReceiver = messagesReceiver.get(0);
-        assertEquals(messageReceiver.getMessageType(), MessageType.GAME_TICK_UPDATE);
-        assertEquals(messageReceiver.getCurrentGameTick(), 666);
-        assertEquals(messageReceiver.getSenderId(), clientSender.getId());
-        assertEquals(messageReceiver.getSenderName(), "Sender");
+        assertEquals(MessageType.GAME_TICK_UPDATE, messageReceiver.getMessageType());
+        assertEquals(666, messageReceiver.getCurrentGameTick());
+        assertEquals(clientSender.getId(), messageReceiver.getSenderId());
+        assertEquals("Sender", messageReceiver.getSenderName());
 
         List<IMessage> messagesSender = clientSender.getMessages();
-        assertEquals(messagesSender.size(), 1);
+        assertEquals(1, messagesSender.size());
         IMessage messageSender = messagesSender.get(0);
-        assertEquals(messageSender.getMessageType(), MessageType.GAME_TICK_UPDATE);
-        assertEquals(messageSender.getCurrentGameTick(), 666);
-        assertEquals(messageSender.getSenderId(), clientSender.getId());
-        assertEquals(messageSender.getSenderName(), "Sender");
+        assertEquals(MessageType.GAME_TICK_UPDATE, messageSender.getMessageType());
+        assertEquals(666, messageSender.getCurrentGameTick());
+        assertEquals(clientSender.getId(), messageSender.getSenderId());
+        assertEquals("Sender", messageSender.getSenderName());
     }
 
     @Test
@@ -136,12 +136,12 @@ public class ServerTest {
         server.startGame();
         Thread.sleep(100);
         List<IMessage> messages = client.getMessages();
-        assertEquals(messages.size(), 1);
+        assertEquals(1, messages.size());
         IMessage message = messages.get(0);
-        assertEquals(message.getMessageType(), MessageType.GAME_TICK_UPDATE);
-        assertEquals(message.getSenderName(), "server");
-        assertEquals(message.getSenderId(), "server");
-        assertEquals(message.getCurrentGameTick() / 10000, System.currentTimeMillis() / 10000);
+        assertEquals(MessageType.GAME_TICK_UPDATE, message.getMessageType());
+        assertEquals("server", message.getSenderName());
+        assertEquals("server", message.getSenderId());
+        assertEquals(System.currentTimeMillis() / 10000, message.getCurrentGameTick() / 10000);
 
     }
 }

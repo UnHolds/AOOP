@@ -49,7 +49,9 @@ public class MessageTest {
     }
 
     @Test
-    public void testIfCatPositionMessageReturnsRightXCoordinate(){
-
+    public void testIfCatPositionMessageReturnsRightXCoordinate() throws InterruptedException {
+        this.sender.sendMessage(this.messageFactorySender.createCatPositionMessage(System.currentTimeMillis(), 1, 2, 3));
+        Thread.sleep(100);
+        List<IMessage> message = this.receiver.getMessages();
     }
 }
