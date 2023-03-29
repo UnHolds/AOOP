@@ -4,6 +4,8 @@ import networking.client.Client;
 import networking.client.IClient;
 import networking.server.IServer;
 import networking.server.Server;
+import org.junit.After;
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -22,7 +24,7 @@ public class MessageTest {
 
     private IMessageFactory messageFactorySender;
 
-    @BeforeEach
+    @Before
     public void serverSetup() throws IOException, InterruptedException {
 
         this.server = new Server();
@@ -41,8 +43,9 @@ public class MessageTest {
 
     }
 
-    @AfterEach
-    public void serverTeardown() throws IOException {
+    @After
+    public void serverTeardown() throws IOException, InterruptedException {
+        Thread.sleep(100);
         this.server.stop();
         this.sender.stop();
         this.receiver.stop();
