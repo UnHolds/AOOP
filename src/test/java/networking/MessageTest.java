@@ -82,7 +82,7 @@ public class MessageTest {
     }
 
     @Test
-    public void testIfCatPositionMessageReturnsRightXCoordinate() throws InterruptedException {
+    public void testIfCatPositionMessageReturnsRightCoordinates() throws InterruptedException {
         ((Server)this.server).forwardEverythingWithoutHandling = true;
         this.sender.sendMessage(this.messageFactorySender.createCatPositionMessage(System.currentTimeMillis(), 1, 2, 3));
         Thread.sleep(100);
