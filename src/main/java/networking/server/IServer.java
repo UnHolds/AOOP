@@ -1,11 +1,12 @@
 package networking.server;
 
 import networking.IMessage;
+import networking.INetworkEntity;
 
 import java.io.IOException;
 import java.util.List;
 
-public interface IServer extends Runnable{
+public interface IServer extends INetworkEntity, Runnable{
 
     /**
      * Starts the server on the given port and accepts infinitely many clients,

@@ -7,6 +7,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import networking.IMessage;
+import networking.Message;
+import networking.MessageFactory;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -22,6 +24,11 @@ public class Server implements IServer, Runnable{
 
     public boolean skipAllClientHandling = false;
 
+    public boolean forwardEverythingWithoutHandling = false;
+
+    private MessageFactory messageFactory = new MessageFactory(this);
+
+    public long gameTick = 0;
 
     private void waitForClients() {
         log.info("Waiting for clients");
@@ -94,6 +101,12 @@ public class Server implements IServer, Runnable{
 
     @Override
     public void sendToAllClients(IMessage message){
+
+        if(this.stop){
+            log.info("Didn't send message because server has stopped");
+            return;
+        }
+
         for(IServerClient client : this.clients){
             try {
                 client.sendMessage(message);
@@ -121,6 +134,9 @@ public class Server implements IServer, Runnable{
     private void mainServerLoop(){
         log.info("Starting main server loop");
 
+        this.gameTick = System.currentTimeMillis();
+        sendToAllClients(messageFactory.createGameTickUpdateMessage(this.gameTick));
+
         while(this.stop == false){
             try {
                 synchronized (this) {
@@ -146,6 +162,13 @@ public class Server implements IServer, Runnable{
                 messages.addAll(filterClientMessages(client.getMessages()));
             }
 
+            if(this.forwardEverythingWithoutHandling){
+                for(IMessage message : messages){
+                    sendToAllClients(message);
+                }
+                return;
+            }
+
             messages = handleMessages(messages);
 
             for(IMessage message : messages){
@@ -161,5 +184,15 @@ public class Server implements IServer, Runnable{
         waitForClients();
         mainServerLoop();
         log.info("Server thread stopped");
+    }
+
+    @Override
+    public String getId() {
+        return "server";
+    }
+
+    @Override
+    public String getName() {
+        return "server";
     }
 }

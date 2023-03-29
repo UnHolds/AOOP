@@ -62,6 +62,12 @@ public class ServerClient implements IServerClient, Runnable{
 
     @Override
     public void sendMessage(IMessage message) throws IOException {
+
+        if(this.stop || this.client.isClosed()){
+            log.debug("Didn't send message to client: " + getAddress() + ", because stopped or socket closed (client disconnect)");
+            return;
+        }
+
         this.output.println(message.toBase64String());
     }
 
@@ -78,7 +84,16 @@ public class ServerClient implements IServerClient, Runnable{
 
     private void fetchMessages(){
         try {
-            this.messagesReceived.add(Message.parse(this.input.readLine()));
+            String data = this.input.readLine();
+
+            if(data == null){
+                //client == disconnected
+                log.info("Client has disconnected stopping server client");
+                stop();
+                return;
+            }
+
+            this.messagesReceived.add(Message.parse(data));
             this.server.notifyNewMessages();
         } catch (IOException e) {
             this.log.error("Could not read from data input stream, client: " + this.client.getInetAddress().getHostAddress());
@@ -97,6 +112,6 @@ public class ServerClient implements IServerClient, Runnable{
     public void run() {
         this.log.debug("Executing main server client loop for client: " + this.client.getInetAddress().getHostAddress());
         mainServerClientLoop();
-        this.log.info("Client: " + this.client.getInetAddress().getHostAddress() + " thread stopped");
+        this.log.info("Client: " + this.client.getInetAddress().getHostAddress() + " thread exited");
     }
 }
