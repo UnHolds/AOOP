@@ -187,6 +187,17 @@ public class ServerTest {
         server.startGame();
         Thread.sleep(100);
         server.stop();
+    }
 
+    @Test
+    public void testServerStartAndDisconnectClient() throws IOException, InterruptedException {
+        IServer server = new Server();
+        server.start(SERVER_PORT);
+        IClient client = new Client("Client");
+        client.connect(LOCALHOST, SERVER_PORT);
+        Thread.sleep(100);
+        server.startGame();
+        Thread.sleep(100);
+        client.stop();
     }
 }

@@ -20,7 +20,7 @@ public class Client implements IClient, Runnable{
     private Socket server;
     private boolean stop = false;
     private List<IMessage> messages = new ArrayList<>();
-    private static Logger log = LogManager.getLogger(Server.class);
+    private static Logger log = LogManager.getLogger(Client.class);
 
     private String id = UUID.randomUUID().toString();
 
@@ -42,6 +42,7 @@ public class Client implements IClient, Runnable{
 
     @Override
     public void stop(){
+        log.info("stopping client");
         this.stop = true;
         try {
             this.server.close();
@@ -53,12 +54,22 @@ public class Client implements IClient, Runnable{
     private void mainClientLoop(){
         while(this.stop == false && this.server.isClosed() == false) {
             try {
-                String data = input.readLine();
+                String data = this.input.readLine();
+
+                if(data == null){
+                    break;
+                }
+
                 synchronized (this) {
                     messages.add(Message.parse(data));
                 }
             } catch (IOException e) {
-                log.error("Could not read from server", e);
+
+                if(this.server.isClosed()){
+                    log.error("Server has closed socket");
+                }else{
+                    log.error("Could not read from server", e);
+                }
             } catch (ClassNotFoundException e) {
                 this.log.error("Could not convert base64 string to class", e);
             }

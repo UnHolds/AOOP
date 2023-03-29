@@ -78,7 +78,16 @@ public class ServerClient implements IServerClient, Runnable{
 
     private void fetchMessages(){
         try {
-            this.messagesReceived.add(Message.parse(this.input.readLine()));
+            String data = this.input.readLine();
+
+            if(data == null){
+                //client == disconnected
+                log.info("Client has disconnected stopping server client");
+                this.stop = true;
+                return;
+            }
+
+            this.messagesReceived.add(Message.parse(data));
             this.server.notifyNewMessages();
         } catch (IOException e) {
             this.log.error("Could not read from data input stream, client: " + this.client.getInetAddress().getHostAddress());
@@ -97,6 +106,6 @@ public class ServerClient implements IServerClient, Runnable{
     public void run() {
         this.log.debug("Executing main server client loop for client: " + this.client.getInetAddress().getHostAddress());
         mainServerClientLoop();
-        this.log.info("Client: " + this.client.getInetAddress().getHostAddress() + " thread stopped");
+        this.log.info("Client: " + this.client.getInetAddress().getHostAddress() + " thread exited");
     }
 }
