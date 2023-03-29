@@ -2,5 +2,7 @@ package networking;
 
 public interface IMessageFactory {
 
-    public IMessage createGameTickUpdateMessage(long gameTick);
+    IMessage createGameTickUpdateMessage(long gameTick);
+
+    IMessage createCatPositionMessage(long gameTick, int x, int y, int z);
 }

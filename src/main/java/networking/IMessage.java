@@ -38,4 +38,23 @@ public interface IMessage {
      */
     long getCurrentGameTick();
 
+
+    /**
+     * returns the X position of the cat if the message is of the type CAT_POSITION otherwise it will return -1
+     * @return X position of cat or -1
+     */
+    int getCatPositionX();
+
+    /**
+     * returns the Y position of the cat if the message is of the type CAT_POSITION otherwise it will return -1
+     * @return Y position of cat or -1
+     */
+    int getCatPositionY();
+
+    /**
+     * returns the Z position of the cat if the message is of the type CAT_POSITION otherwise it will return -1
+     * @return Z position of cat or -1
+     */
+    int getCatPositionZ();
+
 }
