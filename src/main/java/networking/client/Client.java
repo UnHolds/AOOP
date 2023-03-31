@@ -96,6 +96,7 @@ public class Client implements IClient, Runnable{
         }
 
         try {
+            log.debug("Sending message to server from client " + this.name);
             this.output.println(message.toBase64String());
         } catch (IOException e) {
             log.error("Could not send message to server", e);

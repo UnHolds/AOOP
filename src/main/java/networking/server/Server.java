@@ -28,6 +28,8 @@ public class Server implements IServer, Runnable{
 
     private MessageFactory messageFactory = new MessageFactory(this);
 
+    private boolean newMessages = false;
+
     public long gameTick = 0;
 
     private void waitForClients() {
@@ -76,6 +78,7 @@ public class Server implements IServer, Runnable{
     public void notifyNewMessages() {
         synchronized (this) {
             this.notify();
+            this.newMessages = true;
         }
     }
 
@@ -140,10 +143,13 @@ public class Server implements IServer, Runnable{
         while(this.stop == false){
             try {
                 synchronized (this) {
-                    this.wait();
+                    if(this.newMessages == false) {
+                        this.wait();
+                    }
+                    this.newMessages = false;
                 }
             } catch (InterruptedException e) {
-                //ignored
+                log.error("Interrupted while wait");
             }
 
             if(this.skipAllClientHandling){
@@ -162,11 +168,13 @@ public class Server implements IServer, Runnable{
                 messages.addAll(filterClientMessages(client.getMessages()));
             }
 
+            log.debug("Received " + messages.size() + " messages");
+
             if(this.forwardEverythingWithoutHandling){
                 for(IMessage message : messages){
                     sendToAllClients(message);
                 }
-                return;
+                continue;
             }
 
             messages = handleMessages(messages);

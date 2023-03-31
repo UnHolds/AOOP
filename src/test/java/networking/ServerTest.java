@@ -263,6 +263,7 @@ public class ServerTest {
     public void testSendMessageToServerIfClientHasStopped() throws InterruptedException, IOException {
         IServer server = new Server();
         server.start(SERVER_PORT);
+        Thread.sleep(100);
         IClient client = new Client("Client");
         client.connect(LOCALHOST, SERVER_PORT);
         Thread.sleep(100);
@@ -271,5 +272,83 @@ public class ServerTest {
         client.stop();
         Thread.sleep(100);
         server.sendToAllClients(new Message(client.getId(), client.getName(), 555));
+    }
+
+    @Test
+    public void testLotOfClientsSendMessages() throws IOException, InterruptedException {
+
+        int numClients = 50;
+        int numMessages = 20;
+
+        IServer server = new Server();
+        ((Server)server).forwardEverythingWithoutHandling = true;
+        server.start(SERVER_PORT);
+        Thread.sleep(100);
+
+        List<IClient> clients = new ArrayList<>();
+
+        for(int i =0; i<numClients; i++){
+            Client client = new Client("Client" + i);
+            clients.add(client);
+            client.connect(LOCALHOST, SERVER_PORT);
+        }
+        Thread.sleep(100);
+        server.startGame();
+        Thread.sleep(100);
+
+        for(IClient client : clients){
+            client.getMessages();
+        }
+
+        Thread.sleep(100);
+
+        List<Thread> threads = new ArrayList<>();
+        for(IClient client : clients){
+            Thread thread = new Thread(() -> {
+                for(int i = 0; i< numMessages; i++){
+                    client.sendMessage(new Message(client.getId(), client.getName(),  420));
+                }
+            });
+            threads.add(thread);
+        }
+
+        for(int i = 0; i < threads.size(); i++){
+            if(i % 2 == 0){
+                threads.get(i).start();
+            }
+        }
+
+        for(int i = 0; i < threads.size(); i++){
+            if(i % 2 == 0){
+                threads.get(i).join();
+            }
+        }
+
+        Thread.sleep(500);
+
+        for(int i = 0; i < threads.size(); i++){
+            if(i % 2 == 1){
+                threads.get(i).start();
+            }
+        }
+
+        for(int i = 0; i < threads.size(); i++){
+            if(i % 2 == 1){
+                threads.get(i).join();
+            }
+        }
+
+        //wait for thread to handle all messages
+        while(server.getThread().getState() != Thread.State.WAITING){
+            Thread.sleep(100);
+        }
+
+        Thread.sleep(100);
+
+        for(IClient client : clients){
+            assertEquals(numClients*numMessages, client.getMessages().size());
+        }
+
+
     }
 }
