@@ -20,4 +20,11 @@ public class MessageFactory implements IMessageFactory{
     public IMessage createCatPositionMessage(long gameTick, int x, int y, int z) {
         return new Message(MessageType.CAT_POSITION, this.entity.getId(), this.entity.getName(), gameTick, x + "|" + y + "|" + z);
     }
+
+    @Override
+    public IMessage createClientConnectMessage() {
+        return new Message(MessageType.CLIENT_CONNECT, this.entity.getId(), this.entity.getName(), -1, null);
+    }
+
+
 }

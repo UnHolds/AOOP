@@ -348,7 +348,22 @@ public class ServerTest {
         for(IClient client : clients){
             assertEquals(numClients*numMessages, client.getMessages().size());
         }
+    }
 
+    @Test
+    public void testIfServerReceivesClientConnectMessage() throws InterruptedException, IOException {
+        IServer server = new Server();
+        ((Server)server).skipAllClientHandling = true;
+        server.start(SERVER_PORT);
+        Thread.sleep(100);
+        IClient client = new Client("Client");
+        client.connect(LOCALHOST, SERVER_PORT);
+        Thread.sleep(100);
+
+        IMessage message = server.getClients().get(0).getMessages().get(0);
+        assertEquals(MessageType.CLIENT_CONNECT, message.getMessageType());
+        assertEquals(client.getId(), message.getSenderId());
+        assertEquals(client.getName(), message.getSenderName());
 
     }
 }

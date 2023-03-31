@@ -1,7 +1,9 @@
 package networking.client;
 
 import networking.IMessage;
+import networking.IMessageFactory;
 import networking.Message;
+import networking.MessageFactory;
 import networking.server.Server;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -28,6 +30,8 @@ public class Client implements IClient, Runnable{
 
     private Thread thread;
 
+    private IMessageFactory messageFactory = new MessageFactory(this);
+
     public Client(String name){
         this.name = name;
     }
@@ -38,6 +42,7 @@ public class Client implements IClient, Runnable{
         this.output = new PrintWriter(this.server.getOutputStream(), true);
         this.thread = new Thread(this);
         this.thread.start();
+        sendMessage(this.messageFactory.createClientConnectMessage());
     }
 
     @Override
