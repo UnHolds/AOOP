@@ -6,6 +6,7 @@ import networking.server.IServer;
 import java.io.*;
 import java.util.Arrays;
 import java.util.Base64;
+import java.util.HashMap;
 
 public class Message implements IMessage, Serializable {
 
@@ -108,6 +109,24 @@ public class Message implements IMessage, Serializable {
             return new int[0];
         }
         return Arrays.stream(this.data.split("\\|")).mapToInt(Integer::parseInt).toArray();
+    }
+
+    @Override
+    public HashMap<String, String> getClientIdAndName() {
+
+        if(this.type != MessageType.CONNECTED_CLIENTS_UPDATE){
+            return null;
+        }
+
+        HashMap<String, String> clients = new HashMap<>();
+
+        for(String clientData : data.split("#")){
+            String[] clientIdAndName = clientData.split("\\|");
+            String name = new String(Base64.getDecoder().decode(clientIdAndName[1]));
+            clients.put(clientIdAndName[0], name);
+        }
+
+        return clients;
     }
 
 }

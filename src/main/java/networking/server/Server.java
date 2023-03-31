@@ -32,6 +32,12 @@ public class Server implements IServer, Runnable{
 
     public long gameTick = 0;
 
+
+    @Override
+    public void sendUpdateConnectedClientsMessage(){
+        sendToAllClients(messageFactory.createConnectedClientsUpdateMessage(this.clients));
+    }
+
     private void waitForClients() {
         log.info("Waiting for clients");
         while(this.acceptClients && this.stop == false) {
@@ -40,6 +46,8 @@ public class Server implements IServer, Runnable{
                 IServerClient serverClient = new ServerClient(client, this);
                 this.clients.add(serverClient);
                 serverClient.dispatch();
+
+
                 log.info("Client has connected with address " + client.getInetAddress().getHostAddress());
             }catch (IOException e){
                 if(this.socket.isClosed() && this.stop){

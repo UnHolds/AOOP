@@ -49,4 +49,8 @@ public interface IServerClient {
      * @return whether the client is disconnected or not
      */
     boolean isDisconnected();
+
+    String getName();
+
+    String getId();
 }

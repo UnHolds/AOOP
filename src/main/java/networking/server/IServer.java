@@ -54,4 +54,6 @@ public interface IServer extends INetworkEntity, Runnable{
      * @return the server thread
      */
     Thread getThread();
+
+    void sendUpdateConnectedClientsMessage();
 }

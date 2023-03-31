@@ -4,6 +4,7 @@ import networking.IMessage;
 import networking.INetworkEntity;
 
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.List;
 
 public interface IClient extends INetworkEntity {

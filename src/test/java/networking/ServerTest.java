@@ -14,6 +14,7 @@ import org.junit.jupiter.api.DisplayName;
 import java.io.IOException;
 import java.net.Socket;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
@@ -364,6 +365,28 @@ public class ServerTest {
         assertEquals(MessageType.CLIENT_CONNECT, message.getMessageType());
         assertEquals(client.getId(), message.getSenderId());
         assertEquals(client.getName(), message.getSenderName());
+
+    }
+
+    @Test
+    public void testIfClientReceiveClientsConnectedUpdateMessage() throws InterruptedException, IOException {
+        IServer server = new Server();
+        server.start(SERVER_PORT);
+        Thread.sleep(100);
+        IClient client = new Client("Client");
+        client.connect(LOCALHOST, SERVER_PORT);
+        Thread.sleep(100);
+
+        IMessage message = client.getMessages().get(0);
+
+        assertEquals(MessageType.CONNECTED_CLIENTS_UPDATE, message.getMessageType());
+        assertEquals(server.getId(), message.getSenderId());
+        assertEquals(server.getName(), message.getSenderName());
+        HashMap<String, String> clients = message.getClientIdAndName();
+        assertEquals(1, clients.size());
+        assertEquals(client.getId(), clients.keySet().toArray()[0]);
+        assertEquals(client.getName(), clients.values().toArray()[0]);
+
 
     }
 }

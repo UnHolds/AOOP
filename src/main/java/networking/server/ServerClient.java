@@ -2,6 +2,7 @@ package networking.server;
 
 import networking.IMessage;
 import networking.Message;
+import networking.MessageType;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -20,6 +21,8 @@ public class ServerClient implements IServerClient, Runnable{
     private Thread thread;
     private boolean stop;
 
+    private String name;
+    private String id;
 
     private IServer server;
 
@@ -81,6 +84,16 @@ public class ServerClient implements IServerClient, Runnable{
         return this.client.isConnected() == false || this.client.isClosed();
     }
 
+    @Override
+    public String getName() {
+        return this.name;
+    }
+
+    @Override
+    public String getId() {
+        return this.id;
+    }
+
 
     private void fetchMessages(){
         try {
@@ -92,8 +105,23 @@ public class ServerClient implements IServerClient, Runnable{
                 stop();
                 return;
             }
+            IMessage message = Message.parse(data);
 
-            this.messagesReceived.add(Message.parse(data));
+            if(message.getMessageType() == MessageType.CLIENT_CONNECT){
+                this.name = message.getSenderName();
+                this.id = message.getSenderId();
+
+                log.info("Client connect message received: Name: " + this.name + "   Id: " + this.id);
+                this.server.sendUpdateConnectedClientsMessage();
+            }
+
+            if(message.getSenderId() != this.id || message.getSenderName() != this.name){
+                log.error("Received message from client with id and or name mismatch: ID:  Should: " + this.id +
+                        "   Is: " + message.getSenderId() + "      Name:   Should: " + this.name +
+                        "   Is:" + message.getSenderName());
+            }
+
+            this.messagesReceived.add(message);
             this.server.notifyNewMessages();
         } catch (IOException e) {
             this.log.error("Could not read from data input stream, client: " + this.client.getInetAddress().getHostAddress());

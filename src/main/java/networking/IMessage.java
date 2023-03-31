@@ -1,6 +1,7 @@
 package networking;
 
 import java.io.IOException;
+import java.util.HashMap;
 
 public interface IMessage {
 
@@ -63,5 +64,7 @@ public interface IMessage {
      * @return (x, y, z) array of cat position or array with size 0
      */
     int[] getCatPosition();
+
+    HashMap<String, String> getClientIdAndName();
 
 }
