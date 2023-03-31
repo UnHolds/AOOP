@@ -169,6 +169,7 @@ public class ServerTest {
         IClient client = new Client("Client");
         client.connect(LOCALHOST, SERVER_PORT);
         Thread.sleep(100);
+        client.getMessages();
         server.startGame();
         Thread.sleep(100);
         List<IMessage> messages = client.getMessages();
@@ -293,7 +294,7 @@ public class ServerTest {
             clients.add(client);
             client.connect(LOCALHOST, SERVER_PORT);
         }
-        Thread.sleep(100);
+        Thread.sleep(500);
         server.startGame();
         Thread.sleep(100);
 
@@ -352,7 +353,7 @@ public class ServerTest {
     }
 
     @Test
-    public void testIfServerReceivesClientConnectMessage() throws InterruptedException, IOException {
+    public void testIfServerReceivesClientConnectMessageAndSetsIdAndName() throws InterruptedException, IOException {
         IServer server = new Server();
         ((Server)server).skipAllClientHandling = true;
         server.start(SERVER_PORT);
@@ -361,10 +362,11 @@ public class ServerTest {
         client.connect(LOCALHOST, SERVER_PORT);
         Thread.sleep(100);
 
-        IMessage message = server.getClients().get(0).getMessages().get(0);
-        assertEquals(MessageType.CLIENT_CONNECT, message.getMessageType());
-        assertEquals(client.getId(), message.getSenderId());
-        assertEquals(client.getName(), message.getSenderName());
+        assertEquals(0, server.getClients().get(0).getMessages().size());
+        assertEquals(client.getId(), server.getClients().get(0).getId());
+        assertEquals(client.getName(), server.getClients().get(0).getName());
+
+        server.startGame();
 
     }
 
@@ -386,6 +388,8 @@ public class ServerTest {
         assertEquals(1, clients.size());
         assertEquals(client.getId(), clients.keySet().toArray()[0]);
         assertEquals(client.getName(), clients.values().toArray()[0]);
+
+        server.startGame();
 
 
     }

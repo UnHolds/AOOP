@@ -5,6 +5,7 @@ import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.ConcurrentLinkedQueue;
 
 import networking.IMessage;
 import networking.Message;
@@ -15,7 +16,7 @@ import org.apache.logging.log4j.Logger;
 public class Server implements IServer, Runnable{
 
     private ServerSocket socket;
-    private List<IServerClient> clients = new ArrayList<>();
+    private ConcurrentLinkedQueue<IServerClient> clients = new ConcurrentLinkedQueue<>();
     private boolean acceptClients;
     private static Logger log = LogManager.getLogger(Server.class);
     private boolean stop = false;
@@ -35,7 +36,12 @@ public class Server implements IServer, Runnable{
 
     @Override
     public void sendUpdateConnectedClientsMessage(){
-        sendToAllClients(messageFactory.createConnectedClientsUpdateMessage(this.clients));
+
+        List<IServerClient> clients;
+        synchronized (this) {
+            clients = this.clients.stream().filter(c -> c.getId() != null).toList();
+        }
+        sendToAllClients(messageFactory.createConnectedClientsUpdateMessage(clients));
     }
 
     private void waitForClients() {
@@ -44,9 +50,10 @@ public class Server implements IServer, Runnable{
             try {
                 Socket client = this.socket.accept();
                 IServerClient serverClient = new ServerClient(client, this);
-                this.clients.add(serverClient);
+                synchronized (this) {
+                    this.clients.add(serverClient);
+                }
                 serverClient.dispatch();
-
 
                 log.info("Client has connected with address " + client.getInetAddress().getHostAddress());
             }catch (IOException e){
@@ -107,7 +114,7 @@ public class Server implements IServer, Runnable{
 
     @Override
     public List<IServerClient> getClients() {
-        return this.clients;
+        return this.clients.stream().toList();
     }
 
     @Override

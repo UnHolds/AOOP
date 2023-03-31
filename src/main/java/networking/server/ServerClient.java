@@ -113,9 +113,11 @@ public class ServerClient implements IServerClient, Runnable{
 
                 log.info("Client connect message received: Name: " + this.name + "   Id: " + this.id);
                 this.server.sendUpdateConnectedClientsMessage();
+                //message handled
+                return;
             }
 
-            if(message.getSenderId() != this.id || message.getSenderName() != this.name){
+            if(message.getSenderId().equals(this.id) == false || message.getSenderName().equals(this.name) == false){
                 log.error("Received message from client with id and or name mismatch: ID:  Should: " + this.id +
                         "   Is: " + message.getSenderId() + "      Name:   Should: " + this.name +
                         "   Is:" + message.getSenderName());
