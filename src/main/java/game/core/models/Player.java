@@ -11,6 +11,10 @@ public class Player implements IPlayer {
         this.name = name;
     }
 
+    public void incrementScore() {
+        this.score++;
+    }
+
     @Override
     public int getScore() {
         return this.score;
