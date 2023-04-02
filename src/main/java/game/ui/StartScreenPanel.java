@@ -15,14 +15,9 @@ public class StartScreenPanel extends JPanel implements ActionListener{
     private Font cheese;
     private Color cheese_orange = new Color(255, 118, 13);
 
-    // controls the size of the board
-    private static final int TILE_SIZE = 50;
-    private static final int ROWS = 12;
-    private static final int COLUMNS = 18;
-
     public StartScreenPanel(){
         // panel configurations
-        setPreferredSize(new Dimension(TILE_SIZE * COLUMNS, TILE_SIZE * ROWS));
+        setPreferredSize(new Dimension(900, 600));
         this.setLayout(new BoxLayout(this, BoxLayout.PAGE_AXIS));
 
         loadResources();
@@ -30,7 +25,7 @@ public class StartScreenPanel extends JPanel implements ActionListener{
     }
 
     private void initializeStartScreenPanel(){
-        this.add(new Box.Filler(new Dimension(5, 100), new Dimension(5, 100), new Dimension(5, 100)));
+        this.add(createFillerWithSameValueForMinMaxAndPreferredDimension(100, 0));
         JLabel welcomeLabel = new JLabel();
         welcomeLabel.setText("Welcome to");
         welcomeLabel.setFont(moon_cheese.deriveFont(70f));
@@ -45,13 +40,13 @@ public class StartScreenPanel extends JPanel implements ActionListener{
         welcomeLabel2.setAlignmentX(this.CENTER_ALIGNMENT);
         this.add(welcomeLabel2);
 
-        this.add(new Box.Filler(new Dimension(5, 50), new Dimension(5, 50), new Dimension(5, 50)));
+        this.add(createFillerWithSameValueForMinMaxAndPreferredDimension(50, 0));
 
         JButton connectToGameButton = createCenteredButtonWithBasicLayout("Connect to game");
         connectToGameButton.addActionListener(new ConnectToGameListener());
         this.add(connectToGameButton);
 
-        this.add(new Box.Filler(new Dimension(5, 50), new Dimension(5, 50), new Dimension(5, 50)));
+        this.add(createFillerWithSameValueForMinMaxAndPreferredDimension(50, 0));
 
         JButton hostNewGameButton = createCenteredButtonWithBasicLayout("Host new game");
         hostNewGameButton.addActionListener(new HostNewGameListener());
@@ -81,20 +76,15 @@ public class StartScreenPanel extends JPanel implements ActionListener{
         hostConfigPanel.setOpaque(false);
         hostConfigPanel.setLayout(new BoxLayout(hostConfigPanel, BoxLayout.LINE_AXIS));
 
-        JLabel gameConfigLabel = new JLabel("Game host:");
-        gameConfigLabel.setFont(cheese.deriveFont(25f));
-        gameConfigLabel.setForeground(cheese_orange);
+        JLabel gameConfigLabel = createBasicLabel("Game host:");
 
         JTextField ipTextField = new JTextField();
         ipTextField.setFont(cheese.deriveFont(25f));
-        JLabel ipLabel = new JLabel("IP");
-        ipLabel.setFont(cheese.deriveFont(25f));
-        ipLabel.setForeground(cheese_orange);
+        JLabel ipLabel = createBasicLabel("IP");
+
         JTextField portTextField = new JTextField();
         portTextField.setFont(cheese.deriveFont(25f));
-        JLabel portLabel = new JLabel("Port");
-        portLabel.setFont(cheese.deriveFont(25f));
-        portLabel.setForeground(cheese_orange);
+        JLabel portLabel = createBasicLabel("Port");
 
         hostConfigPanel.add(createFillerWithSameValueForMinMaxAndPreferredDimension(0, 20));
         hostConfigPanel.add(gameConfigLabel);
@@ -117,9 +107,8 @@ public class StartScreenPanel extends JPanel implements ActionListener{
         nameConfigPanel.setOpaque(false);
         nameConfigPanel.setLayout(new BoxLayout(nameConfigPanel, BoxLayout.LINE_AXIS));
 
-        JLabel nameLabel = new JLabel("Name:");
-        nameLabel.setFont(cheese.deriveFont(25f));
-        nameLabel.setForeground(cheese_orange);
+        JLabel nameLabel = createBasicLabel("Name:");
+
         JTextField nameTextField = new JTextField();
         nameTextField.setFont(cheese.deriveFont(25f));
 
@@ -223,6 +212,13 @@ public class StartScreenPanel extends JPanel implements ActionListener{
 
     private Box.Filler createFillerWithSameValueForMinMaxAndPreferredDimension(int height, int width){
         return new Box.Filler(new Dimension(width, height), new Dimension(width, height), new Dimension(width, height));
+    }
+
+    private JLabel createBasicLabel(String labelText){
+        JLabel label = new JLabel(labelText);
+        label.setFont(cheese.deriveFont(25f));
+        label.setForeground(cheese_orange);
+        return label;
     }
 
     // UTIL
