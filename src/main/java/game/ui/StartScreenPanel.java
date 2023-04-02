@@ -13,6 +13,7 @@ public class StartScreenPanel extends JPanel implements ActionListener{
     private Image background;
     private Font moon_cheese;
     private Font cheese;
+    private Color cheese_orange = new Color(255, 118, 13);
 
     // controls the size of the board
     private static final int TILE_SIZE = 50;
@@ -46,23 +47,13 @@ public class StartScreenPanel extends JPanel implements ActionListener{
 
         this.add(new Box.Filler(new Dimension(5, 50), new Dimension(5, 50), new Dimension(5, 50)));
 
-        JButton connectToGameButton = new JButton();
-        connectToGameButton.setFont(cheese.deriveFont(25f));
-        connectToGameButton.setForeground(new Color(255, 118, 13));
-        connectToGameButton.setText("Connect to game");
-        connectToGameButton.setBackground(Color.white);
-        connectToGameButton.setAlignmentX(Component.CENTER_ALIGNMENT);
+        JButton connectToGameButton = createCenteredButtonWithBasicLayout("Connect to game");
         connectToGameButton.addActionListener(new ConnectToGameListener());
         this.add(connectToGameButton);
 
         this.add(new Box.Filler(new Dimension(5, 50), new Dimension(5, 50), new Dimension(5, 50)));
 
-        JButton hostNewGameButton = new JButton();
-        hostNewGameButton.setFont(cheese.deriveFont(25f));
-        hostNewGameButton.setForeground(new Color(255, 118, 13));
-        hostNewGameButton.setText("Host new game");
-        hostNewGameButton.setBackground(Color.white);
-        hostNewGameButton.setAlignmentX(Component.CENTER_ALIGNMENT);
+        JButton hostNewGameButton = createCenteredButtonWithBasicLayout("Host new game");
         hostNewGameButton.addActionListener(new HostNewGameListener());
         this.add(hostNewGameButton);
     }
@@ -92,33 +83,34 @@ public class StartScreenPanel extends JPanel implements ActionListener{
 
         JLabel gameConfigLabel = new JLabel("Game host:");
         gameConfigLabel.setFont(cheese.deriveFont(25f));
-        gameConfigLabel.setForeground(new Color(255, 118, 13));
+        gameConfigLabel.setForeground(cheese_orange);
+
         JTextField ipTextField = new JTextField();
         ipTextField.setFont(cheese.deriveFont(25f));
         JLabel ipLabel = new JLabel("IP");
         ipLabel.setFont(cheese.deriveFont(25f));
-        ipLabel.setForeground(new Color(255, 118, 13));
+        ipLabel.setForeground(cheese_orange);
         JTextField portTextField = new JTextField();
         portTextField.setFont(cheese.deriveFont(25f));
         JLabel portLabel = new JLabel("Port");
         portLabel.setFont(cheese.deriveFont(25f));
-        portLabel.setForeground(new Color(255, 118, 13));
+        portLabel.setForeground(cheese_orange);
 
-        hostConfigPanel.add(new Box.Filler(new Dimension(20, 0), new Dimension(20, 0), new Dimension(20, 0)));
+        hostConfigPanel.add(createFillerWithSameValueForMinMaxAndPreferredDimension(0, 20));
         hostConfigPanel.add(gameConfigLabel);
-        hostConfigPanel.add(new Box.Filler(new Dimension(5, 0), new Dimension(5, 0), new Dimension(5, 0)));
+        hostConfigPanel.add(createFillerWithSameValueForMinMaxAndPreferredDimension(5, 0));
         hostConfigPanel.add(ipTextField);
-        hostConfigPanel.add(new Box.Filler(new Dimension(5, 0), new Dimension(5, 0), new Dimension(5, 0)));
+        hostConfigPanel.add(createFillerWithSameValueForMinMaxAndPreferredDimension(5, 0));
         hostConfigPanel.add(ipLabel);
-        hostConfigPanel.add(new Box.Filler(new Dimension(20, 0), new Dimension(20, 0), new Dimension(20, 0)));
+        hostConfigPanel.add(createFillerWithSameValueForMinMaxAndPreferredDimension(0, 20));
         hostConfigPanel.add(portTextField);
-        hostConfigPanel.add(new Box.Filler(new Dimension(5, 0), new Dimension(5, 0), new Dimension(5, 0)));
+        hostConfigPanel.add(createFillerWithSameValueForMinMaxAndPreferredDimension(5, 0));
         hostConfigPanel.add(portLabel);
-        hostConfigPanel.add(new Box.Filler(new Dimension(20, 0), new Dimension(20, 0), new Dimension(20, 0)));
+        hostConfigPanel.add(createFillerWithSameValueForMinMaxAndPreferredDimension(0, 20));
 
         this.add(hostConfigPanel);
 
-        this.add(new Box.Filler(new Dimension(5, 50), new Dimension(5, 50), new Dimension(5, 50)));
+        this.add(createFillerWithSameValueForMinMaxAndPreferredDimension(50, 0));
 
         JPanel nameConfigPanel = new JPanel();
         nameConfigPanel.setMaximumSize(new Dimension(this.getWidth(), 50));
@@ -127,26 +119,21 @@ public class StartScreenPanel extends JPanel implements ActionListener{
 
         JLabel nameLabel = new JLabel("Name:");
         nameLabel.setFont(cheese.deriveFont(25f));
-        nameLabel.setForeground(new Color(255, 118, 13));
+        nameLabel.setForeground(cheese_orange);
         JTextField nameTextField = new JTextField();
         nameTextField.setFont(cheese.deriveFont(25f));
 
-        nameConfigPanel.add(new Box.Filler(new Dimension(20, 0), new Dimension(220, 0), new Dimension(200, 0)));
+        nameConfigPanel.add(createFillerWithSameValueForMinMaxAndPreferredDimension(0, 200));
         nameConfigPanel.add(nameLabel);
-        nameConfigPanel.add(new Box.Filler(new Dimension(5, 0), new Dimension(5, 0), new Dimension(5, 0)));
+        nameConfigPanel.add(createFillerWithSameValueForMinMaxAndPreferredDimension(5, 0));
         nameConfigPanel.add(nameTextField);
-        nameConfigPanel.add(new Box.Filler(new Dimension(20, 0), new Dimension(220, 0), new Dimension(200, 0)));
+        nameConfigPanel.add(createFillerWithSameValueForMinMaxAndPreferredDimension(0, 200));
 
         this.add(nameConfigPanel);
 
-        this.add(new Box.Filler(new Dimension(5, 50), new Dimension(5, 50), new Dimension(5, 50)));
+        this.add(createFillerWithSameValueForMinMaxAndPreferredDimension(50, 0));
 
-        JButton connectButton = new JButton();
-        connectButton.setFont(cheese.deriveFont(25f));
-        connectButton.setForeground(new Color(255, 118, 13));
-        connectButton.setText("Connect");
-        connectButton.setBackground(Color.white);
-        connectButton.setAlignmentX(Component.CENTER_ALIGNMENT);
+        JButton connectButton = createCenteredButtonWithBasicLayout("Connect");
         connectButton.addActionListener(new ConnectToGameHostListener());
         this.add(connectButton);
 
@@ -175,13 +162,12 @@ public class StartScreenPanel extends JPanel implements ActionListener{
             this.remove(fillers.get(i));
         }
 
-
         JLabel letJoinLabel = new JLabel("Let your friends join:");
         letJoinLabel.setFont(cheese.deriveFont(25f));
         letJoinLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
         this.add(letJoinLabel);
 
-        this.add(new Box.Filler(new Dimension(5, 5), new Dimension(5, 5), new Dimension(5, 5)));
+        this.add(createFillerWithSameValueForMinMaxAndPreferredDimension(0, 5));
 
         JPanel gameInfoPanel = new JPanel();
         gameInfoPanel.setMaximumSize(new Dimension(this.getWidth(), 50));
@@ -190,32 +176,26 @@ public class StartScreenPanel extends JPanel implements ActionListener{
 
         JTextField hostInfoText = new JTextField();
         hostInfoText.setFont(cheese.deriveFont(25f));
-        hostInfoText.setForeground(new Color(255, 118, 13));
+        hostInfoText.setForeground(cheese_orange);
         hostInfoText.setBackground(Color.white);
         hostInfoText.setEditable(false);
         hostInfoText.setText("IP: " + ip + "    Port: " + port);
         hostInfoText.setHorizontalAlignment(JTextField.CENTER);
         hostInfoText.setCaretColor(Color.WHITE);
 
-        gameInfoPanel.add(new Box.Filler(new Dimension(100, 0), new Dimension(100, 0), new Dimension(100, 0)));
+        gameInfoPanel.add(createFillerWithSameValueForMinMaxAndPreferredDimension(0, 100));
         gameInfoPanel.add(hostInfoText);
-        gameInfoPanel.add(new Box.Filler(new Dimension(100, 0), new Dimension(100, 0), new Dimension(100, 0)));
-
+        gameInfoPanel.add(createFillerWithSameValueForMinMaxAndPreferredDimension(0, 100));
         this.add(gameInfoPanel);
 
-        this.add(new Box.Filler(new Dimension(5, 25), new Dimension(5, 25), new Dimension(5, 25)));
+        this.add(createFillerWithSameValueForMinMaxAndPreferredDimension(25, 5));
 
         JPanel playersJoinedPanel = new PlayersJoinedPanel(this.getWidth(), 100);
         this.add(playersJoinedPanel);
 
-        this.add(new Box.Filler(new Dimension(5, 25), new Dimension(5, 25), new Dimension(5, 25)));
+        this.add(createFillerWithSameValueForMinMaxAndPreferredDimension(25, 0));
 
-        JButton connectButton = new JButton();
-        connectButton.setFont(cheese.deriveFont(25f));
-        connectButton.setForeground(new Color(255, 118, 13));
-        connectButton.setText("Start mouse catching");
-        connectButton.setBackground(Color.white);
-        connectButton.setAlignmentX(Component.CENTER_ALIGNMENT);
+        JButton connectButton = createCenteredButtonWithBasicLayout("Start mouse catching");
         connectButton.addActionListener(new StartGameAsHostListener());
         this.add(connectButton);
 
@@ -227,6 +207,22 @@ public class StartScreenPanel extends JPanel implements ActionListener{
     protected void paintComponent(Graphics g)     {
         super.paintComponent(g);
         g.drawImage(background, 0, 0, getWidth(), getHeight(), null); // image scaled
+    }
+
+
+    // COMMON UI
+    private JButton createCenteredButtonWithBasicLayout(String buttonText){
+        JButton basicButton = new JButton();
+        basicButton.setFont(cheese.deriveFont(25f));
+        basicButton.setForeground(new Color(255, 118, 13));
+        basicButton.setText(buttonText);
+        basicButton.setBackground(Color.white);
+        basicButton.setAlignmentX(Component.CENTER_ALIGNMENT);
+        return basicButton;
+    }
+
+    private Box.Filler createFillerWithSameValueForMinMaxAndPreferredDimension(int height, int width){
+        return new Box.Filler(new Dimension(width, height), new Dimension(width, height), new Dimension(width, height));
     }
 
     // UTIL
