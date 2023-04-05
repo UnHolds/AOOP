@@ -12,17 +12,19 @@ public class Mouse implements IMouse{
     private boolean won;
     private int goal;
     private int currentPos;
+    private int nextExit;
     private int distance;
     private int minDistance;
 
 
 
-    public Mouse(boolean alive, SubwayMap map, boolean won, int goal, int currentPos, int distance, int minDistance){
+    public Mouse(boolean alive, SubwayMap map, boolean won, int goal, int currentPos, int nextExit, int distance, int minDistance){
         this.alive = alive;
         this.map = map;
         this.won = won;
         this.goal = goal;
         this.currentPos = currentPos;
+        this.nextExit = nextExit;
         this.distance = distance;
         this.minDistance = minDistance;
     }
@@ -45,6 +47,10 @@ public class Mouse implements IMouse{
 
     public int getCurrentPos() {
         return currentPos;
+    }
+
+    public int getNextExit() {
+        return nextExit;
     }
 
     public int getDistance() {
@@ -75,6 +81,10 @@ public class Mouse implements IMouse{
         this.currentPos = currentPos;
     }
 
+    public void setNextExit(int nextExit) {
+        this.nextExit = nextExit;
+    }
+
     public void setDistance(int distance) {
         this.distance = distance;
     }
@@ -95,16 +105,15 @@ public class Mouse implements IMouse{
 
     @Override
     public void calculateNextMove(){
-        while (distance < minDistance){
+        if (distance < minDistance){
             List<Integer> directNeighbor = map.getStationExit(currentPos);
             Random rand = new Random();
             int nextExit = directNeighbor.get(rand.nextInt(directNeighbor.size()));
-            setCurrentPos(nextExit);
+            setNextExit(nextExit);
             List<Station> nextSubway = map.getSubways(currentPos);
             Station next  = nextSubway.get(rand.nextInt(nextSubway.size()));
             setCurrentPos(next.getValue());
             distance += next.getWeight();
-            System.out.printf("Current value of distance: %d and current pos: %d",distance, currentPos);
             System.out.println();
         }
         //Run towards the win
@@ -127,6 +136,7 @@ public class Mouse implements IMouse{
             distance += lastStop.getWeight();
             setWon(true);
             System.out.printf("Reached Goal, after distance %d on Node %d", distance, currentPos);
+            System.out.println();
         }
 
     }

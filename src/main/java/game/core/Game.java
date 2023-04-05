@@ -65,8 +65,9 @@ public class Game implements IGame{
 
         // Adjazenzlistendarstellung des Graphen drucken
         SubwayMap.printMap(subwayMap);
-        Mouse mouse1 = new Mouse(true, subwayMap, false, 10,0,0,50);
-        mouse1.calculateNextMove();
+        Mouse mouse1 = new Mouse(true, subwayMap, false, 10,0,0,0,50);
+        Mouse mouse2 = new Mouse(true, subwayMap, false, 10,5,0,0,50);
+
         }
 
     @Override
