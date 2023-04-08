@@ -17,8 +17,8 @@ public class GameWindow {
         this.window.setResizable(false);
 
         this.startScreenPanel = new StartScreenPanel();
-        //this.window.add(this.startScreenPanel);
-        this.window.add(new GameFieldPanel());
+        this.window.add(new WinScreenPanel());
+        //this.window.add(new GameFieldPanel());
 
         this.window.pack(); // fit the window size around the components
         this.window.setLocationRelativeTo(null);

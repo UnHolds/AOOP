@@ -16,9 +16,11 @@ import java.util.ArrayList;
 public class GameFieldPanel extends JPanel implements ActionListener, KeyListener {
 
     private Image background;
-    private Font moon_cheese;
+    private Image keyLeft;
+    private Image keyRight;
+    private Image keyDown;
+    private Image keyUp;
     private Font cheese;
-    private Color cheese_orange = new Color(255, 118, 13);
     private ArrayList<Image> catImages;
 
     private ArrayList<IPlayer> playerList;
@@ -30,9 +32,12 @@ public class GameFieldPanel extends JPanel implements ActionListener, KeyListene
     // case we need access to it in another method
     private Timer timer;
 
+    private int windowWidth = 900;
+    private int windowHeight = 600;
+
 
     public GameFieldPanel() {
-        setPreferredSize(new Dimension(900, 600));
+        setPreferredSize(new Dimension(windowWidth, windowHeight));
         this.setLayout(new GridBagLayout());
         this.catImages = new ArrayList<>();
 
@@ -43,6 +48,7 @@ public class GameFieldPanel extends JPanel implements ActionListener, KeyListene
         this.playerList.add(new Player(2, "Bob"));
         this.playerList.add(new Player(4, "Eve"));
         // TODO end
+
 
         loadResources();
 
@@ -59,31 +65,42 @@ public class GameFieldPanel extends JPanel implements ActionListener, KeyListene
         c.fill = GridBagConstraints.HORIZONTAL;
 
         // Player panel
+        c.weightx = 0.5;
         c.weighty = 0.5;
         c.gridx = 0;
         c.gridy = 0;
         this.add(playerInfoPanel(), c);
 
         // Playing field
-        JPanel gameField = new FieldPanel(this.getWidth() / 2, this.getHeight() - 100);
+        JPanel gameField = new FieldPanel(this.windowWidth/2, this.windowHeight - 100);
+        c.weightx = 0.5;
         c.weighty = 0.5;
         c.gridx = 1;
         c.gridy = 0;
+        c.gridwidth = 2;
         this.add(gameField, c);
 
         // Playing manual
+        c.weightx = 0.5;
         c.weighty = 0.5;
-        c.gridx = 2;
+        c.gridx = 3;
         c.gridy = 0;
         this.add(gameManualPanel(), c);
     }
 
     private JPanel gameManualPanel(){
         JPanel gameManualPanel = new JPanel();
-        gameManualPanel.setMaximumSize(new Dimension(100,this.getHeight()));
+        gameManualPanel.setMaximumSize(new Dimension(200,this.getHeight()));
         gameManualPanel.setOpaque(false);
         gameManualPanel.setLayout(new BoxLayout(gameManualPanel, BoxLayout.PAGE_AXIS));
 
+        gameManualPanel.add(playingInstructionPanel(keyLeft, "Move left"));
+        gameManualPanel.add(createFillerWithSameValueForMinMaxAndPreferredDimension(40, 0));
+        gameManualPanel.add(playingInstructionPanel(keyRight, "Move right"));
+        gameManualPanel.add(createFillerWithSameValueForMinMaxAndPreferredDimension(40, 0));
+        gameManualPanel.add(playingInstructionPanel(keyUp, "Move up"));
+        gameManualPanel.add(createFillerWithSameValueForMinMaxAndPreferredDimension(40, 0));
+        gameManualPanel.add(playingInstructionPanel(keyDown, "Move down"));
 
         return gameManualPanel;
     }
@@ -96,7 +113,9 @@ public class GameFieldPanel extends JPanel implements ActionListener, KeyListene
 
         for (int i = 0; i < playerList.size(); i++) {
             playerInfoPanel.add(playerPanel(playerList.get(i)));
-            playerInfoPanel.add(createFillerWithSameValueForMinMaxAndPreferredDimension(50, 0));
+            if (i <= 2){
+                playerInfoPanel.add(createFillerWithSameValueForMinMaxAndPreferredDimension(50, 0));
+            }
         }
         return playerInfoPanel;
     }
@@ -138,6 +157,20 @@ public class GameFieldPanel extends JPanel implements ActionListener, KeyListene
         return panel;
     }
 
+    private JPanel playingInstructionPanel(Image image, String instruction){
+        JPanel panel = new JPanel();
+        panel.setOpaque(false);
+        panel.setMaximumSize(new Dimension(200, 100));
+        panel.setLayout(new BoxLayout(panel, BoxLayout.LINE_AXIS));
+
+        JLabel imageLabel = new JLabel(new ImageIcon(image.getScaledInstance(50, 50, Image.SCALE_SMOOTH)));
+        panel.add(imageLabel);
+        panel.add(createFillerWithSameValueForMinMaxAndPreferredDimension(0, 10));
+        JLabel instructionLabel = createBasicLabel(instruction, Color.black);
+        panel.add(instructionLabel);
+        return panel;
+    }
+
     @Override
     protected void paintComponent(Graphics g)     {
         super.paintComponent(g);
@@ -173,12 +206,15 @@ public class GameFieldPanel extends JPanel implements ActionListener, KeyListene
     private void loadResources(){
         try {
             background = ImageIO.read(getClass().getClassLoader().getResourceAsStream("cheese_background.png"));
-            moon_cheese = Font.createFont(Font.TRUETYPE_FONT, getClass().getClassLoader().getResourceAsStream("MoonCheese-Regular2.ttf"));
             cheese = Font.createFont(Font.TRUETYPE_FONT, getClass().getClassLoader().getResourceAsStream("cheeseusauceu.ttf"));
             catImages.add(ImageIO.read(getClass().getClassLoader().getResourceAsStream("cat1.png")));
             catImages.add(ImageIO.read(getClass().getClassLoader().getResourceAsStream("cat2.png")));
             catImages.add(ImageIO.read(getClass().getClassLoader().getResourceAsStream("cat3.png")));
             catImages.add(ImageIO.read(getClass().getClassLoader().getResourceAsStream("cat4.png")));
+            keyLeft = ImageIO.read(getClass().getClassLoader().getResourceAsStream("keyboard_left_key.png"));
+            keyRight = ImageIO.read(getClass().getClassLoader().getResourceAsStream("keyboard_right_key.png"));
+            keyUp = ImageIO.read(getClass().getClassLoader().getResourceAsStream("keyboard_up_key.png"));
+            keyDown = ImageIO.read(getClass().getClassLoader().getResourceAsStream("keyboard_down_key.png"));
         } catch (IOException | FontFormatException e) {
             e.printStackTrace(); // TODO use another way of error handling
         }
