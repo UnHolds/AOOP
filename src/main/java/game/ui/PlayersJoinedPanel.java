@@ -32,6 +32,7 @@ public class PlayersJoinedPanel extends JPanel {
             this.add(panel);
             this.playerPanels.add(panel);
         }
+
     }
 
     private JPanel anonymousPlayerPanel(){

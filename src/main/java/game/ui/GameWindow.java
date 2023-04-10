@@ -1,4 +1,6 @@
 package game.ui;
+import game.core.models.Field;
+
 import javax.swing.*;
 
 public class GameWindow {
@@ -8,8 +10,11 @@ public class GameWindow {
     private GameFieldPanel gameFieldPanel;
     private WinScreenPanel winScreenPanel;
 
-    public GameWindow(){
+    private Field field;
+
+    public GameWindow(Field field){
         this.window = new JFrame("Cat & Mouse Game");
+        this.field = field;
     }
 
     public void initWindow() {
@@ -18,7 +23,7 @@ public class GameWindow {
 
         this.startScreenPanel = new StartScreenPanel();
         //this.window.add(this.startScreenPanel);
-        this.window.add(new GameFieldPanel());
+        this.window.add(new GameFieldPanel(field));
 
         this.window.pack(); // fit the window size around the components
         this.window.setLocationRelativeTo(null);
@@ -26,7 +31,7 @@ public class GameWindow {
     }
 
     public void showGameFieldPanel() {
-        this.gameFieldPanel = new GameFieldPanel();
+        this.gameFieldPanel = new GameFieldPanel(field);
         this.window.remove(this.startScreenPanel);
         this.window.add(gameFieldPanel);
         this.window.addKeyListener(gameFieldPanel);
