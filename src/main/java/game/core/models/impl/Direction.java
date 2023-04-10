@@ -1,4 +1,4 @@
-package game.core.models;
+package game.core.models.impl;
 
 public enum Direction {
     UP,

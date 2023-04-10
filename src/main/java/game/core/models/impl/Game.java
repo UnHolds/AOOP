@@ -1,9 +1,13 @@
-package game.core.models;
+package game.core.models.impl;
+
+import game.core.models.IGame;
+import game.core.models.IMouse;
+import game.core.models.IPlayer;
 
 import java.util.List;
 import java.util.Set;
 
-public class Game {
+public class Game implements IGame {
     private Field field;
     private List<IPlayer> players;
     private Set<IMouse> mouses;

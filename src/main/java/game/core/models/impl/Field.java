@@ -1,8 +1,10 @@
-package game.core.models;
+package game.core.models.impl;
+
+import game.core.models.IField;
 
 import java.util.Set;
 
-public class Field {
+public class Field implements IField {
     private int rowCount;
     private int columnCount;
 

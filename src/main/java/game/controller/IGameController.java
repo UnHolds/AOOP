@@ -1,10 +1,10 @@
-package game.core;
+package game.controller;
 
 /***
  * This is the games starting point (Main)
  * IGame puts all the parts of the game together
  */
-public interface IGame {
+public interface IGameController {
     /**
      * showStartScreen - shows the start screen with the options needed to start a new game
      */

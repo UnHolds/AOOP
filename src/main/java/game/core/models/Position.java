@@ -1,6 +1,6 @@
-package game.core;
+package game.core.models;
 
-import game.core.models.Direction;
+import game.core.models.impl.Direction;
 
 public record Position(int row, int column) {
     public Position move(Direction direction) {

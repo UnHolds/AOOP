@@ -1,18 +1,18 @@
-package game.core;
+package game.controller;
 
 
 import game.core.models.*;
-import game.core.models.Field;
-import game.core.models.Game;
-import game.core.models.Player;
-import game.core.models.Subway;
+import game.core.models.impl.Field;
+import game.core.models.impl.Game;
+import game.core.models.impl.Player;
+import game.core.models.impl.Subway;
 import game.ui.GameWindow;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
-public class GameController implements IGame{
+public class GameController implements IGameController {
     private Game game;
 
     @Override

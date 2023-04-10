@@ -1,9 +1,9 @@
 package game.ui;
 
-import game.core.Position;
-import game.core.models.Game;
+import game.core.models.Position;
+import game.core.models.impl.Game;
 import game.core.models.IPlayer;
-import game.core.models.Subway;
+import game.core.models.impl.Subway;
 
 import javax.swing.*;
 import java.awt.*;

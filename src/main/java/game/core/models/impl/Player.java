@@ -1,6 +1,7 @@
-package game.core.models;
+package game.core.models.impl;
 
-import game.core.Position;
+import game.core.models.Position;
+import game.core.models.IPlayer;
 
 import java.awt.*;
 

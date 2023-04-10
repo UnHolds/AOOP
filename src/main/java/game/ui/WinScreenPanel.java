@@ -1,6 +1,6 @@
 package game.ui;
 
-import game.core.models.Game;
+import game.core.models.impl.Game;
 import game.core.models.IPlayer;
 
 import javax.imageio.ImageIO;
