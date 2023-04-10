@@ -1,7 +1,8 @@
 package game.ui;
 
 import game.core.Position;
-import game.core.models.Field;
+import game.core.models.Game;
+import game.core.models.IPlayer;
 import game.core.models.Subway;
 
 import javax.swing.*;
@@ -17,19 +18,19 @@ public class FieldPanel extends JPanel implements ActionListener, KeyListener {
     //public static final int ROWS = 12;
     //public static final int COLUMNS = 18;
 
-    private Field field;
+    private Game game;
 
-    public FieldPanel(Field field){
+    public FieldPanel(Game game){
         // calculate number of tiles, rows and columns depending on size TODO
-        this.field = field;
+        this.game = game;
     }
 
     private void drawBackground(Graphics g) {
         // draw a checkered background
         g.setColor(new Color(214, 214, 214));
 
-        for (int row = 0; row < field.getRowCount(); row++) {
-            for (int col = 0; col < field.getColumnCount(); col++) {
+        for (int row = 0; row < game.getField().getRowCount(); row++) {
+            for (int col = 0; col < game.getField().getColumnCount(); col++) {
                 // only color every other tile
                 if ((row + col) % 2 == 1) {
                     // draw a square tile at the current row/column position
@@ -44,13 +45,8 @@ public class FieldPanel extends JPanel implements ActionListener, KeyListener {
         }
     }
 
-    @Override
-    public void paintComponent(Graphics g) {
-        super.paintComponent(g);
-        drawBackground(g);
-
-        // Draw Subways
-        for(Subway subway : field.getSubways()) {
+    private void drawSubways(Graphics g) {
+        for(Subway subway : game.getField().getSubways()) {
             for(Position exit : subway.getExits()) {
                 g.setColor(Color.BLACK);
                 g.drawOval(
@@ -60,6 +56,28 @@ public class FieldPanel extends JPanel implements ActionListener, KeyListener {
                 );
             }
         }
+    }
+
+    private void drawCharacters(Graphics g) {
+        for (IPlayer player : game.getPlayers()) {
+            g.drawImage(
+                    player.getImage(),
+                    player.getPosition().column() * TILE_SIZE,
+                    player.getPosition().row() * TILE_SIZE,
+                    TILE_SIZE,
+                    TILE_SIZE,
+                    null
+                    );
+        }
+    }
+
+    @Override
+    public void paintComponent(Graphics g) {
+        super.paintComponent(g);
+        drawBackground(g);
+        drawSubways(g);
+        drawCharacters(g);
+
 
         // this smooths out animations on some systems
         Toolkit.getDefaultToolkit().sync();

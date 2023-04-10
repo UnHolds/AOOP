@@ -1,9 +1,7 @@
 package game.ui;
 
-import game.core.Game;
-import game.core.models.Field;
+import game.core.models.Game;
 import game.core.models.IPlayer;
-import game.core.models.Player;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
@@ -13,7 +11,6 @@ import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.io.IOException;
-import java.util.ArrayList;
 
 public class GameFieldPanel extends JPanel implements ActionListener, KeyListener {
 
@@ -23,9 +20,6 @@ public class GameFieldPanel extends JPanel implements ActionListener, KeyListene
     private Image keyDown;
     private Image keyUp;
     private Font cheese;
-    private ArrayList<Image> catImages;
-
-    private ArrayList<IPlayer> playerList;
 
     // controls the delay between each tick in ms
     private final int DELAY = 25;
@@ -36,22 +30,13 @@ public class GameFieldPanel extends JPanel implements ActionListener, KeyListene
 
     private int windowWidth = 900;
     private int windowHeight = 600;
-    private Field field;
+    private Game game;
 
 
-    public GameFieldPanel(Field field) {
+    public GameFieldPanel(Game game) {
         setPreferredSize(new Dimension(windowWidth, windowHeight));
         this.setLayout(new BorderLayout());
-        this.catImages = new ArrayList<>();
-        this.field = field;
-
-        // TODO remove this test code and replace with game logic
-        this.playerList = new ArrayList<>();
-        this.playerList.add(new Player(3, "Alice"));
-        this.playerList.add(new Player(1, "Bob"));
-        this.playerList.add(new Player(2, "Bob"));
-        this.playerList.add(new Player(4, "Eve"));
-        // TODO end
+        this.game = game;
 
 
         loadResources();
@@ -66,7 +51,7 @@ public class GameFieldPanel extends JPanel implements ActionListener, KeyListene
 
     public void initializeGameFieldPanel(){
         this.add(playerInfoPanel(), BorderLayout.LINE_END);
-        JPanel gameField = new FieldPanel(field);
+        JPanel gameField = new FieldPanel(game);
         this.add(gameField, BorderLayout.CENTER);
 
         // TODO: readd manual panel
@@ -96,8 +81,8 @@ public class GameFieldPanel extends JPanel implements ActionListener, KeyListene
         playerInfoPanel.setOpaque(false);
         playerInfoPanel.setLayout(new BoxLayout(playerInfoPanel, BoxLayout.PAGE_AXIS));
 
-        for (int i = 0; i < playerList.size(); i++) {
-            playerInfoPanel.add(playerPanel(playerList.get(i)));
+        for (int i = 0; i < game.getPlayers().size(); i++) {
+            playerInfoPanel.add(playerPanel(game.getPlayers().get(i)));
             if (i <= 2){
                 playerInfoPanel.add(createFillerWithSameValueForMinMaxAndPreferredDimension(50, 0));
             }
@@ -133,7 +118,7 @@ public class GameFieldPanel extends JPanel implements ActionListener, KeyListene
         panel.add(createBasicLabel(Integer.toString(player.getScore()), Color.black), c);
 
         // Image
-        JLabel image = new JLabel(new ImageIcon(catImages.get(player.getGameUIId() - 1).getScaledInstance(50, 50, Image.SCALE_SMOOTH)));
+        JLabel image = new JLabel(new ImageIcon(player.getImage().getScaledInstance(50, 50, Image.SCALE_SMOOTH)));
         c.weighty = 0.5;
         c.gridx = 0;
         c.gridy = 2;
@@ -192,10 +177,6 @@ public class GameFieldPanel extends JPanel implements ActionListener, KeyListene
         try {
             background = ImageIO.read(getClass().getClassLoader().getResourceAsStream("cheese_background.png"));
             cheese = Font.createFont(Font.TRUETYPE_FONT, getClass().getClassLoader().getResourceAsStream("cheeseusauceu.ttf"));
-            catImages.add(ImageIO.read(getClass().getClassLoader().getResourceAsStream("cat1.png")));
-            catImages.add(ImageIO.read(getClass().getClassLoader().getResourceAsStream("cat2.png")));
-            catImages.add(ImageIO.read(getClass().getClassLoader().getResourceAsStream("cat3.png")));
-            catImages.add(ImageIO.read(getClass().getClassLoader().getResourceAsStream("cat4.png")));
             keyLeft = ImageIO.read(getClass().getClassLoader().getResourceAsStream("keyboard_left_key.png"));
             keyRight = ImageIO.read(getClass().getClassLoader().getResourceAsStream("keyboard_right_key.png"));
             keyUp = ImageIO.read(getClass().getClassLoader().getResourceAsStream("keyboard_up_key.png"));

@@ -1,6 +1,8 @@
 package game.core.models;
 
-public interface IPlayer {
+import java.awt.*;
+
+public interface IPlayer extends ICharacter {
 
     int getScore();
 

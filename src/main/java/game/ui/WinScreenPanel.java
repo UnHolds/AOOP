@@ -1,7 +1,7 @@
 package game.ui;
 
+import game.core.models.Game;
 import game.core.models.IPlayer;
-import game.core.models.Player;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
@@ -19,40 +19,16 @@ public class WinScreenPanel extends JPanel implements ActionListener {
     private ArrayList<Image> catImages;
     private Image podium;
 
-    private ArrayList<IPlayer> playerScoreInfo;
+    private Game game;
 
-    public WinScreenPanel(){
+    public WinScreenPanel(Game game){
+        this.game = game;
         setPreferredSize(new Dimension(900, 600));
         this.setLayout(new BoxLayout(this, BoxLayout.PAGE_AXIS));
         this.catImages = new ArrayList<>();
 
         loadResources();
-        // TODO get winner name and winner_info here or make it part of the constructor
-
         // IMPORTANT winner info list must be sorted
-
-        // TODO this is test data - pls remove when changed to game logic
-        playerScoreInfo = new ArrayList<>();
-        Player alice = new Player(3, "Alice");
-        alice.incrementScore();
-        alice.incrementScore();
-        alice.incrementScore();
-        alice.incrementScore();
-        playerScoreInfo.add(alice);
-
-        Player bob = new Player(1, "Bob");
-        bob.incrementScore();
-        bob.incrementScore();
-        bob.incrementScore();
-        playerScoreInfo.add(bob);
-
-        Player bob2 = new Player(2, "Bob");
-        bob2.incrementScore();
-        bob2.incrementScore();
-        playerScoreInfo.add(bob2);
-
-        playerScoreInfo.add(new Player(4, "Eve")); // TODO remove end
-
         initializeWinScreenPanel("winnername");
     }
 
@@ -83,8 +59,8 @@ public class WinScreenPanel extends JPanel implements ActionListener {
         scoreBoard.setLayout(new BoxLayout(scoreBoard, BoxLayout.LINE_AXIS));
         scoreBoard.setOpaque(false);
 
-        for (int i = 0; i < playerScoreInfo.size(); i++) {
-            String text = (i+1) + ". " + playerScoreInfo.get(i).getName() + " - " + playerScoreInfo.get(i).getScore();
+        for (int i = 0; i < game.getPlayers().size(); i++) {
+            String text = (i+1) + ". " + game.getPlayers().get(i).getName() + " - " + game.getPlayers().get(i).getScore();
             if(i <= 2){
                 text += " *** ";
             }
@@ -147,7 +123,7 @@ public class WinScreenPanel extends JPanel implements ActionListener {
         c.fill = GridBagConstraints.HORIZONTAL;
 
         // 1st place
-        JPanel firstPlace = playerPanel(playerScoreInfo.get(0));
+        JPanel firstPlace = playerPanel(game.getPlayers().get(0));
         c.fill = GridBagConstraints.HORIZONTAL;
         c.weightx = 0.5;
         c.gridx = 1;
@@ -155,7 +131,7 @@ public class WinScreenPanel extends JPanel implements ActionListener {
         podiumPanel.add(firstPlace,c);
 
         // 2nd place
-        JPanel secondPlace = playerPanel(playerScoreInfo.get(1));
+        JPanel secondPlace = playerPanel(game.getPlayers().get(1));
         c.fill = GridBagConstraints.HORIZONTAL;
         c.weightx = 0.5;
         c.gridx = 0;
@@ -163,7 +139,7 @@ public class WinScreenPanel extends JPanel implements ActionListener {
         podiumPanel.add(secondPlace,c);
 
         // 3rd place
-        JPanel thirdPlace = playerPanel(playerScoreInfo.get(2));
+        JPanel thirdPlace = playerPanel(game.getPlayers().get(2));
         c.fill = GridBagConstraints.HORIZONTAL;
         c.weightx = 0.5;
         c.gridx = 2;

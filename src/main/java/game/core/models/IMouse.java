@@ -9,14 +9,14 @@ public interface IMouse extends ICharacter{
     /**
      *
      */
-    public void deathAnimation();
+    // public void deathAnimation();
 
 
     /**
      * Calculate where the mouse moves next based on if it is on the surface or in the tunnel and the moving algorithm
      * the mouse applies
      */
-    public void calculateNextMove();
+    //public void calculateNextMove();
 
 
     /**
@@ -24,6 +24,7 @@ public interface IMouse extends ICharacter{
      * broadCastCatLocationsToMiceNearby - notifies the other mice about the cat's position given the current mouse
      * is in a tunnel and other mice are in the same place
      */
-    public void broadCastCatLocationsToMiceNearby();
+    // public void broadCastCatLocationsToMiceNearby();
+
 
 }
