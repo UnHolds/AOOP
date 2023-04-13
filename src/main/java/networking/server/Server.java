@@ -137,8 +137,11 @@ public class Server implements IServer, Runnable{
 
     @Override
     public List<IMessage> getAllMessages() {
-        List<IMessage> messages = this.receivedMessages.stream().toList();
-        this.receivedMessages.clear();
+        List<IMessage> messages;
+        synchronized (this) {
+            messages = this.receivedMessages.stream().toList();
+            this.receivedMessages.clear();
+        }
         return messages;
     }
 
@@ -197,7 +200,9 @@ public class Server implements IServer, Runnable{
             }
 
 
-            this.receivedMessages.addAll(messages);
+            synchronized (this) {
+                this.receivedMessages.addAll(messages);
+            }
             /*
             messages = handleMessages(messages);
 
