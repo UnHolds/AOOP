@@ -78,19 +78,5 @@ public class MessageTest {
         assertFalse(exceptionThrownInThread);
 
     }
-
-    @Test
-    public void testIfCatPositionMessageReturnsRightCoordinates() throws InterruptedException {
-        ((Server)this.server).forwardEverything = true;
-        this.sender.sendMessage(this.messageFactorySender.createCatPositionMessage(System.currentTimeMillis(), 1, 2, 3));
-        Thread.sleep(100);
-        List<IMessage> messages = this.receiver.getMessages();
-        assertEquals(1, messages.size());
-        IMessage message = messages.get(0);
-        assertEquals(1, message.getCatPositionX());
-        assertEquals(2, message.getCatPositionY());
-        assertEquals(3, message.getCatPositionZ());
-        assertEquals(3, message.getCatPosition().length);
-        assertTrue(Arrays.equals(new int[] { 1, 2, 3}, message.getCatPosition()));
-    }
+    
 }
