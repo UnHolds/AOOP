@@ -358,7 +358,7 @@ public class ServerTest {
             List<IMessage> messages =  client.getMessages();
             List<Long> gameTicks = messages.stream().map(m -> m.getCurrentGameTick()).collect(Collectors.toList());
             List<Long> missingGameTicks = numbers.stream().filter(n -> gameTicks.contains(n) == false).collect(Collectors.toList());
-            assertEquals(0, missingGameTicks);
+            assertEquals(0, missingGameTicks.size());
             assertEquals(numClients*numMessages, messages.size());
         }
     }

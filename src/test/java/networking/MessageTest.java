@@ -78,5 +78,5 @@ public class MessageTest {
         assertFalse(exceptionThrownInThread);
 
     }
-    
+
 }
