@@ -33,8 +33,6 @@ public class PlayersJoinedPanel extends JPanel {
             this.playerPanels.add(panel);
         }
 
-        addPlayer("test");
-
     }
 
     private JPanel anonymousPlayerPanel(){
@@ -63,8 +61,8 @@ public class PlayersJoinedPanel extends JPanel {
 
     public void addPlayer(String name){
         if (nextEmptySlot < 4){
-            this.joinedPlayers.add(name);
-            JPanel panel = this.playerPanels.get(nextEmptySlot);
+            joinedPlayers.add(name);
+            JPanel panel = playerPanels.get(nextEmptySlot);
 
             JLabel nameLabel = (JLabel) panel.getComponent(0);
             nameLabel.setText(name);
@@ -79,7 +77,7 @@ public class PlayersJoinedPanel extends JPanel {
             c.gridy = 1;
             panel.add(image,c);
 
-            this.nextEmptySlot ++;
+            updateNextEmptySlot();
 
             this.revalidate();
             this.repaint();
@@ -88,11 +86,26 @@ public class PlayersJoinedPanel extends JPanel {
 
     public void removePlayer(String name){
         if(joinedPlayers.contains(name)){
-            // TODO implement
+            for (int i = 0; i < joinedPlayers.size(); i++) {
+                if (joinedPlayers.get(i).equals(name)){
+                    joinedPlayers.remove(i);
+                    playerPanels.set(i, anonymousPlayerPanel());
+                }
+            }
         }
+
+        updateNextEmptySlot();
 
         this.revalidate();
         this.repaint();
+    }
+
+    private void updateNextEmptySlot(){
+        for (int i = 0; i < joinedPlayers.size(); i++) {
+            if (joinedPlayers.get(i) == null){
+                nextEmptySlot = i;
+            }
+        }
     }
 
     // todo extract into resourceHandler
