@@ -50,6 +50,12 @@ public interface IServer extends INetworkEntity, Runnable{
     void sendToAllClients(IMessage message);
 
     /**
+     * returns all the received messages and clears the stored received message list
+     * @return all the received messages
+     */
+    List<IMessage> getAllMessages();
+
+    /**
      * returns the thread in which the server is running in
      * @return the server thread
      */

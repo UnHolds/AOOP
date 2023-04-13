@@ -8,7 +8,6 @@ import java.util.List;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
 import networking.IMessage;
-import networking.Message;
 import networking.MessageFactory;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -25,13 +24,15 @@ public class Server implements IServer, Runnable{
 
     public boolean skipAllClientHandling = false;
 
-    public boolean forwardEverythingWithoutHandling = false;
+    public boolean forwardEverything = false;
 
     private MessageFactory messageFactory = new MessageFactory(this);
 
     private boolean newMessages = false;
 
     public long gameTick = 0;
+
+    private ConcurrentLinkedQueue<IMessage> receivedMessages = new ConcurrentLinkedQueue<>();
 
 
     @Override
@@ -135,6 +136,13 @@ public class Server implements IServer, Runnable{
     }
 
     @Override
+    public List<IMessage> getAllMessages() {
+        List<IMessage> messages = this.receivedMessages.stream().toList();
+        this.receivedMessages.clear();
+        return messages;
+    }
+
+    @Override
     public Thread getThread() {
         return this.thread;
     }
@@ -144,10 +152,6 @@ public class Server implements IServer, Runnable{
         return messages;
     }
 
-    private List<IMessage> handleMessages(List<IMessage> messages){
-        //TODO handle messages
-        return messages;
-    }
 
     private void mainServerLoop(){
         log.info("Starting main server loop");
@@ -185,18 +189,22 @@ public class Server implements IServer, Runnable{
 
             log.debug("Received " + messages.size() + " messages");
 
-            if(this.forwardEverythingWithoutHandling){
+            if(this.forwardEverything){
                 for(IMessage message : messages){
                     sendToAllClients(message);
                 }
                 continue;
             }
 
+
+            this.receivedMessages.addAll(messages);
+            /*
             messages = handleMessages(messages);
 
             for(IMessage message : messages){
                 sendToAllClients(message);
             }
+            */
         }
     }
 
