@@ -36,5 +36,10 @@ public interface IClient extends INetworkEntity {
     void sendMessage(IMessage message);
 
 
+    /**
+     * returns the thread of the client
+     * @return thread of the client
+     */
+    Thread getThread();
 
 }

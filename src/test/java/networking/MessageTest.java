@@ -7,8 +7,6 @@ import networking.server.Server;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
 
 import java.io.IOException;
 import java.util.Arrays;
@@ -81,18 +79,4 @@ public class MessageTest {
 
     }
 
-    @Test
-    public void testIfCatPositionMessageReturnsRightCoordinates() throws InterruptedException {
-        ((Server)this.server).forwardEverythingWithoutHandling = true;
-        this.sender.sendMessage(this.messageFactorySender.createCatPositionMessage(System.currentTimeMillis(), 1, 2, 3));
-        Thread.sleep(100);
-        List<IMessage> messages = this.receiver.getMessages();
-        assertEquals(1, messages.size());
-        IMessage message = messages.get(0);
-        assertEquals(1, message.getCatPositionX());
-        assertEquals(2, message.getCatPositionY());
-        assertEquals(3, message.getCatPositionZ());
-        assertEquals(3, message.getCatPosition().length);
-        assertTrue(Arrays.equals(new int[] { 1, 2, 3}, message.getCatPosition()));
-    }
 }

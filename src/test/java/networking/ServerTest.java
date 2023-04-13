@@ -7,7 +7,6 @@ import networking.server.IServerClient;
 import networking.server.Server;
 import org.junit.After;
 import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.jupiter.api.DisplayName;
 
@@ -17,6 +16,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.concurrent.ConcurrentLinkedQueue;
+import java.util.stream.Collectors;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
@@ -129,7 +129,7 @@ public class ServerTest {
     @Test
     public void testSendMessageToServerAndCheckIfOtherClientGetsMessage() throws IOException, InterruptedException {
         IServer server = new Server();
-        ((Server)server).forwardEverythingWithoutHandling = true;
+        ((Server)server).forwardEverything = true;
         server.start(SERVER_PORT);
         IClient clientSender = new Client("Sender");
         clientSender.connect(LOCALHOST, SERVER_PORT);
@@ -283,7 +283,7 @@ public class ServerTest {
         int numMessages = 20;
 
         IServer server = new Server();
-        ((Server)server).forwardEverythingWithoutHandling = true;
+        ((Server)server).forwardEverything = true;
         server.start(SERVER_PORT);
         Thread.sleep(100);
 
@@ -305,10 +305,13 @@ public class ServerTest {
         Thread.sleep(100);
 
         List<Thread> threads = new ArrayList<>();
-        for(IClient client : clients){
+
+        for(int j = 0; j < clients.size(); j++){
+            IClient client = clients.get(j);
+            int finalJ = j;
             Thread thread = new Thread(() -> {
                 for(int i = 0; i< numMessages; i++){
-                    client.sendMessage(new Message(client.getId(), client.getName(),  420));
+                    client.sendMessage(new Message(client.getId(), client.getName(),  10001 + i + finalJ * numMessages));
                 }
             });
             threads.add(thread);
@@ -345,10 +348,18 @@ public class ServerTest {
             Thread.sleep(100);
         }
 
-        Thread.sleep(100);
+        //helper list
+        ArrayList<Long> numbers = new ArrayList<>();
+        for(int i = 0; i < 1000; i++){
+            numbers.add(10001l + i);
+        }
 
         for(IClient client : clients){
-            assertEquals(numClients*numMessages, client.getMessages().size());
+            List<IMessage> messages =  client.getMessages();
+            List<Long> gameTicks = messages.stream().map(m -> m.getCurrentGameTick()).collect(Collectors.toList());
+            List<Long> missingGameTicks = numbers.stream().filter(n -> gameTicks.contains(n) == false).collect(Collectors.toList());
+            assertEquals(0, missingGameTicks.size());
+            assertEquals(numClients*numMessages, messages.size());
         }
     }
 

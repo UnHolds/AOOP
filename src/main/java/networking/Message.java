@@ -80,38 +80,6 @@ public class Message implements IMessage, Serializable {
     }
 
     @Override
-    public int getCatPositionX() {
-        if(this.type != MessageType.CAT_POSITION){
-            return -1;
-        }
-        return Integer.parseInt(data.split("\\|")[0]);
-    }
-
-    @Override
-    public int getCatPositionY() {
-        if(this.type != MessageType.CAT_POSITION){
-            return -1;
-        }
-        return Integer.parseInt(data.split("\\|")[1]);
-    }
-
-    @Override
-    public int getCatPositionZ() {
-        if(this.type != MessageType.CAT_POSITION){
-            return -1;
-        }
-        return Integer.parseInt(data.split("\\|")[2]);
-    }
-
-    @Override
-    public int[] getCatPosition() {
-        if(this.type != MessageType.CAT_POSITION){
-            return new int[0];
-        }
-        return Arrays.stream(this.data.split("\\|")).mapToInt(Integer::parseInt).toArray();
-    }
-
-    @Override
     public HashMap<String, String> getClientIdAndName() {
 
         if(this.type != MessageType.CONNECTED_CLIENTS_UPDATE){
