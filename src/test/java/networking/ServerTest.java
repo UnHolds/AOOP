@@ -15,6 +15,7 @@ import java.net.Socket;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.stream.Collectors;
 
@@ -395,7 +396,7 @@ public class ServerTest {
         assertEquals(MessageType.CONNECTED_CLIENTS_UPDATE, message.getMessageType());
         assertEquals(server.getId(), message.getSenderId());
         assertEquals(server.getName(), message.getSenderName());
-        HashMap<String, String> clients = message.getClientIdAndName();
+        Map<String, String> clients = message.getClientIdAndName();
         assertEquals(1, clients.size());
         assertEquals(client.getId(), clients.keySet().toArray()[0]);
         assertEquals(client.getName(), clients.values().toArray()[0]);

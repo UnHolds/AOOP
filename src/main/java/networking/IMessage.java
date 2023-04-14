@@ -1,7 +1,10 @@
 package networking;
 
+import game.core.models.Position;
+
 import java.io.IOException;
 import java.util.HashMap;
+import java.util.Map;
 
 public interface IMessage {
 
@@ -40,6 +43,10 @@ public interface IMessage {
     long getCurrentGameTick();
 
 
-    HashMap<String, String> getClientIdAndName();
+    Map<String, String> getClientIdAndName();
+
+    Map<String, Position> getPlayersPositions();
+
+    Map<String, Position> getMicePositions();
 
 }

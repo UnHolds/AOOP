@@ -29,6 +29,11 @@ public class Character implements ICharacter {
         return position;
     }
 
+    @Override
+    public String getId() {
+        return null;
+    }
+
     private Image loadImageFromResources(String imagePath) {
         try {
             return ImageIO.read(getClass().getClassLoader().getResourceAsStream(imagePath));

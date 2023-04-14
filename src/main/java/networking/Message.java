@@ -1,5 +1,6 @@
 package networking;
 
+import game.core.models.Position;
 import networking.client.IClient;
 import networking.server.IServer;
 
@@ -7,6 +8,7 @@ import java.io.*;
 import java.util.Arrays;
 import java.util.Base64;
 import java.util.HashMap;
+import java.util.Map;
 
 public class Message implements IMessage, Serializable {
 
@@ -80,7 +82,7 @@ public class Message implements IMessage, Serializable {
     }
 
     @Override
-    public HashMap<String, String> getClientIdAndName() {
+    public Map<String, String> getClientIdAndName() {
 
         if(this.type != MessageType.CONNECTED_CLIENTS_UPDATE){
             return null;
@@ -95,6 +97,55 @@ public class Message implements IMessage, Serializable {
         }
 
         return clients;
+    }
+
+    @Override
+    public Map<String, Position> getPlayersPositions() {
+
+        if(this.type != MessageType.GAME_FIELD_UPDATE){
+            return null;
+        }
+
+        HashMap<String, Position> playerPositions = new HashMap<>();
+
+        for(String player : this.data.split("@")[0].split("#")){
+
+            String id = player.split("~")[0];
+            String[] coordinates = player.split("~")[1].split("\\|");
+
+            int row = Integer.parseInt(coordinates[0]);
+            int column = Integer.parseInt(coordinates[1]);
+
+            Position pos = new Position(row, column);
+
+            playerPositions.put(id, pos);
+        }
+
+        return playerPositions;
+    }
+
+    @Override
+    public Map<String, Position> getMicePositions() {
+
+        if(this.type != MessageType.GAME_FIELD_UPDATE){
+            return null;
+        }
+
+        HashMap<String, Position> micePositions = new HashMap<>();
+
+        for(String mouse : this.data.split("@")[1].split("#")){
+            String id = mouse.split("~")[0];
+            String[] coordinates = mouse.split("~")[1].split("\\|");
+
+            int row = Integer.parseInt(coordinates[0]);
+            int column = Integer.parseInt(coordinates[1]);
+
+            Position pos = new Position(row, column);
+
+            micePositions.put(id, pos);
+        }
+
+        return micePositions;
     }
 
 }

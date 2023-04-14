@@ -37,4 +37,9 @@ public class Player extends Character implements IPlayer {
     public String getName() {
         return this.name;
     }
+
+    @Override
+    public String getId() {
+        return null;
+    }
 }
