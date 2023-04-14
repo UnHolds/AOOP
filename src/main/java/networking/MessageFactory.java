@@ -67,7 +67,7 @@ public class MessageFactory implements IMessageFactory{
         String data = playersData + "@" + miceData;
 
 
-        return new Message(MessageType.CONNECTED_CLIENTS_UPDATE, this.entity.getId(), this.entity.getName(), gameTick, data);
+        return new Message(MessageType.GAME_FIELD_UPDATE, this.entity.getId(), this.entity.getName(), gameTick, data);
     }
 
 

@@ -12,8 +12,8 @@ public class Player extends Character implements IPlayer {
 
     private Image image;
 
-    public Player(int gameUIId, String name, Position startPosition, String imagePath){
-        super(startPosition, imagePath);
+    public Player(String id, int gameUIId, String name, Position startPosition, String imagePath){
+        super(id, startPosition, imagePath);
         this.score = 0;
         this.gameUIId = gameUIId;
         this.name = name;
@@ -38,8 +38,4 @@ public class Player extends Character implements IPlayer {
         return this.name;
     }
 
-    @Override
-    public String getId() {
-        return null;
-    }
 }
