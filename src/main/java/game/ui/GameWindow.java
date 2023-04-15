@@ -1,7 +1,9 @@
 package game.ui;
+import game.core.models.IGame;
 import game.core.models.impl.Game;
 
 import javax.swing.*;
+import java.awt.event.KeyListener;
 
 public class GameWindow {
 
@@ -10,10 +12,11 @@ public class GameWindow {
     private GameFieldPanel gameFieldPanel;
     private WinScreenPanel winScreenPanel;
 
-    private Game game;
+    private IGame game;
 
-    public GameWindow(Game game){
+    public GameWindow(IGame game){
         this.window = new JFrame("Cat & Mouse Game");
+        gameFieldPanel = new GameFieldPanel(game);
         this.game = game;
     }
 
@@ -23,7 +26,7 @@ public class GameWindow {
 
         this.startScreenPanel = new StartScreenPanel();
         //this.window.add(this.startScreenPanel);
-        this.window.add(new GameFieldPanel(game));
+        this.window.add(gameFieldPanel);
 
         this.window.pack(); // fit the window size around the components
         this.window.setLocationRelativeTo(null);
@@ -31,10 +34,8 @@ public class GameWindow {
     }
 
     public void showGameFieldPanel() {
-        this.gameFieldPanel = new GameFieldPanel(game);
         this.window.remove(this.startScreenPanel);
         this.window.add(gameFieldPanel);
-        this.window.addKeyListener(gameFieldPanel);
         this.window.pack();
         this.window.setVisible(true);
     }
@@ -45,5 +46,13 @@ public class GameWindow {
         this.window.add(winScreenPanel);
         this.window.pack();
         this.window.setVisible(true);
+    }
+
+    public void update() {
+        window.repaint();
+    }
+
+    public void registerMovementListener(KeyListener listener) {
+        window.addKeyListener(listener);
     }
 }

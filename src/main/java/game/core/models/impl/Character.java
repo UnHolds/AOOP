@@ -9,7 +9,7 @@ import java.io.IOException;
 
 public class Character implements ICharacter {
     private Position position;
-    private Direction movingDirection;
+    private Direction movingDirection = Direction.STOP;
     private Image image;
     private String id;
 
@@ -20,7 +20,7 @@ public class Character implements ICharacter {
     }
 
     public void move() {
-        position = position.move(movingDirection);
+        position =  position.move(movingDirection);
     }
 
     @Override

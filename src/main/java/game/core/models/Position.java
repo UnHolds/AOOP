@@ -17,6 +17,9 @@ public record Position(int y, int x) {
             case RIGHT -> {
                 return right();
             }
+            case STOP -> {
+                return stop();
+            }
         }
         return null;
     }
@@ -35,6 +38,10 @@ public record Position(int y, int x) {
 
     public Position right() {
         return new Position(y, x +1);
+    }
+
+    public Position stop() {
+        return this;
     }
 
 }

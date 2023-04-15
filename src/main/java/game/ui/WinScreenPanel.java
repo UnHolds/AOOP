@@ -1,5 +1,6 @@
 package game.ui;
 
+import game.core.models.IGame;
 import game.core.models.impl.Game;
 import game.core.models.IPlayer;
 
@@ -19,9 +20,9 @@ public class WinScreenPanel extends JPanel implements ActionListener {
     private ArrayList<Image> catImages;
     private Image podium;
 
-    private Game game;
+    private IGame game;
 
-    public WinScreenPanel(Game game){
+    public WinScreenPanel(IGame game){
         this.game = game;
         setPreferredSize(new Dimension(900, 600));
         this.setLayout(new BoxLayout(this, BoxLayout.PAGE_AXIS));

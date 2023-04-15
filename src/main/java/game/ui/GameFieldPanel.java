@@ -1,5 +1,6 @@
 package game.ui;
 
+import game.core.models.IGame;
 import game.core.models.impl.Game;
 import game.core.models.IPlayer;
 
@@ -12,7 +13,7 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.io.IOException;
 
-public class GameFieldPanel extends JPanel implements ActionListener, KeyListener {
+public class GameFieldPanel extends JPanel implements ActionListener {
 
     private Image background;
     private Image keyLeft;
@@ -30,10 +31,10 @@ public class GameFieldPanel extends JPanel implements ActionListener, KeyListene
 
     private int windowWidth = 900;
     private int windowHeight = 600;
-    private Game game;
+    private IGame game;
 
 
-    public GameFieldPanel(Game game) {
+    public GameFieldPanel(IGame game) {
         setPreferredSize(new Dimension(windowWidth, windowHeight));
         this.setLayout(new BorderLayout());
         this.game = game;
@@ -153,22 +154,6 @@ public class GameFieldPanel extends JPanel implements ActionListener, KeyListene
         // the state of your game or animation before the graphics are redrawn.
 
         //repaint();
-    }
-
-
-    @Override
-    public void keyTyped(KeyEvent e) {
-
-    }
-
-    @Override
-    public void keyPressed(KeyEvent e) {
-        // TODO check which key was pressed here
-    }
-
-    @Override
-    public void keyReleased(KeyEvent e) {
-
     }
 
     // UTIL

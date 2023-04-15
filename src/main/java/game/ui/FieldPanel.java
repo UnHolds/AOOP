@@ -1,7 +1,7 @@
 package game.ui;
 
+import game.core.models.IGame;
 import game.core.models.Position;
-import game.core.models.impl.Game;
 import game.core.models.IPlayer;
 import game.core.models.impl.Subway;
 
@@ -18,9 +18,9 @@ public class FieldPanel extends JPanel implements ActionListener, KeyListener {
     //public static final int ROWS = 12;
     //public static final int COLUMNS = 18;
 
-    private Game game;
+    private IGame game;
 
-    public FieldPanel(Game game){
+    public FieldPanel(IGame game){
         // calculate number of tiles, rows and columns depending on size TODO
         this.game = game;
     }
@@ -50,8 +50,8 @@ public class FieldPanel extends JPanel implements ActionListener, KeyListener {
             for(Position exit : subway.getExits()) {
                 g.setColor(Color.BLACK);
                 g.drawOval(
-                        exit.x() * TILE_SIZE,
-                        exit.y() * TILE_SIZE,
+                        exit.x(),
+                        exit.y(),
                         TILE_SIZE, TILE_SIZE
                 );
             }
@@ -62,8 +62,8 @@ public class FieldPanel extends JPanel implements ActionListener, KeyListener {
         for (IPlayer player : game.getPlayers()) {
             g.drawImage(
                     player.getImage(),
-                    player.getPosition().x() * TILE_SIZE,
-                    player.getPosition().y() * TILE_SIZE,
+                    player.getPosition().x(),
+                    player.getPosition().y(),
                     TILE_SIZE,
                     TILE_SIZE,
                     null

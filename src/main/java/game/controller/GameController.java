@@ -1,19 +1,18 @@
 package game.controller;
 
 
-import game.core.models.*;
-import game.core.models.impl.Field;
-import game.core.models.impl.Game;
-import game.core.models.impl.Player;
-import game.core.models.impl.Subway;
+import game.core.GameServer;
+import game.core.handler.CharacterMovementController;
 import game.ui.GameWindow;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Set;
-
 public class GameController implements IGameController {
-    private Game game;
+    private GameServer gameServer;
+    private GameWindow gameWindow;
+
+    public GameController(GameServer gameServer) {
+        gameServer.setGameController(this);
+        this.gameServer = gameServer;
+    }
 
     @Override
     public void showStartScreen() {
@@ -27,23 +26,19 @@ public class GameController implements IGameController {
 
     @Override
     public void initializeGameUI() {
-        GameWindow gameWindow = new GameWindow(game);
+        gameWindow = new GameWindow(gameServer.getGame());
         gameWindow.initWindow();
+        CharacterMovementController movementController = new CharacterMovementController(gameServer.getGame().getPlayers().get(0));
+        gameWindow.registerMovementListener(movementController);
+    }
+
+    public void updateGameWindow() {
+        gameWindow.update();
     }
 
     @Override
     public void initializeGameLogic() {
-        Field field = new Field(12, 18, Set.of(
-                new Subway(List.of(new Position(3, 4))))
-        );
 
-        List<IPlayer> playerList = new ArrayList<>();
-        playerList.add(new Player(null, 3, "Alice", new Position(1, 2), "cat1.png"));
-        playerList.add(new Player(null, 1, "Bob", new Position(1, 3), "cat2.png"));
-        playerList.add(new Player(null, 2, "Bob", new Position(1, 4), "cat3.png"));
-        playerList.add(new Player(null,4, "Eve", new Position(1, 5), "cat4.png"));
-
-        game = new Game(field, playerList, null);
     }
 
     @Override
@@ -58,8 +53,10 @@ public class GameController implements IGameController {
 
     public static void main(String[] args){
         System.out.println("Please call the other methods here when implemented");
-        GameController gameController = new GameController();
+        GameServer gameServer = new GameServer();
+        GameController gameController = new GameController(gameServer);
         gameController.initializeGameLogic();
         gameController.initializeGameUI();
+        gameServer.run();
     }
 }
