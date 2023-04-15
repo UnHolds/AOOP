@@ -48,7 +48,7 @@ public class MessageFactory implements IMessageFactory{
 
         for(IPlayer player : players){
             playersData += player.getId() + "~";
-            playersData += player.getPosition().row() + "|" + player.getPosition().column();
+            playersData += player.getPosition().y() + "|" + player.getPosition().x();
             playersData += "#";
         }
 
@@ -58,7 +58,7 @@ public class MessageFactory implements IMessageFactory{
 
         for(IMouse mouse : mice){
             miceData += mouse.getId() + "~";
-            miceData += mouse.getPosition().row() + "|" + mouse.getPosition().column();
+            miceData += mouse.getPosition().y() + "|" + mouse.getPosition().x();
             miceData += "#";
         }
 

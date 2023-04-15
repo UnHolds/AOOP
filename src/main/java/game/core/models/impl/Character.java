@@ -9,6 +9,7 @@ import java.io.IOException;
 
 public class Character implements ICharacter {
     private Position position;
+    private Direction movingDirection;
     private Image image;
     private String id;
 
@@ -18,8 +19,8 @@ public class Character implements ICharacter {
         this.id = id;
     }
 
-    public void move(Direction direction) {
-        position = position.move(direction);
+    public void move() {
+        position = position.move(movingDirection);
     }
 
     @Override
@@ -29,6 +30,16 @@ public class Character implements ICharacter {
 
     public Position getPosition() {
         return position;
+    }
+
+    @Override
+    public void setMovingDirection(Direction direction) {
+        movingDirection = direction;
+    }
+
+    @Override
+    public Direction getMovingDirection() {
+        return movingDirection;
     }
 
     @Override

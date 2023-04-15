@@ -9,11 +9,15 @@ import java.awt.*;
  */
 public interface ICharacter {
 
-    void move(Direction direction);
+    void move();
 
     Image getImage();
 
     Position getPosition();
+
+    void setMovingDirection(Direction direction);
+
+    Direction getMovingDirection();
 
     String getId();
 
