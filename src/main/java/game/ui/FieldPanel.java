@@ -33,7 +33,7 @@ public class FieldPanel extends JPanel implements ActionListener, KeyListener {
             for (int col = 0; col < game.getField().getColumnCount(); col++) {
                 // only color every other tile
                 if ((row + col) % 2 == 1) {
-                    // draw a square tile at the current row/column position
+                    // draw a square tile at the current y/x position
                     g.fillRect(
                             col * TILE_SIZE,
                             row * TILE_SIZE,
@@ -50,8 +50,8 @@ public class FieldPanel extends JPanel implements ActionListener, KeyListener {
             for(Position exit : subway.getExits()) {
                 g.setColor(Color.BLACK);
                 g.drawOval(
-                        exit.column() * TILE_SIZE,
-                        exit.row() * TILE_SIZE,
+                        exit.x() * TILE_SIZE,
+                        exit.y() * TILE_SIZE,
                         TILE_SIZE, TILE_SIZE
                 );
             }
@@ -62,8 +62,8 @@ public class FieldPanel extends JPanel implements ActionListener, KeyListener {
         for (IPlayer player : game.getPlayers()) {
             g.drawImage(
                     player.getImage(),
-                    player.getPosition().column() * TILE_SIZE,
-                    player.getPosition().row() * TILE_SIZE,
+                    player.getPosition().x() * TILE_SIZE,
+                    player.getPosition().y() * TILE_SIZE,
                     TILE_SIZE,
                     TILE_SIZE,
                     null

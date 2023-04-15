@@ -2,7 +2,7 @@ package game.core.models;
 
 import game.core.models.impl.Direction;
 
-public record Position(int row, int column) {
+public record Position(int y, int x) {
     public Position move(Direction direction) {
         switch (direction) {
             case UP -> {
@@ -22,19 +22,19 @@ public record Position(int row, int column) {
     }
 
     public Position up() {
-        return new Position(row-1, column);
+        return new Position(y -1, x);
     }
 
     public Position down() {
-        return new Position(row+1, column);
+        return new Position(y +1, x);
     }
 
     public Position left() {
-        return new Position(row, column-1);
+        return new Position(y, x -1);
     }
 
     public Position right() {
-        return new Position(row, column+1);
+        return new Position(y, x +1);
     }
 
 }
