@@ -10,10 +10,12 @@ import java.io.IOException;
 public class Character implements ICharacter {
     private Position position;
     private Image image;
+    private String id;
 
-    public Character(Position position, String imagePath) {
+    public Character(String id, Position position, String imagePath) {
         this.position = position;
         this.image = loadImageFromResources(imagePath);
+        this.id = id;
     }
 
     public void move(Direction direction) {
@@ -27,6 +29,11 @@ public class Character implements ICharacter {
 
     public Position getPosition() {
         return position;
+    }
+
+    @Override
+    public String getId() {
+        return this.id;
     }
 
     private Image loadImageFromResources(String imagePath) {

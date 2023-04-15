@@ -15,6 +15,8 @@ public interface ICharacter {
 
     Position getPosition();
 
+    String getId();
+
 
     //void leap(); TODO might be added later
 

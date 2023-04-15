@@ -1,5 +1,7 @@
 package networking;
 
+import game.core.models.IMouse;
+import game.core.models.IPlayer;
 import networking.client.IClient;
 import networking.server.IServer;
 import networking.server.IServerClient;
@@ -21,15 +23,11 @@ public class MessageFactory implements IMessageFactory{
     }
 
     @Override
-    public IMessage createCatPositionMessage(long gameTick, int x, int y, int z) {
-        return new Message(MessageType.CAT_POSITION, this.entity.getId(), this.entity.getName(), gameTick, x + "|" + y + "|" + z);
-    }
-
-    @Override
     public IMessage createClientConnectMessage() {
         return new Message(MessageType.CLIENT_CONNECT, this.entity.getId(), this.entity.getName(), -1, null);
     }
 
+    @Override
     public IMessage createConnectedClientsUpdateMessage(List<IServerClient> clients){
         String data = "";
 
@@ -41,6 +39,35 @@ public class MessageFactory implements IMessageFactory{
         data = data.substring(0, data.length()-1);
 
         return new Message(MessageType.CONNECTED_CLIENTS_UPDATE, this.entity.getId(), this.entity.getName(), -1, data);
+    }
+
+    @Override
+    public IMessage createGameFieldUpdateMessage(long gameTick, List<IPlayer> players, List<IMouse> mice){
+
+        String playersData = "";
+
+        for(IPlayer player : players){
+            playersData += player.getId() + "~";
+            playersData += player.getPosition().row() + "|" + player.getPosition().column();
+            playersData += "#";
+        }
+
+        playersData.substring(0, playersData.length()-2);
+
+        String miceData = "";
+
+        for(IMouse mouse : mice){
+            miceData += mouse.getId() + "~";
+            miceData += mouse.getPosition().row() + "|" + mouse.getPosition().column();
+            miceData += "#";
+        }
+
+        miceData.substring(0, miceData.length()-2);
+
+        String data = playersData + "@" + miceData;
+
+
+        return new Message(MessageType.GAME_FIELD_UPDATE, this.entity.getId(), this.entity.getName(), gameTick, data);
     }
 
 

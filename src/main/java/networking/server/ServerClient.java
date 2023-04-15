@@ -58,8 +58,11 @@ public class ServerClient implements IServerClient, Runnable{
 
     @Override
     public List<IMessage> getMessages() {
-        List<IMessage> messages = this.messagesReceived.stream().toList();
-        this.messagesReceived.clear();
+        List<IMessage> messages = new ArrayList<>();
+        synchronized (this) {
+            messages = this.messagesReceived.stream().toList();
+            this.messagesReceived.clear();
+        }
         return messages;
     }
 
@@ -123,7 +126,9 @@ public class ServerClient implements IServerClient, Runnable{
                         "   Is:" + message.getSenderName());
             }
 
-            this.messagesReceived.add(message);
+            synchronized (this) {
+                this.messagesReceived.add(message);
+            }
             this.server.notifyNewMessages();
         } catch (IOException e) {
             this.log.error("Could not read from data input stream, client: " + this.client.getInetAddress().getHostAddress());

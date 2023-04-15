@@ -60,7 +60,6 @@ public class Client implements IClient, Runnable{
         while(this.stop == false && this.server.isClosed() == false) {
             try {
                 String data = this.input.readLine();
-
                 if(data == null){
                     stop();
                     break;
@@ -106,6 +105,11 @@ public class Client implements IClient, Runnable{
         } catch (IOException e) {
             log.error("Could not send message to server", e);
         }
+    }
+
+    @Override
+    public Thread getThread() {
+        return this.thread;
     }
 
     @Override
