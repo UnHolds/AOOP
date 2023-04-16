@@ -1,6 +1,5 @@
 package game.ui;
 import game.core.models.IGame;
-import game.core.models.impl.Game;
 
 import javax.swing.*;
 import java.awt.event.KeyListener;

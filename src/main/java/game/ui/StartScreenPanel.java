@@ -102,28 +102,46 @@ public class StartScreenPanel extends JPanel implements ActionListener{
 
         this.add(createFillerWithSameValueForMinMaxAndPreferredDimension(50, 0));
 
-        JPanel nameConfigPanel = new JPanel();
-        nameConfigPanel.setMaximumSize(new Dimension(this.getWidth(), 50));
-        nameConfigPanel.setOpaque(false);
-        nameConfigPanel.setLayout(new BoxLayout(nameConfigPanel, BoxLayout.LINE_AXIS));
-
-        JLabel nameLabel = createBasicLabel("Name:");
-
-        JTextField nameTextField = new JTextField();
-        nameTextField.setFont(cheese.deriveFont(25f));
-
-        nameConfigPanel.add(createFillerWithSameValueForMinMaxAndPreferredDimension(0, 200));
-        nameConfigPanel.add(nameLabel);
-        nameConfigPanel.add(createFillerWithSameValueForMinMaxAndPreferredDimension(5, 0));
-        nameConfigPanel.add(nameTextField);
-        nameConfigPanel.add(createFillerWithSameValueForMinMaxAndPreferredDimension(0, 200));
-
-        this.add(nameConfigPanel);
+        this.add(createBasicInputWithLabel("Name:"));
 
         this.add(createFillerWithSameValueForMinMaxAndPreferredDimension(50, 0));
 
         JButton connectButton = createCenteredButtonWithBasicLayout("Connect");
         connectButton.addActionListener(new ConnectToGameHostListener());
+        this.add(connectButton);
+
+        this.revalidate();
+        this.repaint();
+    }
+
+    private void showHostInformationInput(){
+        // Remove the buttons from the panel
+        Component[] componentList = this.getComponents();
+        ArrayList<Box.Filler> fillers = new ArrayList<>();
+
+        for(Component c : componentList){
+            if(c instanceof JButton){
+                this.remove(c);
+            }
+            else if(c instanceof Box.Filler){
+                fillers.add((Box.Filler)c);
+            }
+        }
+
+        for (int i = 1; i < fillers.size(); i++) {
+            this.remove(fillers.get(i));
+        }
+
+        this.add(createBasicInputWithLabel("Port:"));
+
+        this.add(createFillerWithSameValueForMinMaxAndPreferredDimension(50, 0));
+
+        this.add(createBasicInputWithLabel("Name:"));
+
+        this.add(createFillerWithSameValueForMinMaxAndPreferredDimension(50, 0));
+
+        JButton connectButton = createCenteredButtonWithBasicLayout("Host game");
+        connectButton.addActionListener(new HostScreenListener());
         this.add(connectButton);
 
         this.revalidate();
@@ -140,6 +158,9 @@ public class StartScreenPanel extends JPanel implements ActionListener{
 
         for(Component c : componentList){
             if(c instanceof JButton){
+                this.remove(c);
+            }
+            if(c instanceof JPanel){
                 this.remove(c);
             }
             else if(c instanceof Box.Filler){
@@ -221,6 +242,25 @@ public class StartScreenPanel extends JPanel implements ActionListener{
         return label;
     }
 
+    private JPanel createBasicInputWithLabel(String labelText){
+        JPanel panel = new JPanel();
+        panel.setMaximumSize(new Dimension(this.getWidth(), 50));
+        panel.setOpaque(false);
+        panel.setLayout(new BoxLayout(panel, BoxLayout.LINE_AXIS));
+
+        JLabel label = createBasicLabel(labelText);
+
+        JTextField textField = new JTextField();
+        textField.setFont(cheese.deriveFont(25f));
+
+        panel.add(createFillerWithSameValueForMinMaxAndPreferredDimension(0, 200));
+        panel.add(label);
+        panel.add(createFillerWithSameValueForMinMaxAndPreferredDimension(5, 0));
+        panel.add(textField);
+        panel.add(createFillerWithSameValueForMinMaxAndPreferredDimension(0, 200));
+        return panel;
+    }
+
     // UTIL
     // TODO move to another class that handles resources?
     private void loadResources(){
@@ -250,7 +290,15 @@ public class StartScreenPanel extends JPanel implements ActionListener{
     private class HostNewGameListener implements ActionListener {
         @Override
         public void actionPerformed(ActionEvent e) {
+            StartScreenPanel.this.showHostInformationInput();
+        }
+    }
+
+    private class HostScreenListener implements ActionListener {
+        @Override
+        public void actionPerformed(ActionEvent e) {
             StartScreenPanel.this.showHostNewGame();
+            // TODO send information about port to server
         }
     }
 
