@@ -4,15 +4,14 @@ import networking.IMessage;
 import networking.IMessageFactory;
 import networking.Message;
 import networking.MessageFactory;
-import networking.server.Server;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.io.*;
 import java.net.Socket;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.UUID;
+import java.util.concurrent.BlockingQueue;
+import java.util.concurrent.LinkedBlockingQueue;
 
 
 public class Client implements IClient, Runnable{
@@ -21,7 +20,7 @@ public class Client implements IClient, Runnable{
     private  PrintWriter output;
     private Socket server;
     private boolean stop = false;
-    private List<IMessage> messages = new ArrayList<>();
+    private BlockingQueue<IMessage> messages = new LinkedBlockingQueue<>();
     private static Logger log = LogManager.getLogger(Client.class);
 
     private String id = UUID.randomUUID().toString();
@@ -65,9 +64,7 @@ public class Client implements IClient, Runnable{
                     break;
                 }
 
-                synchronized (this) {
-                    messages.add(Message.parse(data));
-                }
+                messages.add(Message.parse(data));
             } catch (IOException e) {
 
                 if(this.server.isClosed()){
@@ -82,12 +79,8 @@ public class Client implements IClient, Runnable{
     }
 
     @Override
-    public List<IMessage> getMessages() {
-        synchronized (this){
-            List<IMessage> messages = this.messages;
-            this.messages = new ArrayList<>();
-            return messages;
-        }
+    public BlockingQueue<IMessage> getMessageQueue() {
+        return messages;
     }
 
     @Override

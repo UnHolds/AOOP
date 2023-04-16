@@ -69,8 +69,8 @@ public class MessageTest {
             Thread.sleep(100);
         }
 
-        this.client2.getMessages();
-        this.client1.getMessages();
+        this.client2.getMessageQueue();
+        this.client1.getMessageQueue();
 
     }
 
@@ -119,7 +119,7 @@ public class MessageTest {
 
         Thread.sleep(100);
 
-        List<IMessage> messages = this.client1.getMessages();
+        List<IMessage> messages = this.client1.getMessageQueue();
 
         assertEquals(1, messages.size());
         IMessage message = messages.get(0);

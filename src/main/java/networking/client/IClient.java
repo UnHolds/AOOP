@@ -4,8 +4,8 @@ import networking.IMessage;
 import networking.INetworkEntity;
 
 import java.io.IOException;
-import java.util.HashMap;
 import java.util.List;
+import java.util.concurrent.BlockingQueue;
 
 public interface IClient extends INetworkEntity {
 
@@ -27,7 +27,7 @@ public interface IClient extends INetworkEntity {
      * Returns the received messages from the server
      * @return the received messages as list
      */
-    List<IMessage> getMessages();
+    BlockingQueue<IMessage> getMessageQueue();
 
     /**
      * sends a message to the server
