@@ -16,4 +16,5 @@ public interface IMessageFactory {
     IMessage createConnectedClientsUpdateMessage(List<IServerClient> clients);
 
     IMessage createGameFieldUpdateMessage(long gameTick, List<IPlayer> players, List<IMouse> mice);
+
 }

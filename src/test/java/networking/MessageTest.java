@@ -62,7 +62,7 @@ public class MessageTest {
         this.client1.connect(LOCALHOST, SERVER_PORT);
         this.client2.connect(LOCALHOST, SERVER_PORT);
         Thread.sleep(100);
-        this.server.startGame();
+        this.server.startGame(new ArrayList<>()); //TODO change
         Thread.sleep(100);
 
         while(server.getThread().getState() != Thread.State.WAITING){
