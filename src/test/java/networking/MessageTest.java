@@ -119,7 +119,7 @@ public class MessageTest {
 
         Thread.sleep(100);
 
-        List<IMessage> messages = this.client1.getMessageQueue();
+        List<IMessage> messages = this.client1.getMessageQueue().stream().toList();
 
         assertEquals(1, messages.size());
         IMessage message = messages.get(0);

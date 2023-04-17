@@ -118,7 +118,7 @@ public class ServerTest {
         client.getMessageQueue();
         server.sendToAllClients(new Message(client.getId(), client.getName(), 420));
         Thread.sleep(100);
-        List<IMessage> messages = client.getMessageQueue();
+        List<IMessage> messages = client.getMessageQueue().stream().toList();
         assertEquals(1, messages.size());
         IMessage message = messages.get(0);
         assertEquals(MessageType.GAME_TICK_UPDATE, message.getMessageType());
@@ -145,7 +145,7 @@ public class ServerTest {
 
 
 
-        List<IMessage> messagesReceiver = clientReceiver.getMessageQueue();
+        List<IMessage> messagesReceiver = clientReceiver.getMessageQueue().stream().toList();
         assertEquals(1, messagesReceiver.size());
         IMessage messageReceiver = messagesReceiver.get(0);
         assertEquals(MessageType.GAME_TICK_UPDATE, messageReceiver.getMessageType());
@@ -153,7 +153,7 @@ public class ServerTest {
         assertEquals(clientSender.getId(), messageReceiver.getSenderId());
         assertEquals("Sender", messageReceiver.getSenderName());
 
-        List<IMessage> messagesSender = clientSender.getMessageQueue();
+        List<IMessage> messagesSender = clientSender.getMessageQueue().stream().toList();
         assertEquals(1, messagesSender.size());
         IMessage messageSender = messagesSender.get(0);
         assertEquals(MessageType.GAME_TICK_UPDATE, messageSender.getMessageType());
@@ -172,7 +172,7 @@ public class ServerTest {
         client.getMessageQueue();
         server.startGame();
         Thread.sleep(100);
-        List<IMessage> messages = client.getMessageQueue();
+        List<IMessage> messages = client.getMessageQueue().stream().toList();
         assertEquals(1, messages.size());
         IMessage message = messages.get(0);
         assertEquals(MessageType.GAME_TICK_UPDATE, message.getMessageType());
@@ -225,8 +225,8 @@ public class ServerTest {
         server.sendToAllClients(new Message("server", "server", 123));
         Thread.sleep(100);
 
-        List<IMessage> messagesClientConnected = clientConnected.getMessageQueue();
-        List<IMessage> messagesClientDisconnected = clientConnected.getMessageQueue();
+        List<IMessage> messagesClientConnected = clientConnected.getMessageQueue().stream().toList();
+        List<IMessage> messagesClientDisconnected = clientConnected.getMessageQueue().stream().toList();
         assertEquals(0, messagesClientDisconnected.size());
         assertEquals(1, messagesClientConnected.size());
         assertEquals(123, messagesClientConnected.get(0).getCurrentGameTick());
@@ -355,7 +355,7 @@ public class ServerTest {
         }
 
         for(IClient client : clients){
-            List<IMessage> messages =  client.getMessageQueue();
+            List<IMessage> messages =  client.getMessageQueue().stream().toList();
             List<Long> gameTicks = messages.stream().map(m -> m.getCurrentGameTick()).collect(Collectors.toList());
             List<Long> missingGameTicks = numbers.stream().filter(n -> gameTicks.contains(n) == false).collect(Collectors.toList());
             assertEquals(0, missingGameTicks.size());
@@ -390,7 +390,7 @@ public class ServerTest {
         client.connect(LOCALHOST, SERVER_PORT);
         Thread.sleep(100);
 
-        IMessage message = client.getMessageQueue().get(0);
+        IMessage message = client.getMessageQueue().stream().toList().get(0);
 
         assertEquals(MessageType.CONNECTED_CLIENTS_UPDATE, message.getMessageType());
         assertEquals(server.getId(), message.getSenderId());
