@@ -69,8 +69,8 @@ public class MessageTest {
             Thread.sleep(100);
         }
 
-        this.client2.getMessageQueue();
-        this.client1.getMessageQueue();
+        this.client2.getMessageQueue().clear();
+        this.client1.getMessageQueue().clear();
 
     }
 

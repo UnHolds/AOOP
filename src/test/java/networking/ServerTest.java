@@ -115,7 +115,7 @@ public class ServerTest {
         Thread.sleep(100);
         server.startGame();
         Thread.sleep(100);
-        client.getMessageQueue();
+        client.getMessageQueue().clear();
         server.sendToAllClients(new Message(client.getId(), client.getName(), 420));
         Thread.sleep(100);
         List<IMessage> messages = client.getMessageQueue().stream().toList();
@@ -138,8 +138,8 @@ public class ServerTest {
         Thread.sleep(100);
         server.startGame();
         Thread.sleep(100);
-        clientSender.getMessageQueue();
-        clientReceiver.getMessageQueue();
+        clientSender.getMessageQueue().clear();
+        clientReceiver.getMessageQueue().clear();
         clientSender.sendMessage(new Message(clientSender.getId(), clientSender.getName(), 666));
         Thread.sleep(100);
 
@@ -169,7 +169,7 @@ public class ServerTest {
         IClient client = new Client("Client");
         client.connect(LOCALHOST, SERVER_PORT);
         Thread.sleep(100);
-        client.getMessageQueue();
+        client.getMessageQueue().clear();
         server.startGame();
         Thread.sleep(100);
         List<IMessage> messages = client.getMessageQueue().stream().toList();
@@ -217,8 +217,8 @@ public class ServerTest {
         Thread.sleep(100);
         server.startGame();
         Thread.sleep(100);
-        clientConnected.getMessageQueue();
-        clientDisconnect.getMessageQueue();
+        clientConnected.getMessageQueue().clear();
+        clientDisconnect.getMessageQueue().clear();
         Thread.sleep(100);
         clientDisconnect.stop();
         Thread.sleep(100);
@@ -226,7 +226,7 @@ public class ServerTest {
         Thread.sleep(100);
 
         List<IMessage> messagesClientConnected = clientConnected.getMessageQueue().stream().toList();
-        List<IMessage> messagesClientDisconnected = clientConnected.getMessageQueue().stream().toList();
+        List<IMessage> messagesClientDisconnected = clientDisconnect.getMessageQueue().stream().toList();
         assertEquals(0, messagesClientDisconnected.size());
         assertEquals(1, messagesClientConnected.size());
         assertEquals(123, messagesClientConnected.get(0).getCurrentGameTick());
@@ -299,7 +299,7 @@ public class ServerTest {
         Thread.sleep(100);
 
         for(IClient client : clients){
-            client.getMessageQueue();
+            client.getMessageQueue().clear();
         }
 
         Thread.sleep(100);
