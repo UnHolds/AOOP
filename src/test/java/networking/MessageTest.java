@@ -5,6 +5,7 @@ import game.core.models.IPlayer;
 import game.core.models.Position;
 import game.core.models.impl.Mouse;
 import game.core.models.impl.Player;
+import game.core.models.impl.Subway;
 import networking.client.Client;
 import networking.client.IClient;
 import networking.server.IServer;
@@ -62,15 +63,18 @@ public class MessageTest {
         this.client1.connect(LOCALHOST, SERVER_PORT);
         this.client2.connect(LOCALHOST, SERVER_PORT);
         Thread.sleep(100);
-        this.server.startGame();
+        List<IMessage> startMessages = new ArrayList<>();
+        startMessages.add(messageFactory.createGameInitMessage(new ArrayList<>())); //TODO add some subways
+        startMessages.add(messageFactory.createGameFieldUpdateMessage(-1, new ArrayList<>(), new ArrayList<>())); //TODO add some players and mice
+        this.server.startGame(startMessages);
         Thread.sleep(100);
 
         while(server.getThread().getState() != Thread.State.WAITING){
             Thread.sleep(100);
         }
 
-        this.client2.getMessageQueue();
-        this.client1.getMessageQueue();
+        this.client2.getMessageQueue().clear();
+        this.client1.getMessageQueue().clear();
 
     }
 
@@ -119,7 +123,7 @@ public class MessageTest {
 
         Thread.sleep(100);
 
-        List<IMessage> messages = this.client1.getMessageQueue();
+        List<IMessage> messages = this.client1.getMessageQueue().stream().toList();
 
         assertEquals(1, messages.size());
         IMessage message = messages.get(0);
@@ -139,6 +143,57 @@ public class MessageTest {
 
         assertEquals(pos3, micePos.get("ID_MOUSE_1"));
         assertEquals(pos4, micePos.get("ID_MOUSE_2"));
+    }
+
+    @Test
+    public void testGameInitMessage() throws InterruptedException {
+
+        List<Position> exits1 = Arrays.asList(new Position(1,2), new Position(2,3));
+        List<Position> exits2 = Arrays.asList(new Position(4,5), new Position(6,7), new Position(8,9));
+
+        Subway subway1 = new Subway(exits1);
+        Subway subway2 = new Subway(exits2);
+
+        List<Subway> subways = Arrays.asList(subway1, subway2);
+
+        IMessage gameInitMessage = this.messageFactory.createGameInitMessage(subways);
+        this.server.sendToAllClients(gameInitMessage);
+
+        IMessage message = this.client1.getMessageQueue().take();
+        assertEquals(0, this.client1.getMessageQueue().size());
+        assertEquals(MessageType.GAME_FIELD_INIT, message.getMessageType());
+        List<Subway> recSubways = message.getSubways();
+        assertEquals(2, recSubways.size());
+        Subway recSubway1 = recSubways.get(0);
+        Subway recSubway2 = recSubways.get(1);
+
+        assertEquals(2, recSubway1.getExits().size());
+        assertEquals(3, recSubway2.getExits().size());
+
+        assertEquals(exits1, recSubway1.getExits());
+        assertEquals(exits2, recSubway2.getExits());
+
+    }
+
+    @Test
+    public void testGameInitMessageEmptyList() throws InterruptedException {
+        IMessage gameInitMessage = this.messageFactory.createGameInitMessage(new ArrayList<>());
+        this.server.sendToAllClients(gameInitMessage);
+        IMessage message = this.client2.getMessageQueue().take();
+
+        assertEquals(0, this.client2.getMessageQueue().size());
+        assertEquals(0, message.getSubways().size());
+    }
+
+    @Test
+    public void testGameFieldUpdateMessageEmptyLists() throws InterruptedException {
+        IMessage gameFieldUpdate = this.messageFactory.createGameFieldUpdateMessage(-1, new ArrayList<>(), new ArrayList<>());
+        this.server.sendToAllClients(gameFieldUpdate);
+
+        IMessage message = this.client1.getMessageQueue().take();
+        assertEquals(0, this.client1.getMessageQueue().size());
+        assertEquals(0, message.getPlayersPositions().size());
+        assertEquals(0, message.getMicePositions().size());
     }
 
 }

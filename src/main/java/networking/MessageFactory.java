@@ -2,6 +2,8 @@ package networking;
 
 import game.core.models.IMouse;
 import game.core.models.IPlayer;
+import game.core.models.Position;
+import game.core.models.impl.Subway;
 import networking.client.IClient;
 import networking.server.IServer;
 import networking.server.IServerClient;
@@ -52,7 +54,7 @@ public class MessageFactory implements IMessageFactory{
             playersData += "#";
         }
 
-        playersData.substring(0, playersData.length()-2);
+        playersData = playersData.length() > 0 ? playersData.substring(0, playersData.length()-1) : "";
 
         String miceData = "";
 
@@ -62,12 +64,33 @@ public class MessageFactory implements IMessageFactory{
             miceData += "#";
         }
 
-        miceData.substring(0, miceData.length()-2);
+        miceData = miceData.length() > 0 ? miceData.substring(0, miceData.length()-1) : "";
 
         String data = playersData + "@" + miceData;
 
 
         return new Message(MessageType.GAME_FIELD_UPDATE, this.entity.getId(), this.entity.getName(), gameTick, data);
+    }
+
+    @Override
+    public IMessage createGameInitMessage(List<Subway> subways) {
+
+        String data = "";
+
+        for(Subway subway : subways){
+            List<Position> exits = subway.getExits();
+            for(Position exit : exits){
+                data += exit.y() + "|" + exit.x();
+                data += "#";
+            }
+
+            data = data.substring(0, data.length() - 1);
+            data += "@";
+        }
+
+        data = data.length() > 0 ? data.substring(0, data.length() - 1) : "";
+
+        return new Message(MessageType.GAME_FIELD_INIT, this.entity.getId(), this.entity.getName(), -1, data);
     }
 
 

@@ -1,14 +1,12 @@
 package networking;
 
 import game.core.models.Position;
+import game.core.models.impl.Subway;
 import networking.client.IClient;
 import networking.server.IServer;
 
 import java.io.*;
-import java.util.Arrays;
-import java.util.Base64;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 public class Message implements IMessage, Serializable {
 
@@ -106,22 +104,10 @@ public class Message implements IMessage, Serializable {
             return null;
         }
 
-        HashMap<String, Position> playerPositions = new HashMap<>();
 
-        for(String player : this.data.split("@")[0].split("#")){
+        String playersData = this.data.startsWith("@") ? "" : this.data.split("@")[0];
 
-            String id = player.split("~")[0];
-            String[] coordinates = player.split("~")[1].split("\\|");
-
-            int row = Integer.parseInt(coordinates[0]);
-            int column = Integer.parseInt(coordinates[1]);
-
-            Position pos = new Position(row, column);
-
-            playerPositions.put(id, pos);
-        }
-
-        return playerPositions;
+        return getPositionMap(playersData);
     }
 
     @Override
@@ -131,9 +117,20 @@ public class Message implements IMessage, Serializable {
             return null;
         }
 
-        HashMap<String, Position> micePositions = new HashMap<>();
+        String miceData = this.data.endsWith("@") ? "" : this.data.split("@")[1];
 
-        for(String mouse : this.data.split("@")[1].split("#")){
+        return getPositionMap(miceData);
+    }
+
+    private Map<String, Position> getPositionMap(String dataString) {
+
+        HashMap<String, Position> positions = new HashMap<>();
+
+        if(dataString.isEmpty()){
+            return positions;
+        }
+
+        for(String mouse : dataString.split("#")){
             String id = mouse.split("~")[0];
             String[] coordinates = mouse.split("~")[1].split("\\|");
 
@@ -142,10 +139,39 @@ public class Message implements IMessage, Serializable {
 
             Position pos = new Position(row, column);
 
-            micePositions.put(id, pos);
+            positions.put(id, pos);
         }
 
-        return micePositions;
+        return positions;
+    }
+
+    @Override
+    public List<Subway> getSubways() {
+
+        if(this.type != MessageType.GAME_FIELD_INIT){
+            return null;
+        }
+
+        if(data.isEmpty()){
+            return new ArrayList<>();
+        }
+
+        List<Subway> subways = new ArrayList<>();
+
+        for(String sSubway : this.data.split("@")){
+            List<Position> exits = new ArrayList<>();
+            for(String sExitPos : sSubway.split("#")){
+
+                String[] coordinates = sExitPos.split("\\|");
+                int row = Integer.parseInt(coordinates[0]);
+                int column = Integer.parseInt(coordinates[1]);
+
+                exits.add(new Position(row, column));
+            }
+            subways.add(new Subway(exits));
+        }
+
+        return subways;
     }
 
 }

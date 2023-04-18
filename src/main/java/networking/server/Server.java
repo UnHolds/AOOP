@@ -81,12 +81,16 @@ public class Server implements IServer, Runnable{
     }
 
     @Override
-    public void startGame() {
+    public void startGame(List<IMessage> startMessages) {
         this.acceptClients = false;
         try {
             this.socket.close();
         } catch (IOException e) {
             log.error("Could not close serverSocket", e);
+        }
+
+        for(IMessage message : startMessages){
+            sendToAllClients(message);
         }
     }
 
@@ -158,9 +162,6 @@ public class Server implements IServer, Runnable{
 
     private void mainServerLoop(){
         log.info("Starting main server loop");
-
-        this.gameTick = System.currentTimeMillis();
-        sendToAllClients(messageFactory.createGameTickUpdateMessage(this.gameTick));
 
         while(this.stop == false){
             try {

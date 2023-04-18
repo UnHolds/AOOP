@@ -1,9 +1,11 @@
 package networking;
 
 import game.core.models.Position;
+import game.core.models.impl.Subway;
 
 import java.io.IOException;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public interface IMessage {
@@ -48,5 +50,7 @@ public interface IMessage {
     Map<String, Position> getPlayersPositions();
 
     Map<String, Position> getMicePositions();
+
+    List<Subway> getSubways();
 
 }

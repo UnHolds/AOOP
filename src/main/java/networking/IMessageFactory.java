@@ -2,6 +2,7 @@ package networking;
 
 import game.core.models.IMouse;
 import game.core.models.IPlayer;
+import game.core.models.impl.Subway;
 import networking.client.IClient;
 import networking.server.IServerClient;
 
@@ -16,4 +17,6 @@ public interface IMessageFactory {
     IMessage createConnectedClientsUpdateMessage(List<IServerClient> clients);
 
     IMessage createGameFieldUpdateMessage(long gameTick, List<IPlayer> players, List<IMouse> mice);
+
+    IMessage createGameInitMessage(List<Subway> subways);
 }

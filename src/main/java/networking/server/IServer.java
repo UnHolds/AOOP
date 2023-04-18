@@ -22,8 +22,9 @@ public interface IServer extends INetworkEntity, Runnable{
     /**
      * starts the game, that means that no new clients will be accepted,
      * and that the mainServerLoop will be executed
+     * @param startMessages the first messages that will be sent to all clients
      */
-    void startGame();
+    void startGame(List<IMessage> startMessages);
 
     /**
      * used to notify the server that a serverClient has received a new message
