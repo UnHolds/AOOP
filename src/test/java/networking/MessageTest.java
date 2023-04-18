@@ -175,4 +175,25 @@ public class MessageTest {
 
     }
 
+    @Test
+    public void testGameInitMessageEmptyList() throws InterruptedException {
+        IMessage gameInitMessage = this.messageFactory.createGameInitMessage(new ArrayList<>());
+        this.server.sendToAllClients(gameInitMessage);
+        IMessage message = this.client2.getMessageQueue().take();
+
+        assertEquals(0, this.client2.getMessageQueue().size());
+        assertEquals(0, message.getSubways().size());
+    }
+
+    @Test
+    public void testGameFieldUpdateMessageEmptyLists() throws InterruptedException {
+        IMessage gameFieldUpdate = this.messageFactory.createGameFieldUpdateMessage(-1, new ArrayList<>(), new ArrayList<>());
+        this.server.sendToAllClients(gameFieldUpdate);
+
+        IMessage message = this.client1.getMessageQueue().take();
+        assertEquals(0, this.client1.getMessageQueue().size());
+        assertEquals(0, message.getPlayersPositions().size());
+        assertEquals(0, message.getMicePositions().size());
+    }
+
 }
