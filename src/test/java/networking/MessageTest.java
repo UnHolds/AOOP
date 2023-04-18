@@ -62,7 +62,10 @@ public class MessageTest {
         this.client1.connect(LOCALHOST, SERVER_PORT);
         this.client2.connect(LOCALHOST, SERVER_PORT);
         Thread.sleep(100);
-        this.server.startGame(new ArrayList<>()); //TODO change
+        List<IMessage> startMessages = new ArrayList<>();
+        startMessages.add(messageFactory.createGameInitMessage(new ArrayList<>())); //TODO add some subways
+        startMessages.add(messageFactory.createGameFieldUpdateMessage(-1, new ArrayList<>(), new ArrayList<>())); //TODO add some players and mice
+        this.server.startGame(startMessages);
         Thread.sleep(100);
 
         while(server.getThread().getState() != Thread.State.WAITING){

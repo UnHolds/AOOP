@@ -54,7 +54,7 @@ public class MessageFactory implements IMessageFactory{
             playersData += "#";
         }
 
-        playersData.substring(0, playersData.length()-2);
+        playersData = playersData.length() > 0 ? playersData.substring(0, playersData.length()-1) : "";
 
         String miceData = "";
 
@@ -64,7 +64,7 @@ public class MessageFactory implements IMessageFactory{
             miceData += "#";
         }
 
-        miceData.substring(0, miceData.length()-2);
+        miceData = miceData.length() > 0 ? miceData.substring(0, miceData.length()-1) : "";
 
         String data = playersData + "@" + miceData;
 
@@ -84,11 +84,11 @@ public class MessageFactory implements IMessageFactory{
                 data += "#";
             }
 
-            data = data.substring(0, data.length() - 2);
+            data = data.substring(0, data.length() - 1);
             data += "@";
         }
 
-        data = data.substring(0, data.length() - 2);
+        data = data.length() > 0 ? data.substring(0, data.length() - 1) : "";
 
         return new Message(MessageType.GAME_FIELD_INIT, this.entity.getId(), this.entity.getName(), -1, data);
     }
