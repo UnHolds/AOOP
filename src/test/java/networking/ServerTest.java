@@ -276,6 +276,7 @@ public class ServerTest {
         client.stop();
         Thread.sleep(100);
         server.sendToAllClients(new Message(client.getId(), client.getName(), 555));
+        server.stop();
     }
 
     @Test
@@ -283,6 +284,7 @@ public class ServerTest {
 
         int numClients = 50;
         int numMessages = 20;
+        int timeout = 50; // 50 * 100 ms
 
         IServer server = new Server();
         ((Server)server).forwardEverything = true;
@@ -357,12 +359,22 @@ public class ServerTest {
         }
 
         for(IClient client : clients){
-            List<IMessage> messages =  client.getMessageQueue().stream().toList();
+            List<IMessage> messages = new ArrayList<>();
+            int timeoutCount = 0;
+            while(messages.size() < numClients*numMessages && timeoutCount < timeout){
+                while(client.getMessageQueue().size() > 0) {
+                    messages.add(client.getMessageQueue().take());
+                }
+                Thread.sleep(100);
+                timeoutCount ++;
+            }
             List<Long> gameTicks = messages.stream().map(m -> m.getCurrentGameTick()).collect(Collectors.toList());
             List<Long> missingGameTicks = numbers.stream().filter(n -> gameTicks.contains(n) == false).collect(Collectors.toList());
             assertEquals(0, missingGameTicks.size());
             assertEquals(numClients*numMessages, messages.size());
         }
+
+        server.stop();
     }
 
     @Test
@@ -380,6 +392,9 @@ public class ServerTest {
         assertEquals(client.getName(), server.getClients().get(0).getName());
 
         server.startGame(new ArrayList<>());
+
+        client.stop();
+        server.stop();
 
     }
 
@@ -403,6 +418,9 @@ public class ServerTest {
         assertEquals(client.getName(), clients.values().toArray()[0]);
 
         server.startGame(new ArrayList<>());
+
+        server.stop();
+        client.stop();
     }
 
     @Test
@@ -427,5 +445,9 @@ public class ServerTest {
         assertEquals(0, client.getMessageQueue().size());
         IMessage message = client.getMessageQueue().take();
         assertEquals(123, message.getCurrentGameTick());
+
+        client.stop();
+        server.stop();
+
     }
 }
