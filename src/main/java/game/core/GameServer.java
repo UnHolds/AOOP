@@ -10,9 +10,7 @@ import game.core.models.impl.Game;
 import game.core.models.impl.Player;
 import game.core.models.impl.Subway;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 public class GameServer {
     private static final int TICK_PAUSE_MILLIS = 25;
@@ -22,9 +20,27 @@ public class GameServer {
     private GameController gameController;
 
     public GameServer() {
-        Field field = new Field(12, 18, Set.of(
-                new Subway(List.of(new Position(3, 4), new Position(7, 4))))
-        );
+        // SUBWAY 1
+        Position pos5 = new Position(1, 1);
+        Position pos6 = new Position(5, 5);
+        Position pos7 = new Position(9, 9);
+        List<Position> sub1 = new ArrayList<>();
+        sub1.add(pos5);
+        sub1.add(pos6);
+        sub1.add(pos7);
+        // SUBWAY 2
+        Position pos8 = new Position(9, 1);
+        Position pos9 = new Position(3, 3);
+        Position pos10 = new Position(1, 9);
+        List<Position> sub2 = new ArrayList<>();
+        sub2.add(pos8);
+        sub2.add(pos9);
+        sub2.add(pos10);
+
+        Subway subway1 = new Subway(sub1);
+        Subway subway2 = new Subway(sub2);
+        Map<Integer, Subway> subways = new HashMap<>();
+        Field field = new Field(12, 18, subways);
 
         List<IPlayer> playerList = new ArrayList<>();
         playerList.add(new Player(null, 3, "Alice", new Position(1, 2), "cat1.png"));

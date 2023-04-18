@@ -2,6 +2,7 @@ package game.core.models;
 
 import game.core.models.impl.Subway;
 
+import java.util.Map;
 import java.util.Set;
 
 public interface IField {
@@ -10,5 +11,5 @@ public interface IField {
 
     int getColumnCount();
 
-    Set<Subway> getSubways();
+    Map<Integer, Subway> getSubways();
 }

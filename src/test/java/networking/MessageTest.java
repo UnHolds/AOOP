@@ -3,6 +3,7 @@ package networking;
 import game.core.models.IMouse;
 import game.core.models.IPlayer;
 import game.core.models.Position;
+import game.core.models.impl.Field;
 import game.core.models.impl.Mouse;
 import game.core.models.impl.Player;
 import networking.client.Client;
@@ -102,8 +103,9 @@ public class MessageTest {
         IPlayer player1 = new Player(this.client1.getId(), -1, "Player 1", pos1, "cat1.png");
         IPlayer player2 = new Player(this.client2.getId(), -1, "Player 2", pos2, "cat2.png");
 
-        IMouse mouse1 = new Mouse("ID_MOUSE_1", pos3, "mouse.png");
-        IMouse mouse2 = new Mouse("ID_MOUSE_2", pos4, "mouse.png");
+        Field field = null;
+        IMouse mouse1 = new Mouse("ID_MOUSE_1", pos3, "mouse.png", field);
+        IMouse mouse2 = new Mouse("ID_MOUSE_2", pos4, "mouse.png", field);
 
         List<IPlayer> players = new ArrayList<>();
         players.add(player1);

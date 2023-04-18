@@ -16,7 +16,7 @@ public interface IMouse extends ICharacter{
      * Calculate where the mouse moves next based on if it is on the surface or in the tunnel and the moving algorithm
      * the mouse applies
      */
-    //public void calculateNextMove();
+    public void calculateNextMove();
 
 
     /**
