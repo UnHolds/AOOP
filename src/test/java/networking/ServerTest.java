@@ -403,7 +403,29 @@ public class ServerTest {
         assertEquals(client.getName(), clients.values().toArray()[0]);
 
         server.startGame(new ArrayList<>());
+    }
 
+    @Test
+    public void testIfBlockingMessageQueueWorks() throws IOException, InterruptedException {
+        IServer server = new Server();
+        server.start(SERVER_PORT);
+        Thread.sleep(100);
+        IClient client = new Client("Client");
+        client.connect(LOCALHOST, SERVER_PORT);
+        Thread.sleep(100);
+        client.getMessageQueue().clear();
 
+        Thread thread = new Thread(() -> {
+            try {
+                Thread.sleep(300);
+            } catch (InterruptedException e) {
+                throw new RuntimeException(e);
+            }
+            server.sendToAllClients(new Message(server.getId(), server.getName(),  123));
+        });
+        thread.start();
+        assertEquals(0, client.getMessageQueue().size());
+        IMessage message = client.getMessageQueue().take();
+        assertEquals(123, message.getCurrentGameTick());
     }
 }
