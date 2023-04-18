@@ -80,7 +80,7 @@ public class MessageFactory implements IMessageFactory{
         for(Subway subway : subways){
             List<Position> exits = subway.getExits();
             for(Position exit : exits){
-                data += exit.y() + "|" + exit.y();
+                data += exit.y() + "|" + exit.x();
                 data += "#";
             }
 
