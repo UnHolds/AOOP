@@ -19,6 +19,13 @@ public class Player extends Character implements IPlayer {
         this.name = name;
     }
 
+    public Player(int gameUIId, String name, Position startPosition, String imagePath){
+        super(startPosition, imagePath);
+        this.score = 0;
+        this.gameUIId = gameUIId;
+        this.name = name;
+    }
+
     public void incrementScore() {
         this.score++;
     }

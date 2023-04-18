@@ -6,6 +6,7 @@ import game.core.models.ICharacter;
 import javax.imageio.ImageIO;
 import java.awt.*;
 import java.io.IOException;
+import java.util.UUID;
 
 public class Character implements ICharacter {
     private Position position;
@@ -19,6 +20,10 @@ public class Character implements ICharacter {
         this.id = id;
     }
 
+    public Character(Position position, String imagePath) {
+        this(UUID.randomUUID().toString(), position, imagePath);
+    }
+
     public void move() {
         position =  position.move(movingDirection);
     }
@@ -30,6 +35,11 @@ public class Character implements ICharacter {
 
     public Position getPosition() {
         return position;
+    }
+
+    @Override
+    public void setPosition(Position position) {
+        this.position = position;
     }
 
     @Override
