@@ -1,14 +1,12 @@
 package networking;
 
 import game.core.models.Position;
+import game.core.models.impl.Subway;
 import networking.client.IClient;
 import networking.server.IServer;
 
 import java.io.*;
-import java.util.Arrays;
-import java.util.Base64;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 public class Message implements IMessage, Serializable {
 
@@ -146,6 +144,31 @@ public class Message implements IMessage, Serializable {
         }
 
         return micePositions;
+    }
+
+    @Override
+    public List<Subway> getSubways() {
+
+        if(this.type != MessageType.GAME_FIELD_INIT){
+            return null;
+        }
+
+        List<Subway> subways = new ArrayList<>();
+
+        for(String sSubway : this.data.split("@")){
+            List<Position> exits = new ArrayList<>();
+            for(String sExitPos : sSubway.split("#")){
+
+                String[] coordinates = sExitPos.split("\\|");
+                int row = Integer.parseInt(coordinates[0]);
+                int column = Integer.parseInt(coordinates[1]);
+
+                exits.add(new Position(row, column));
+            }
+            subways.add(new Subway(exits));
+        }
+
+        return subways;
     }
 
 }

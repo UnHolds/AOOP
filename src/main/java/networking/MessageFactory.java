@@ -2,6 +2,8 @@ package networking;
 
 import game.core.models.IMouse;
 import game.core.models.IPlayer;
+import game.core.models.Position;
+import game.core.models.impl.Subway;
 import networking.client.IClient;
 import networking.server.IServer;
 import networking.server.IServerClient;
@@ -68,6 +70,27 @@ public class MessageFactory implements IMessageFactory{
 
 
         return new Message(MessageType.GAME_FIELD_UPDATE, this.entity.getId(), this.entity.getName(), gameTick, data);
+    }
+
+    @Override
+    public IMessage createGameInitMessage(List<Subway> subways) {
+
+        String data = "";
+
+        for(Subway subway : subways){
+            List<Position> exits = subway.getExits();
+            for(Position exit : exits){
+                data += exit.y() + "|" + exit.y();
+                data += "#";
+            }
+
+            data = data.substring(0, data.length() - 2);
+            data += "@";
+        }
+
+        data = data.substring(0, data.length() - 2);
+
+        return new Message(MessageType.GAME_FIELD_INIT, this.entity.getId(), this.entity.getName(), -1, data);
     }
 
 
