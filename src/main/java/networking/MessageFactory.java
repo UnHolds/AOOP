@@ -3,6 +3,7 @@ package networking;
 import game.core.models.IMouse;
 import game.core.models.IPlayer;
 import game.core.models.Position;
+import game.core.models.impl.Direction;
 import game.core.models.impl.Subway;
 import networking.client.IClient;
 import networking.server.IServer;
@@ -91,6 +92,11 @@ public class MessageFactory implements IMessageFactory{
         data = data.length() > 0 ? data.substring(0, data.length() - 1) : "";
 
         return new Message(MessageType.GAME_FIELD_INIT, this.entity.getId(), this.entity.getName(), -1, data);
+    }
+
+    @Override
+    public IMessage createCatDirectionChangeMessage(long gameTick, Direction direction) {
+        return new Message(MessageType.CAT_DIRECTION_CHANGE, this.entity.getId(), this.entity.getName(), -1, direction.ordinal() + "");
     }
 
 

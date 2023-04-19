@@ -1,6 +1,7 @@
 package networking;
 
 import game.core.models.Position;
+import game.core.models.impl.Direction;
 import game.core.models.impl.Subway;
 import networking.client.IClient;
 import networking.server.IServer;
@@ -172,6 +173,16 @@ public class Message implements IMessage, Serializable {
         }
 
         return subways;
+    }
+
+    @Override
+    public Direction getDirection() {
+
+        if(this.type != MessageType.CAT_DIRECTION_CHANGE){
+            return null;
+        }
+
+        return Direction.values()[Integer.parseInt(this.data)];
     }
 
 }

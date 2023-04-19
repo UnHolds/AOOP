@@ -1,6 +1,7 @@
 package networking;
 
 import game.core.models.Position;
+import game.core.models.impl.Direction;
 import game.core.models.impl.Subway;
 
 import java.io.IOException;
@@ -52,5 +53,7 @@ public interface IMessage {
     Map<String, Position> getMicePositions();
 
     List<Subway> getSubways();
+
+    Direction getDirection();
 
 }
