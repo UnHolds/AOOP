@@ -3,6 +3,7 @@ package networking;
 import game.core.models.IMouse;
 import game.core.models.IPlayer;
 import game.core.models.Position;
+import game.core.models.impl.Direction;
 import game.core.models.impl.Mouse;
 import game.core.models.impl.Player;
 import game.core.models.impl.Subway;
@@ -194,6 +195,19 @@ public class MessageTest {
         assertEquals(0, this.client1.getMessageQueue().size());
         assertEquals(0, message.getPlayersPositions().size());
         assertEquals(0, message.getMicePositions().size());
+    }
+
+    @Test
+    public void testCatDirectionChangeMessage() throws InterruptedException {
+        IMessage catDirChange = this.messageFactory.createCatDirectionChangeMessage(42, Direction.LEFT);
+        this.client1.sendMessage(catDirChange);
+        Thread.sleep(100);
+        List<IMessage> messages = this.server.getAllMessages();
+
+        assertEquals(1, messages.size());
+        IMessage message = messages.get(0);
+        assertEquals(MessageType.CAT_DIRECTION_CHANGE, message.getMessageType());
+        assertEquals(Direction.LEFT, message.getDirection());
     }
 
 }
