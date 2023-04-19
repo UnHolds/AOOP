@@ -56,4 +56,6 @@ public interface IMessage {
 
     Direction getDirection();
 
+    String getPlayerId();
+
 }

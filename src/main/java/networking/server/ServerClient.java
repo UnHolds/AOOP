@@ -120,12 +120,15 @@ public class ServerClient implements IServerClient, Runnable{
                 return;
             }
 
+            log.debug("Received message of type " + message.getMessageType());
+
             if(message.getSenderId().equals(this.id) == false || message.getSenderName().equals(this.name) == false){
                 log.error("Received message from client with id and or name mismatch: ID:  Should: " + this.id +
                         "   Is: " + message.getSenderId() + "      Name:   Should: " + this.name +
                         "   Is:" + message.getSenderName());
             }
 
+            server.getMessageQueue().add(message);
             synchronized (this) {
                 this.messagesReceived.add(message);
             }

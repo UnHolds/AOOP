@@ -5,7 +5,9 @@ import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.ConcurrentLinkedQueue;
+import java.util.concurrent.LinkedBlockingQueue;
 
 import networking.IMessage;
 import networking.MessageFactory;
@@ -32,7 +34,7 @@ public class Server implements IServer, Runnable{
 
     public long gameTick = 0;
 
-    private ConcurrentLinkedQueue<IMessage> receivedMessages = new ConcurrentLinkedQueue<>();
+    private BlockingQueue<IMessage> receivedMessages = new LinkedBlockingQueue<>();
 
 
     @Override
@@ -150,6 +152,11 @@ public class Server implements IServer, Runnable{
     }
 
     @Override
+    public BlockingQueue<IMessage> getMessageQueue() {
+        return receivedMessages;
+    }
+
+    @Override
     public Thread getThread() {
         return this.thread;
     }
@@ -201,9 +208,7 @@ public class Server implements IServer, Runnable{
             }
 
 
-            synchronized (this) {
-                this.receivedMessages.addAll(messages);
-            }
+            // this.receivedMessages.addAll(messages);
             /*
             messages = handleMessages(messages);
 

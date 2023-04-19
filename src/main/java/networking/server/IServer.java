@@ -5,6 +5,7 @@ import networking.INetworkEntity;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.concurrent.BlockingQueue;
 
 public interface IServer extends INetworkEntity, Runnable{
 
@@ -55,6 +56,8 @@ public interface IServer extends INetworkEntity, Runnable{
      * @return all the received messages
      */
     List<IMessage> getAllMessages();
+
+    BlockingQueue<IMessage> getMessageQueue();
 
     /**
      * returns the thread in which the server is running in

@@ -16,16 +16,14 @@ public class GameWindow {
     public GameWindow(IGame game){
         this.window = new JFrame("Cat & Mouse Game");
         gameFieldPanel = new GameFieldPanel(game);
+        startScreenPanel = new StartScreenPanel();
         this.game = game;
     }
 
     public void initWindow() {
         this.window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.window.setResizable(false);
-
-        this.startScreenPanel = new StartScreenPanel();
-        //this.window.add(this.startScreenPanel);
-        this.window.add(gameFieldPanel);
+        this.window.add(this.startScreenPanel);
 
         this.window.pack(); // fit the window size around the components
         this.window.setLocationRelativeTo(null);

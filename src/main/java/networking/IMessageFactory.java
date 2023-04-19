@@ -1,5 +1,6 @@
 package networking;
 
+import game.core.models.ICharacter;
 import game.core.models.IMouse;
 import game.core.models.IPlayer;
 import game.core.models.impl.Direction;
@@ -21,5 +22,5 @@ public interface IMessageFactory {
 
     IMessage createGameInitMessage(List<Subway> subways);
 
-    IMessage createCatDirectionChangeMessage(long gameTick, Direction direction);
+    IMessage createCatDirectionChangeMessage(long gameTick, ICharacter player, Direction direction);
 }

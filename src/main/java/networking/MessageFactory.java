@@ -1,5 +1,6 @@
 package networking;
 
+import game.core.models.ICharacter;
 import game.core.models.IMouse;
 import game.core.models.IPlayer;
 import game.core.models.Position;
@@ -95,8 +96,8 @@ public class MessageFactory implements IMessageFactory{
     }
 
     @Override
-    public IMessage createCatDirectionChangeMessage(long gameTick, Direction direction) {
-        return new Message(MessageType.CAT_DIRECTION_CHANGE, this.entity.getId(), this.entity.getName(), -1, direction.ordinal() + "");
+    public IMessage createCatDirectionChangeMessage(long gameTick, ICharacter player, Direction direction) {
+        return new Message(MessageType.CAT_DIRECTION_CHANGE, this.entity.getId(), this.entity.getName(), -1, player.getId() + "|" + direction.ordinal());
     }
 
 

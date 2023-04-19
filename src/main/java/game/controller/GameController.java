@@ -1,17 +1,19 @@
 package game.controller;
 
 
+import game.core.GameClient;
 import game.core.GameServer;
 import game.core.handler.CharacterMovementController;
 import game.ui.GameWindow;
 
 public class GameController implements IGameController {
-    private GameServer gameServer;
     private GameWindow gameWindow;
+    private GameClient gameClient;
 
-    public GameController(GameServer gameServer) {
-        gameServer.setGameController(this);
-        this.gameServer = gameServer;
+    public GameController(GameClient gameClient) {
+        //gameServer.setGameController(this);
+        gameClient.setController(this);
+        this.gameClient = gameClient;
     }
 
     @Override
@@ -26,9 +28,10 @@ public class GameController implements IGameController {
 
     @Override
     public void initializeGameUI() {
-        gameWindow = new GameWindow(gameServer.getGame());
+        gameWindow = new GameWindow(gameClient.getGame());
         gameWindow.initWindow();
-        CharacterMovementController movementController = new CharacterMovementController(gameServer.getGame().getPlayers().get(0));
+        gameWindow.showGameFieldPanel();
+        CharacterMovementController movementController = new CharacterMovementController(gameClient.getGame().getPlayers().get(0), gameClient);
         gameWindow.registerMovementListener(movementController);
     }
 
@@ -51,12 +54,20 @@ public class GameController implements IGameController {
 
     }
 
+    public void startGameAsHost() {
+
+    }
+
+    public void startGameAsClient() {
+
+    }
+
     public static void main(String[] args){
         System.out.println("Please call the other methods here when implemented");
-        GameServer gameServer = new GameServer();
-        GameController gameController = new GameController(gameServer);
+        GameClient gameClient = new GameClient("127.0.0.1", 12345);
+        GameController gameController = new GameController(gameClient);
         gameController.initializeGameLogic();
         gameController.initializeGameUI();
-        gameServer.run();
+        gameClient.run();
     }
 }

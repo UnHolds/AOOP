@@ -1,16 +1,20 @@
 package game.core.handler;
 
+import game.core.GameClient;
 import game.core.models.ICharacter;
 import game.core.models.impl.Direction;
+import game.core.models.impl.Game;
 
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 
 public class CharacterMovementController implements KeyListener {
     private ICharacter target;
+    private GameClient gameClient;
 
-    public CharacterMovementController(ICharacter target) {
+    public CharacterMovementController(ICharacter target, GameClient gameClient) {
         this.target = target;
+        this.gameClient = gameClient;
     }
 
     @Override
@@ -32,6 +36,7 @@ public class CharacterMovementController implements KeyListener {
             }
         }
         target.setMovingDirection(newDirection);
+        gameClient.sendDirectionChange(target, newDirection);
     }
 
     @Override

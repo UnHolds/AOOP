@@ -177,12 +177,20 @@ public class Message implements IMessage, Serializable {
 
     @Override
     public Direction getDirection() {
-
         if(this.type != MessageType.CAT_DIRECTION_CHANGE){
             return null;
         }
 
-        return Direction.values()[Integer.parseInt(this.data)];
+        String[] data = this.data.split("\\|");
+        return Direction.values()[Integer.parseInt(data[1])];
+    }
+
+    @Override
+    public String getPlayerId() {
+        if(this.type != MessageType.CAT_DIRECTION_CHANGE){
+            return null;
+        }
+        return this.data.split("\\|")[0];
     }
 
 }
