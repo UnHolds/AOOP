@@ -34,7 +34,9 @@ public class MessageTest {
 
     private IClient client2;
 
-    private IMessageFactory messageFactory;
+    private IMessageFactory client1MessageFactory;
+    private IMessageFactory client2MessageFactory;
+    private IMessageFactory serverMessageFactory;
 
     public boolean exceptionThrownInThread = false;
     public ConcurrentLinkedQueue<Throwable> exceptions;
@@ -60,13 +62,15 @@ public class MessageTest {
         Thread.sleep(100);
         this.client1 = new Client("Client 1");
         this.client2 = new Client("Client 2");
-        this.messageFactory = new MessageFactory(this.client1);
+        this.client1MessageFactory = new MessageFactory(this.client1);
+        this.client2MessageFactory = new MessageFactory(this.client2);
+        this.serverMessageFactory = new MessageFactory(this.server);
         this.client1.connect(LOCALHOST, SERVER_PORT);
         this.client2.connect(LOCALHOST, SERVER_PORT);
         Thread.sleep(100);
         List<IMessage> startMessages = new ArrayList<>();
-        startMessages.add(messageFactory.createGameInitMessage(new ArrayList<>())); //TODO add some subways
-        startMessages.add(messageFactory.createGameFieldUpdateMessage(-1, new ArrayList<>(), new ArrayList<>())); //TODO add some players and mice
+        startMessages.add(client1MessageFactory.createGameInitMessage(new ArrayList<>())); //here would be a list of subways
+        startMessages.add(client1MessageFactory.createGameFieldUpdateMessage(-1, new ArrayList<>(), new ArrayList<>())); //were would be a list of mice and players
         this.server.startGame(startMessages);
         Thread.sleep(100);
 
@@ -118,7 +122,7 @@ public class MessageTest {
         mice.add(mouse1);
         mice.add(mouse2);
 
-        IMessage gameFieldUpdateMessage = this.messageFactory.createGameFieldUpdateMessage(420, players, mice);
+        IMessage gameFieldUpdateMessage = this.serverMessageFactory.createGameFieldUpdateMessage(420, players, mice);
 
         this.server.sendToAllClients(gameFieldUpdateMessage);
 
@@ -144,6 +148,9 @@ public class MessageTest {
 
         assertEquals(pos3, micePos.get("ID_MOUSE_1"));
         assertEquals(pos4, micePos.get("ID_MOUSE_2"));
+
+        assertEquals(this.server.getId(), message.getSenderId());
+        assertEquals(this.server.getName(), message.getSenderName());
     }
 
     @Test
@@ -157,7 +164,7 @@ public class MessageTest {
 
         List<Subway> subways = Arrays.asList(subway1, subway2);
 
-        IMessage gameInitMessage = this.messageFactory.createGameInitMessage(subways);
+        IMessage gameInitMessage = this.serverMessageFactory.createGameInitMessage(subways);
         this.server.sendToAllClients(gameInitMessage);
 
         IMessage message = this.client1.getMessageQueue().take();
@@ -174,32 +181,39 @@ public class MessageTest {
         assertEquals(exits1, recSubway1.getExits());
         assertEquals(exits2, recSubway2.getExits());
 
+        assertEquals(this.server.getId(), message.getSenderId());
+        assertEquals(this.server.getName(), message.getSenderName());
+
     }
 
     @Test
     public void testGameInitMessageEmptyList() throws InterruptedException {
-        IMessage gameInitMessage = this.messageFactory.createGameInitMessage(new ArrayList<>());
+        IMessage gameInitMessage = this.serverMessageFactory.createGameInitMessage(new ArrayList<>());
         this.server.sendToAllClients(gameInitMessage);
         IMessage message = this.client2.getMessageQueue().take();
 
         assertEquals(0, this.client2.getMessageQueue().size());
         assertEquals(0, message.getSubways().size());
+        assertEquals(this.server.getId(), message.getSenderId());
+        assertEquals(this.server.getName(), message.getSenderName());
     }
 
     @Test
     public void testGameFieldUpdateMessageEmptyLists() throws InterruptedException {
-        IMessage gameFieldUpdate = this.messageFactory.createGameFieldUpdateMessage(-1, new ArrayList<>(), new ArrayList<>());
+        IMessage gameFieldUpdate = this.serverMessageFactory.createGameFieldUpdateMessage(-1, new ArrayList<>(), new ArrayList<>());
         this.server.sendToAllClients(gameFieldUpdate);
 
         IMessage message = this.client1.getMessageQueue().take();
         assertEquals(0, this.client1.getMessageQueue().size());
         assertEquals(0, message.getPlayersPositions().size());
         assertEquals(0, message.getMicePositions().size());
+        assertEquals(this.server.getId(), message.getSenderId());
+        assertEquals(this.server.getName(), message.getSenderName());
     }
 
     @Test
     public void testCatDirectionChangeMessage() throws InterruptedException {
-        IMessage catDirChange = this.messageFactory.createCatDirectionChangeMessage(42, Direction.LEFT);
+        IMessage catDirChange = this.client1MessageFactory.createCatDirectionChangeMessage(42, Direction.LEFT);
         this.client1.sendMessage(catDirChange);
         Thread.sleep(100);
         List<IMessage> messages = this.server.getAllMessages();
@@ -208,6 +222,8 @@ public class MessageTest {
         IMessage message = messages.get(0);
         assertEquals(MessageType.CAT_DIRECTION_CHANGE, message.getMessageType());
         assertEquals(Direction.LEFT, message.getDirection());
+        assertEquals(this.client1.getId(), message.getSenderId());
+        assertEquals(this.client1.getName(), message.getSenderName());
     }
 
 }
