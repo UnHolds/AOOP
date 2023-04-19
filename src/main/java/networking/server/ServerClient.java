@@ -26,7 +26,6 @@ public class ServerClient implements IServerClient, Runnable{
 
     private IServer server;
 
-    private ConcurrentLinkedQueue<IMessage> messagesReceived = new ConcurrentLinkedQueue<>();
     private static Logger log = LogManager.getLogger(ServerClient.class);
 
     public ServerClient(Socket client, IServer server) throws IOException {
@@ -54,16 +53,6 @@ public class ServerClient implements IServerClient, Runnable{
         } catch (IOException e) {
             this.log.error("Could not close socket in ServerClient: " + this.client.getInetAddress().getHostAddress(), e);
         }
-    }
-
-    @Override
-    public List<IMessage> getMessages() {
-        List<IMessage> messages = new ArrayList<>();
-        synchronized (this) {
-            messages = this.messagesReceived.stream().toList();
-            this.messagesReceived.clear();
-        }
-        return messages;
     }
 
     @Override
@@ -129,12 +118,10 @@ public class ServerClient implements IServerClient, Runnable{
             }
 
             server.getMessageQueue().add(message);
-            synchronized (this) {
-                this.messagesReceived.add(message);
-            }
             this.server.notifyNewMessages();
         } catch (IOException e) {
             this.log.error("Could not read from data input stream, client: " + this.client.getInetAddress().getHostAddress());
+            stop = true;
         } catch (ClassNotFoundException e) {
             this.log.error("Could not convert base64 string to class, client: "  + this.client.getInetAddress().getHostAddress(), e);
         }

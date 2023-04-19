@@ -55,8 +55,6 @@ public interface IServer extends INetworkEntity, Runnable{
      * returns all the received messages and clears the stored received message list
      * @return all the received messages
      */
-    List<IMessage> getAllMessages();
-
     BlockingQueue<IMessage> getMessageQueue();
 
     /**

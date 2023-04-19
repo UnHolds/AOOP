@@ -24,17 +24,13 @@ public class Server implements IServer, Runnable{
 
     private Thread thread;
 
-    public boolean skipAllClientHandling = false;
-
-    public boolean forwardEverything = false;
-
     private MessageFactory messageFactory = new MessageFactory(this);
 
     private boolean newMessages = false;
 
     public long gameTick = 0;
 
-    private BlockingQueue<IMessage> receivedMessages = new LinkedBlockingQueue<>();
+    private BlockingQueue<IMessage> messageQueue = new LinkedBlockingQueue<>();
 
 
     @Override
@@ -142,18 +138,8 @@ public class Server implements IServer, Runnable{
     }
 
     @Override
-    public List<IMessage> getAllMessages() {
-        List<IMessage> messages;
-        synchronized (this) {
-            messages = this.receivedMessages.stream().toList();
-            this.receivedMessages.clear();
-        }
-        return messages;
-    }
-
-    @Override
     public BlockingQueue<IMessage> getMessageQueue() {
-        return receivedMessages;
+        return messageQueue;
     }
 
     @Override
@@ -167,64 +153,16 @@ public class Server implements IServer, Runnable{
     }
 
 
-    private void mainServerLoop(){
-        log.info("Starting main server loop");
-
-        while(this.stop == false){
-            try {
-                synchronized (this) {
-                    if(this.newMessages == false) {
-                        this.wait();
-                    }
-                    this.newMessages = false;
-                }
-            } catch (InterruptedException e) {
-                log.error("Interrupted while wait");
-            }
-
-            if(this.skipAllClientHandling){
-                continue;
-            }
-
-            List<IMessage> messages = new ArrayList<>();
-
-            for(IServerClient client : this.clients){
-
-                //remove disconnected clients
-                if(client.isDisconnected()){
-                    client.stop();
-                    this.clients.remove(client);
-                }
-                messages.addAll(filterClientMessages(client.getMessages()));
-            }
-
-            log.debug("Received " + messages.size() + " messages");
-
-            if(this.forwardEverything){
-                for(IMessage message : messages){
-                    sendToAllClients(message);
-                }
-                continue;
-            }
-
-
-            // this.receivedMessages.addAll(messages);
-            /*
-            messages = handleMessages(messages);
-
-            for(IMessage message : messages){
-                sendToAllClients(message);
-            }
-            */
-        }
-    }
-
-
-
     @Override
     public void run() {
         waitForClients();
-        mainServerLoop();
+        for(IServerClient client : clients) {
+            try {
+                client.getThread().join();
+            } catch (InterruptedException e) {
+                throw new RuntimeException(e);
+            }
+        }
         log.info("Server thread stopped");
     }
 

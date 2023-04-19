@@ -25,13 +25,6 @@ public interface IServerClient {
     void stop();
 
     /**
-     * returns the received messages of the serverClient. When this function is called it
-     * will delete the messages afterwards. So it is more like a get and clear method.
-     * @return the received messages since the last getMessage() call
-     */
-    List<IMessage> getMessages();
-
-    /**
      * sends the given message to the connected client
      * @param message the message to send
      * @throws IOException
