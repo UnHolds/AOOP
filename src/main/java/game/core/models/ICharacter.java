@@ -15,6 +15,8 @@ public interface ICharacter {
 
     Position getPosition();
 
+    void setPosition(Position pos);
+
     void setMovingDirection(Direction direction);
 
     Direction getMovingDirection();

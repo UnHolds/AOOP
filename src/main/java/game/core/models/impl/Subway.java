@@ -3,12 +3,11 @@ package game.core.models.impl;
 import game.core.models.Position;
 import game.core.models.IMouse;
 
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 public class Subway {
     private List<Position> exits;
-    private Set<IMouse> mouses;
+    private Set<IMouse> mouses = new HashSet<>();
 
     public Subway(List<Position> exits) {
         this.exits = exits;
@@ -20,6 +19,10 @@ public class Subway {
 
     public void mouseExit(IMouse mouse) {
         mouses.remove(mouse);
+    }
+
+    public Set<IMouse> getMouses() {
+        return mouses;
     }
 
     public List<Position> getExits() {

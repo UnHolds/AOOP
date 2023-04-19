@@ -32,6 +32,10 @@ public class Character implements ICharacter {
         return position;
     }
 
+    public void setPosition(Position pos){
+        this.position = pos;
+    }
+
     @Override
     public void setMovingDirection(Direction direction) {
         movingDirection = direction;
