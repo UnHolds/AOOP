@@ -8,12 +8,14 @@ import java.util.List;
 import java.util.Map;
 import java.util.Random;
 
+
 public class Mouse extends Character implements IMouse {
-    public Field field;
     public Integer lastSubway;
+    public Integer moveAmount;
     public Mouse(String id, Position position, String imagePath,Integer lastSubway) {
         super(id, position, imagePath);
         this.lastSubway = lastSubway;
+        this.moveAmount = -1;
     }
 
     public void setLastSubway(Integer lastSubway) {
@@ -23,6 +25,10 @@ public class Mouse extends Character implements IMouse {
     public Integer getLastSubway(){
         return lastSubway;
     }
+
+    public void setMoveAmount(Integer moves){this.moveAmount = moves;}
+
+    public Integer getMoveAmount(){return this.moveAmount;}
 
     @Override
     public void calculateNextMove(Position goal) {
