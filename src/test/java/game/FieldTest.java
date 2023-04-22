@@ -43,8 +43,8 @@ public class FieldTest {
         subways.put(1, subway2);
 
         Field field = new Field(10, 10, subways);
-        IMouse mouse2 = new Mouse("ID_MOUSE_2", pos4, "mouse.png", field,-1);
-        IMouse mouse1 = new Mouse("ID_MOUSE_1", pos3, "mouse.png", field,-1);
+        IMouse mouse2 = new Mouse("ID_MOUSE_2", pos4, "mouse.png", -1);
+        IMouse mouse1 = new Mouse("ID_MOUSE_1", pos3, "mouse.png", -1);
 
         for (int i = 0; i < field.getColumnCount();i++){
             for (int j = 0; j < field.getRowCount();j++){
@@ -88,15 +88,16 @@ public class FieldTest {
             }
         }
         for(int a = 0; a < 50; a++) {
-            Position goal = mouse1.closestSubway(mouse1.getPosition());
+            Position goal = mouse1.closestSubway(mouse1.getPosition(),field);
             while (mouse1.getPosition() != goal) {
+                Position goal1 = mouse1.closestSubway(mouse1.getPosition(),field);
                 System.out.printf("OLD Position of m1: x = %d, y = %d", mouse1.getPosition().x(), mouse1.getPosition().y());
                 System.out.println();
-                mouse1.calculateNextMove(goal);
+                mouse1.calculateNextMove(goal1);
                 mouse1.move();
                 System.out.printf("New Position of m1: x = %d, y = %d", mouse1.getPosition().x(), mouse1.getPosition().y());
                 System.out.println();
-                if (mouse1.getPosition().x() == goal.x() && mouse1.getPosition().y() == goal.y()) {
+                if (mouse1.getPosition().x() == goal1.x() && mouse1.getPosition().y() == goal1.y()) {
                     for (int i = 0; i < field.getSubways().size(); i++) {
                         List<Position> sub = field.getSubways().get(i).getExits();
                         if (sub.contains(mouse1.getPosition())) {

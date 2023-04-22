@@ -11,9 +11,8 @@ import java.util.Random;
 public class Mouse extends Character implements IMouse {
     public Field field;
     public Integer lastSubway;
-    public Mouse(String id, Position position, String imagePath, Field field,Integer lastSubway) {
+    public Mouse(String id, Position position, String imagePath,Integer lastSubway) {
         super(id, position, imagePath);
-        this.field = field;
         this.lastSubway = lastSubway;
     }
 
@@ -97,7 +96,7 @@ public class Mouse extends Character implements IMouse {
         }
     }
 
-    public Position closestSubway(Position pos){
+    public Position closestSubway(Position pos, Field field){
         Map<Integer, Subway> subwayMap = field.getSubways();
         List<Position> subwayExits = new ArrayList<>();
         for (int i=0;i < subwayMap.size();i++){

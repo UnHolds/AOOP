@@ -1,6 +1,7 @@
 package game.core.models;
 
 import game.core.models.impl.Direction;
+import game.core.models.impl.Field;
 
 import java.util.List;
 
@@ -24,7 +25,7 @@ public interface IMouse extends ICharacter{
 
     public Position searchNextExit(List<Position> sub, Position pos);
 
-    public Position closestSubway(Position pos);
+    public Position closestSubway(Position pos, Field field);
 
     public void setLastSubway(Integer lastSubway);
 
