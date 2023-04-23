@@ -1,5 +1,6 @@
 package game.core.models.impl;
 
+import game.core.models.IPlayer;
 import game.core.models.Position;
 import game.core.models.IMouse;
 
@@ -22,7 +23,7 @@ public class Mouse extends Character implements IMouse {
         this.lastSubway = lastSubway;
     }
 
-    public Integer getLastSubway(){
+    private Integer getLastSubway(){
         return lastSubway;
     }
 
@@ -32,14 +33,12 @@ public class Mouse extends Character implements IMouse {
 
     @Override
     public void calculateNextMove(Position goal) {
-        //Position nextGoal  = closestSubway(getPosition());
         System.out.printf("Closest exit is : x = %d, y= %d",goal.x(),goal.y());
         System.out.println();
         int mx = getPosition().x();
         int my = getPosition().y();
         int gx = goal.x();
         int gy = goal.y();
-        Direction next = Direction.STOP;
         if(getPosition() != goal) {
             if (Math.abs(mx - gx) != 0 || Math.abs(my - gy) != 0) {
                 System.out.println();
@@ -102,11 +101,11 @@ public class Mouse extends Character implements IMouse {
         }
     }
 
-    public Position closestSubway(Position pos, Field field){
-        Map<Integer, Subway> subwayMap = field.getSubways();
+    public Position closestSubway(Position pos, Game game){
+        Map<Integer, Subway> subwayMap = game.getField().getSubways();
         List<Position> subwayExits = new ArrayList<>();
         for (int i=0;i < subwayMap.size();i++){
-            if (lastSubway == i){
+            if (getLastSubway() == i){
                 continue;
             }else {
                 subwayExits.addAll(subwayMap.get(i).getExits());
@@ -114,8 +113,13 @@ public class Mouse extends Character implements IMouse {
         }
         Position closestExit = null;
         double minDist = Double.MAX_VALUE;
-
-        for (Position posi : subwayExits){
+        List<IPlayer> cats = game.getPlayers();
+        List<Position> catsPos = new ArrayList<>();
+        for (IPlayer player : cats){
+            catsPos.add(player.getPosition());
+        }
+        List<Position> saveEx = saveEntranceExit(subwayExits, catsPos);
+        for (Position posi : saveEx){
             double distance = Math.sqrt(Math.pow(pos.x() - posi.x(), 2) + Math.pow(pos.y() - posi.y(), 2));
             if (distance < minDist){
                 minDist = distance;
@@ -125,13 +129,34 @@ public class Mouse extends Character implements IMouse {
         return closestExit;
     }
 
+    private List<Position> saveEntranceExit(List<Position> subwayExits, List<Position> catsPos){
+        List<Position> saveExit = new ArrayList<>();
+        saveExit.addAll(subwayExits);
+        for (Position posi : subwayExits){
+            for (Position cpos : catsPos){
+                double catDistToSub = Math.sqrt(Math.pow(posi.x() - cpos.x(), 2) + Math.pow(posi.y() - cpos.y(), 2));
+                if (catDistToSub < 2.0){
+                    saveExit.remove(posi);
+                }
+            }
+        }
+        return  saveExit;
+    }
+
     @Override
-    public Position searchNextExit(List<Position> sub, Position pos){
-        List<Position> update = sub;
+    public Position searchNextExit(Subway sub, Position pos){
+        List<IPlayer> cats = sub.getSnapMap();
+        List<Position> catsPos = new ArrayList<>();
+        for (IPlayer player : cats){
+            catsPos.add(player.getPosition());
+        }
+        List<Position> update = saveEntranceExit(sub.getExits(),catsPos);
         update.remove(pos);
-        Random rnd = new Random();
-        Position ret = sub.get(rnd.nextInt(update.size()));
-        update.add(pos);
+        Position ret = pos;
+        if (update.size() > 0) {
+            Random rnd = new Random();
+            ret = update.get(rnd.nextInt(update.size()));
+        }
         return ret;
     }
 }

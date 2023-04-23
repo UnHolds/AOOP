@@ -15,8 +15,8 @@ public class FieldTest {
     @Test
     @DisplayName("Test Field")
     public void testField() {
-        Position pos1 = new Position(1, 2);
-        Position pos2 = new Position(3, 4);
+        Position pos1 = new Position(3, 2);
+        Position pos2 = new Position(1, 4);
         Position pos3 = new Position(5, 6);
         Position pos4 = new Position(7, 8);
         // SUBWAY 1
@@ -57,10 +57,12 @@ public class FieldTest {
 
         Field field = new Field(10, 10, subways);
         IPlayer p1 = new Player("ID_PLAYER_1",1, "PLAYER", pos1, "cat1.png");
+        IPlayer p2 = new Player("ID_PLAYER_2",1, "PLAYER2", pos2, "cat2.png");
         IMouse mouse2 = new Mouse("ID_MOUSE_2", pos4, "mouse.png", -1);
         IMouse mouse1 = new Mouse("ID_MOUSE_1", pos3, "mouse.png", -1);
         List<IPlayer> players = new ArrayList<>();
         players.add(p1);
+        players.add(p2);
         Set<IMouse> mouses = new HashSet<>();
         mouses.add(mouse1);
         mouses.add(mouse2);
@@ -77,21 +79,23 @@ public class FieldTest {
                         exits.addAll(subwayMap.get(x).getExits());
                     }
                     if (exits.contains(test)){
-                        System.out.printf("|U");
+                        System.out.printf("|U ");
                     } else if (mouse1.getPosition().y() == test.y() && mouse2.getPosition().x() == test.x()){
-                        System.out.printf("|M");
+                        System.out.printf("|M1");
                     }else if (mouse2.getPosition().y() == test.y() && mouse2.getPosition().x() == test.x()){
-                        System.out.printf("|M");
+                        System.out.printf("|M2");
                     } else if (p1.getPosition().y() == test.y() && p1.getPosition().x() == test.x()){
-                        System.out.printf("|P");
+                        System.out.printf("|P1");
+                    }else if (p2.getPosition().y() == test.y() && p2.getPosition().x() == test.x()){
+                        System.out.printf("|P2");
                     }else {
-                        System.out.printf("| ");
+                        System.out.printf("|  ");
                     }
                 }
                 if (j + 1 >= game.getField().getColumnCount()){
                     System.out.printf("|\n");
 
-                    System.out.printf("---------------------\n");
+                    System.out.printf("-------------------------------\n");
                 }
             }
         }
@@ -110,9 +114,9 @@ public class FieldTest {
             }
         }
         for(int a = 0; a < 50; a++) {
-            Position goal = mouse1.closestSubway(mouse1.getPosition(),game.getField());
+            Position goal = mouse1.closestSubway(mouse1.getPosition(),game);
             while (mouse1.getPosition() != goal) {
-                Position goal1 = mouse1.closestSubway(mouse1.getPosition(),game.getField());
+                Position goal1 = mouse1.closestSubway(mouse1.getPosition(),game);
                 System.out.printf("OLD Position of m1: x = %d, y = %d", mouse1.getPosition().x(), mouse1.getPosition().y());
                 System.out.println();
                 mouse1.calculateNextMove(goal1);
@@ -123,7 +127,8 @@ public class FieldTest {
                     for (int i = 0; i < game.getField().getSubways().size(); i++) {
                         List<Position> sub = game.getField().getSubways().get(i).getExits();
                         if (sub.contains(mouse1.getPosition())) {
-                            game.getField().getSubways().get(i).mouseEnter(mouse1);
+                            game.getField().getSubways().get(i).mouseEnter(mouse1,game.getPlayers());
+                            mouse1.setLastSubway(i);
                         }
                     }
                     break;
@@ -134,9 +139,8 @@ public class FieldTest {
                 Set<IMouse> um = s.getMouses();
                 System.out.printf("TEST : %b", um.contains(mouse1));
                 System.out.println();
-                System.out.printf("SIZE OF S : %d",game.getField().getSubways().get(i).getExits().size());
                 if (um.contains(mouse1)) {
-                    Position np = mouse1.searchNextExit(game.getField().getSubways().get(i).getExits(), mouse1.getPosition());
+                    Position np = mouse1.searchNextExit(game.getField().getSubways().get(i), mouse1.getPosition());
                     //System.out.printf("NEW EXIT: x=%d y=%d", np.x(), np.y());
                     System.out.println();
                     game.getField().getSubways().get(i).mouseExit(mouse1);

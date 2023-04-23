@@ -1,9 +1,7 @@
 package game.core.models;
 
-import game.core.models.impl.Direction;
-import game.core.models.impl.Field;
-
-import java.util.List;
+import game.core.models.impl.Game;
+import game.core.models.impl.Subway;
 
 /**
  * Contains all the mouse specific functionalities such as broadcasting the cat's position to the other mice, how the
@@ -23,13 +21,11 @@ public interface IMouse extends ICharacter{
      */
     public void calculateNextMove(Position goal);
 
-    public Position searchNextExit(List<Position> sub, Position pos);
+    public Position searchNextExit(Subway sub, Position pos);
 
-    public Position closestSubway(Position pos, Field field);
+    public Position closestSubway(Position pos, Game game);
 
     public void setLastSubway(Integer lastSubway);
-
-    public Integer getLastSubway();
 
     /**
      * TODO: maybe move somewhere else
