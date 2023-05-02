@@ -27,6 +27,10 @@ public interface IMouse extends ICharacter{
 
     public void setLastSubway(Integer lastSubway);
 
+    public void adjustDistance();
+
+    public Integer getMoveAmount();
+
     /**
      * TODO: maybe move somewhere else
      * broadCastCatLocationsToMiceNearby - notifies the other mice about the cat's position given the current mouse

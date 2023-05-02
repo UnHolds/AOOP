@@ -53,13 +53,14 @@ public class FieldTest {
         subways.put(2, subway3);
 
         Random rand = new Random();
-        int mouseMoves = rand.nextInt(51) + 50;
+        int mouseMoves1 = rand.nextInt(51) + 50;
+        int mouseMoves2 = rand.nextInt(51) + 50;
 
         Field field = new Field(10, 10, subways);
         IPlayer p1 = new Player("ID_PLAYER_1",1, "PLAYER", pos1, "cat1.png");
         IPlayer p2 = new Player("ID_PLAYER_2",1, "PLAYER2", pos2, "cat2.png");
-        IMouse mouse2 = new Mouse("ID_MOUSE_2", pos4, "mouse.png", -1);
-        IMouse mouse1 = new Mouse("ID_MOUSE_1", pos3, "mouse.png", -1);
+        IMouse mouse2 = new Mouse("ID_MOUSE_2", pos4, "mouse.png", -1,mouseMoves1,subway1);
+        IMouse mouse1 = new Mouse("ID_MOUSE_1", pos3, "mouse.png", -1,mouseMoves2,subway1);
         List<IPlayer> players = new ArrayList<>();
         players.add(p1);
         players.add(p2);
@@ -113,14 +114,19 @@ public class FieldTest {
                 System.out.printf("Subway%d : %d,%d \n",y, p.y(), p.x());
             }
         }
-        for(int a = 0; a < 50; a++) {
+        for(int a = 0; a < mouseMoves1 + 100; a++) {
             Position goal = mouse1.closestSubway(mouse1.getPosition(),game);
+            if(mouse1.getMoveAmount() == 0 && subway1.getMouses().contains(mouse1)){
+                System.out.printf("MOUSE DONE !!!!");
+                break;
+            }
             while (mouse1.getPosition() != goal) {
                 Position goal1 = mouse1.closestSubway(mouse1.getPosition(),game);
                 System.out.printf("OLD Position of m1: x = %d, y = %d", mouse1.getPosition().x(), mouse1.getPosition().y());
                 System.out.println();
                 mouse1.calculateNextMove(goal1);
                 mouse1.move();
+                mouse1.adjustDistance();
                 System.out.printf("New Position of m1: x = %d, y = %d", mouse1.getPosition().x(), mouse1.getPosition().y());
                 System.out.println();
                 if (mouse1.getPosition().x() == goal1.x() && mouse1.getPosition().y() == goal1.y()) {
@@ -135,9 +141,12 @@ public class FieldTest {
                 }
             }
             for (int i = 0; i < game.getField().getSubways().size(); i++) {
+                if(mouse1.getMoveAmount() == 0 && subway1.getMouses().contains(mouse1)){
+                    break;
+                }
                 Subway s = game.getField().getSubways().get(i);
                 Set<IMouse> um = s.getMouses();
-                System.out.printf("TEST : %b", um.contains(mouse1));
+                System.out.printf("TEST : %b, MOVEMENT : %d", um.contains(mouse1), mouse1.getMoveAmount());
                 System.out.println();
                 if (um.contains(mouse1)) {
                     Position np = mouse1.searchNextExit(game.getField().getSubways().get(i), mouse1.getPosition());
@@ -149,9 +158,6 @@ public class FieldTest {
                     break;
                 }
             }
-
-            System.out.printf("New Position of m1: x = %d, y = %d", mouse1.getPosition().x(), mouse1.getPosition().y());
-            System.out.println();
         }
     }
 }

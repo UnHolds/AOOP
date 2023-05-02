@@ -1,10 +1,7 @@
 package game.core;
 
 import game.controller.GameController;
-import game.core.models.ICharacter;
-import game.core.models.IGame;
-import game.core.models.IPlayer;
-import game.core.models.Position;
+import game.core.models.*;
 import game.core.models.impl.Field;
 import game.core.models.impl.Game;
 import game.core.models.impl.Player;
@@ -53,8 +50,31 @@ public class GameServer {
 
     public void run() {
         while (true) {
-            for(ICharacter character : game.getMouses()) {
-                character.move();
+            for(IMouse mouse : game.getMouses()) {
+                Position goal = mouse.closestSubway(mouse.getPosition(), (Game) game);
+                mouse.calculateNextMove(goal);
+                mouse.move();
+                if (mouse.getPosition().x() == goal.x() && mouse.getPosition().y() == goal.y()) {
+                    for (int i = 0; i < game.getField().getSubways().size(); i++) {
+                        List<Position> sub = game.getField().getSubways().get(i).getExits();
+                        if (sub.contains(mouse.getPosition())) {
+                            game.getField().getSubways().get(i).mouseEnter(mouse,game.getPlayers());
+                            mouse.setLastSubway(i);
+                        }
+                    }
+                    break;
+                }
+                for (int i = 0; i < game.getField().getSubways().size(); i++) {
+                    Subway s = game.getField().getSubways().get(i);
+                    Set<IMouse> um = s.getMouses();
+                    if (um.contains(mouse)) {
+                        Position np = mouse.searchNextExit(game.getField().getSubways().get(i), mouse.getPosition());
+                        game.getField().getSubways().get(i).mouseExit(mouse);
+                        mouse.setPosition(np);
+                        mouse.setLastSubway(i);
+                        break;
+                    }
+                }
             }
 
             for(ICharacter character : game.getPlayers()) {

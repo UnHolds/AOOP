@@ -110,8 +110,8 @@ public class MessageTest {
         Subway subway = new Subway(sub);
 
         Field field = null;
-        IMouse mouse1 = new Mouse("ID_MOUSE_1", pos3, "mouse.png", -1);
-        IMouse mouse2 = new Mouse("ID_MOUSE_2", pos4, "mouse.png", -1);
+        IMouse mouse1 = new Mouse("ID_MOUSE_1", pos3, "mouse.png", -1, 10,subway);
+        IMouse mouse2 = new Mouse("ID_MOUSE_2", pos4, "mouse.png", -1, 10,subway);
 
         List<IPlayer> players = new ArrayList<>();
         players.add(player1);

@@ -13,10 +13,12 @@ import java.util.Random;
 public class Mouse extends Character implements IMouse {
     public Integer lastSubway;
     public Integer moveAmount;
-    public Mouse(String id, Position position, String imagePath,Integer lastSubway) {
+    public Subway goalSub;
+    public Mouse(String id, Position position, String imagePath,Integer lastSubway, Integer moveAmount, Subway goalSub) {
         super(id, position, imagePath);
         this.lastSubway = lastSubway;
-        this.moveAmount = -1;
+        this.moveAmount = moveAmount;
+        this.goalSub = goalSub;
     }
 
     public void setLastSubway(Integer lastSubway) {
@@ -27,7 +29,15 @@ public class Mouse extends Character implements IMouse {
         return lastSubway;
     }
 
-    public void setMoveAmount(Integer moves){this.moveAmount = moves;}
+    private Subway getGoalSub(){return goalSub;}
+
+    public void adjustDistance(){
+        if(this.moveAmount == 0){
+            this.moveAmount = 0;
+        } else {
+            this.moveAmount = getMoveAmount() - 1;
+        }
+    }
 
     public Integer getMoveAmount(){return this.moveAmount;}
 
@@ -104,12 +114,16 @@ public class Mouse extends Character implements IMouse {
     public Position closestSubway(Position pos, Game game){
         Map<Integer, Subway> subwayMap = game.getField().getSubways();
         List<Position> subwayExits = new ArrayList<>();
-        for (int i=0;i < subwayMap.size();i++){
-            if (getLastSubway() == i){
-                continue;
-            }else {
-                subwayExits.addAll(subwayMap.get(i).getExits());
+        if(getMoveAmount() != 0) {
+            for (int i = 0; i < subwayMap.size(); i++) {
+                if (getLastSubway() == i) {
+                    continue;
+                } else {
+                    subwayExits.addAll(subwayMap.get(i).getExits());
+                }
             }
+        } else {
+            subwayExits.addAll(getGoalSub().getExits());
         }
         Position closestExit = null;
         double minDist = Double.MAX_VALUE;
