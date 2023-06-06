@@ -7,6 +7,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.concurrent.BlockingQueue;
 
 public class StartScreenPanel extends JPanel implements ActionListener{
 
@@ -14,9 +16,11 @@ public class StartScreenPanel extends JPanel implements ActionListener{
     private Font moon_cheese;
     private Font cheese;
     private Color cheese_orange = new Color(255, 118, 13);
+    private BlockingQueue<IUiGameConfig> gameConfigs;
 
-    public StartScreenPanel(){
+    public StartScreenPanel(BlockingQueue<IUiGameConfig> gameConfigs){
         // panel configurations
+        this.gameConfigs = gameConfigs;
         setPreferredSize(new Dimension(900, 600));
         this.setLayout(new BoxLayout(this, BoxLayout.PAGE_AXIS));
 
@@ -102,12 +106,14 @@ public class StartScreenPanel extends JPanel implements ActionListener{
 
         this.add(createFillerWithSameValueForMinMaxAndPreferredDimension(50, 0));
 
-        this.add(createBasicInputWithLabel("Name:"));
+        JPanel namePanel = createBasicInputWithLabel("Name:");
+        this.add(namePanel);
+        JTextField nameText = (JTextField) Arrays.stream(namePanel.getComponents()).filter(c -> c instanceof JTextField).findFirst().orElse(null);
 
         this.add(createFillerWithSameValueForMinMaxAndPreferredDimension(50, 0));
 
         JButton connectButton = createCenteredButtonWithBasicLayout("Connect");
-        connectButton.addActionListener(new ConnectToGameHostListener());
+        connectButton.addActionListener(new ConnectToGameHostListener(ipTextField, portTextField, nameText));
         this.add(connectButton);
 
         this.revalidate();
@@ -131,26 +137,29 @@ public class StartScreenPanel extends JPanel implements ActionListener{
         for (int i = 1; i < fillers.size(); i++) {
             this.remove(fillers.get(i));
         }
-
-        this.add(createBasicInputWithLabel("Port:"));
+        JPanel portPanel = createBasicInputWithLabel("Port:");
+        this.add(portPanel);
 
         this.add(createFillerWithSameValueForMinMaxAndPreferredDimension(50, 0));
-
-        this.add(createBasicInputWithLabel("Name:"));
+        JPanel namePanel = createBasicInputWithLabel("Name:");
+        this.add(namePanel);
 
         this.add(createFillerWithSameValueForMinMaxAndPreferredDimension(50, 0));
 
         JButton connectButton = createCenteredButtonWithBasicLayout("Host game");
-        connectButton.addActionListener(new HostScreenListener());
+
+        JTextField portText = (JTextField) Arrays.stream(portPanel.getComponents()).filter(c -> c instanceof JTextField).findFirst().orElse(null);
+        JTextField nameText = (JTextField) Arrays.stream(namePanel.getComponents()).filter(c -> c instanceof JTextField).findFirst().orElse(null);
+        String ip = "ttttt127.0.0.1ttt"; //TODO
+
+        connectButton.addActionListener(new HostScreenListener(ip, portText, nameText));
         this.add(connectButton);
 
         this.revalidate();
         this.repaint();
     }
 
-    private void showHostNewGame(){
-        String ip = "127.0.0.1"; // TODO change via game logic
-        String port = "1234"; // TODO change via game logic
+    private void showHostNewGame(String ip, String port){
 
         // Remove the buttons from the panel
         Component[] componentList = this.getComponents();
@@ -295,18 +304,37 @@ public class StartScreenPanel extends JPanel implements ActionListener{
     }
 
     private class HostScreenListener implements ActionListener {
+
+        private String ip;
+        private JTextField portText;
+        private JTextField nameText;
+        public HostScreenListener(String ip, JTextField portText, JTextField nameText) {
+            this.ip = ip;
+            this.portText = portText;
+            this.nameText = nameText;
+        }
+
         @Override
         public void actionPerformed(ActionEvent e) {
-            StartScreenPanel.this.showHostNewGame();
-            // TODO send information about port to server
+            StartScreenPanel.this.gameConfigs.add(new UiGameConfig(true, ip, this.portText.getText(), nameText.getText()));
+            StartScreenPanel.this.showHostNewGame(this.ip, this.portText.getText());
         }
     }
 
     private class ConnectToGameHostListener implements ActionListener{
-        // TODO implement
+
+        private JTextField ipText;
+        private JTextField portText;
+        private JTextField nameText;
+        public ConnectToGameHostListener(JTextField ipText, JTextField portText, JTextField nameText) {
+            this.ipText = ipText;
+            this.portText = portText;
+            this.nameText = nameText;
+        }
+
         @Override
         public void actionPerformed(ActionEvent e) {
-            
+            StartScreenPanel.this.gameConfigs.add(new UiGameConfig(false, this.ipText.getText(), this.portText.getText(), this.nameText.getText()));
         }
     }
 
@@ -314,7 +342,7 @@ public class StartScreenPanel extends JPanel implements ActionListener{
         // TODO implement
         @Override
         public void actionPerformed(ActionEvent e) {
-
+            StartScreenPanel.this.gameConfigs.add(new UiGameConfig());
         }
     }
 }

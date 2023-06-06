@@ -3,6 +3,9 @@ import game.core.models.IGame;
 
 import javax.swing.*;
 import java.awt.event.KeyListener;
+import java.util.concurrent.ArrayBlockingQueue;
+import java.util.concurrent.BlockingQueue;
+import java.util.concurrent.LinkedBlockingQueue;
 
 public class GameWindow {
 
@@ -11,13 +14,21 @@ public class GameWindow {
     private GameFieldPanel gameFieldPanel;
     private WinScreenPanel winScreenPanel;
 
+    private BlockingQueue<IUiGameConfig> gameConfigs = new LinkedBlockingQueue<>();
+
     private IGame game;
 
-    public GameWindow(IGame game){
+    public GameWindow(){
         this.window = new JFrame("Cat & Mouse Game");
-        //gameFieldPanel = new GameFieldPanel(game);
-        startScreenPanel = new StartScreenPanel();
-        this.game = game;
+        this.startScreenPanel = new StartScreenPanel(gameConfigs);
+    }
+
+    public IUiGameConfig getGameConfig(){
+        try {
+            return this.gameConfigs.take();
+        } catch (InterruptedException e) {
+            return null;
+        }
     }
 
     public void initWindow() {
@@ -32,6 +43,7 @@ public class GameWindow {
 
     public void showGameFieldPanel() {
         this.window.remove(this.startScreenPanel);
+        this.gameFieldPanel = new GameFieldPanel(this.game);
         this.window.add(gameFieldPanel);
         this.window.pack();
         this.window.setVisible(true);
