@@ -3,23 +3,19 @@ package game.core.models;
 import game.core.models.impl.Direction;
 
 public record Position(int y, int x) {
+
     public Position move(Direction direction) {
         switch (direction) {
-            case UP -> {
+            case UP:
                 return up();
-            }
-            case DOWN -> {
+            case DOWN:
                 return down();
-            }
-            case LEFT -> {
+            case LEFT:
                 return left();
-            }
-            case RIGHT -> {
+            case RIGHT:
                 return right();
-            }
-            case STOP -> {
+            case STOP:
                 return stop();
-            }
         }
         return null;
     }

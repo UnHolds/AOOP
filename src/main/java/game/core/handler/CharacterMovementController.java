@@ -25,14 +25,23 @@ public class CharacterMovementController implements KeyListener {
     public void keyPressed(KeyEvent e) {
         Direction newDirection;
         switch (e.getKeyCode()) {
-            case KeyEvent.VK_A -> newDirection = Direction.LEFT;
-            case KeyEvent.VK_W -> newDirection = Direction.UP;
-            case KeyEvent.VK_D -> newDirection = Direction.RIGHT;
-            case KeyEvent.VK_S -> newDirection = Direction.DOWN;
-            case KeyEvent.VK_SPACE -> newDirection = Direction.STOP;
-            default -> {
+            case KeyEvent.VK_A:
+                newDirection = Direction.LEFT;
+                break;
+            case KeyEvent.VK_W:
+                newDirection = Direction.UP;
+                break;
+            case KeyEvent.VK_D:
+                newDirection = Direction.RIGHT;
+                break;
+            case KeyEvent.VK_S:
+                newDirection = Direction.DOWN;
+                break;
+            case KeyEvent.VK_SPACE:
+                newDirection = Direction.STOP;
+                break;
+            default:
                 return;
-            }
         }
         target.setMovingDirection(newDirection);
         //gameClient.sendDirectionChange(target, newDirection);
