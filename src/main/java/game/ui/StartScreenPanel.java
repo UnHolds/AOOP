@@ -6,8 +6,12 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.IOException;
+import java.net.InetAddress;
+import java.net.NetworkInterface;
+import java.net.SocketException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Enumeration;
 import java.util.concurrent.BlockingQueue;
 
 public class StartScreenPanel extends JPanel implements ActionListener{
@@ -152,7 +156,30 @@ public class StartScreenPanel extends JPanel implements ActionListener{
 
         JTextField portText = (JTextField) Arrays.stream(portPanel.getComponents()).filter(c -> c instanceof JTextField).findFirst().orElse(null);
         JTextField nameText = (JTextField) Arrays.stream(namePanel.getComponents()).filter(c -> c instanceof JTextField).findFirst().orElse(null);
-        String ip = "ttttt127.0.0.1ttt"; //TODO
+
+        String ip = "127.0.0.1";
+        Enumeration e;
+        try {
+            e = NetworkInterface.getNetworkInterfaces();
+        } catch (SocketException ex) {
+            throw new RuntimeException(ex);
+        }
+        while(e.hasMoreElements())
+        {
+            NetworkInterface n = (NetworkInterface) e.nextElement();
+            Enumeration ee = n.getInetAddresses();
+            while (ee.hasMoreElements())
+            {
+                InetAddress i = (InetAddress) ee.nextElement();
+                ip = i.getHostAddress();
+                if((ip.startsWith("10.") || ip.startsWith("192.168") || ip.startsWith("128")) && ip.contains(":") == false){
+                    break;
+                }
+            }
+            if((ip.startsWith("10.") || ip.startsWith("192.168") || ip.startsWith("128")) && ip.contains(":") == false){
+                break;
+            }
+        }
 
         connectButton.addActionListener(new HostScreenListener(ip, portText, nameText));
         this.add(connectButton);

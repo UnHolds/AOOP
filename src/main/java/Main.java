@@ -10,7 +10,6 @@ public class Main {
         uiGameConfig.isHost();
 
         Thread.sleep(1000);
-
         uiGameConfig.addPlayer("test");
         Thread.sleep(1000);
         uiGameConfig.addPlayer("test1");
