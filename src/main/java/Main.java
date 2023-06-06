@@ -1,3 +1,4 @@
+import game.core.GameServer;
 import game.ui.GameWindow;
 import game.ui.IUiGameConfig;
 
@@ -7,7 +8,11 @@ public class Main {
         GameWindow gw = new GameWindow();
         gw.initWindow();
         IUiGameConfig uiGameConfig = gw.getGameConfig();
-        uiGameConfig.isHost();
+
+
+        if(uiGameConfig.isHost()){
+            GameServer server = new GameServer(uiGameConfig.getPort());
+        }
 
         Thread.sleep(1000);
         uiGameConfig.addPlayer("test");

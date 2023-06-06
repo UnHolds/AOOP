@@ -6,7 +6,7 @@ public class UiGameConfig implements IUiGameConfig {
 
     private boolean isHost;
     private String ip;
-    private String port;
+    private int port;
 
     private String playerName;
 
@@ -16,7 +16,7 @@ public class UiGameConfig implements IUiGameConfig {
 
     }
 
-    public UiGameConfig(boolean isHost, String ip, String port, String playerName, StartScreenPanel startScreenPanel){
+    public UiGameConfig(boolean isHost, String ip, int port, String playerName, StartScreenPanel startScreenPanel){
         this.isHost = isHost;
         this.ip = ip;
         this.port = port;
@@ -35,8 +35,8 @@ public class UiGameConfig implements IUiGameConfig {
     }
 
     @Override
-    public String getPort() {
-        return this.getPort();
+    public int getPort() {
+        return this.port;
     }
 
     @Override

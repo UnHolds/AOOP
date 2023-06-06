@@ -347,7 +347,27 @@ public class StartScreenPanel extends JPanel implements ActionListener{
 
         @Override
         public void actionPerformed(ActionEvent e) {
-            StartScreenPanel.this.gameConfigs.add(new UiGameConfig(true, ip, this.portText.getText(), nameText.getText(), StartScreenPanel.this));
+            int port;
+            try {
+                port = Integer.parseInt(this.portText.getText());
+                if(port <= 0 || port > 65535){
+                    JOptionPane.showMessageDialog(StartScreenPanel.this, "Invalid port range", "Warning",
+                            JOptionPane.WARNING_MESSAGE);
+                    return;
+                }
+
+                if(ip.matches("^(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$") == false){
+                    JOptionPane.showMessageDialog(StartScreenPanel.this, "Invalid ip address", "Warning",
+                            JOptionPane.WARNING_MESSAGE);
+                    return;
+                }
+
+            }catch (Exception ex){
+                JOptionPane.showMessageDialog(StartScreenPanel.this, "Invalid port", "Warning",
+                        JOptionPane.WARNING_MESSAGE);
+                return;
+            }
+            StartScreenPanel.this.gameConfigs.add(new UiGameConfig(true, ip, port, nameText.getText(), StartScreenPanel.this));
             StartScreenPanel.this.showHostNewGame(this.ip, this.portText.getText(), true);
         }
     }
@@ -365,7 +385,27 @@ public class StartScreenPanel extends JPanel implements ActionListener{
 
         @Override
         public void actionPerformed(ActionEvent e) {
-            StartScreenPanel.this.gameConfigs.add(new UiGameConfig(false, this.ipText.getText(), this.portText.getText(), this.nameText.getText(), StartScreenPanel.this));
+            int port;
+            try {
+                port = Integer.parseInt(this.portText.getText());
+                if(port <= 0 || port > 65535){
+                    JOptionPane.showMessageDialog(StartScreenPanel.this, "Invalid port range", "Warning",
+                            JOptionPane.WARNING_MESSAGE);
+                    return;
+                }
+
+                if(ipText.getText().matches("^(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$") == false){
+                    JOptionPane.showMessageDialog(StartScreenPanel.this, "Invalid ip address", "Warning",
+                            JOptionPane.WARNING_MESSAGE);
+                    return;
+                }
+
+            }catch (Exception ex){
+                JOptionPane.showMessageDialog(StartScreenPanel.this, "Invalid port", "Warning",
+                        JOptionPane.WARNING_MESSAGE);
+                return;
+            }
+            StartScreenPanel.this.gameConfigs.add(new UiGameConfig(false, this.ipText.getText(), port, this.nameText.getText(), StartScreenPanel.this));
             StartScreenPanel.this.showHostNewGame(this.ipText.getText(), this.portText.getText(), false);
         }
     }
