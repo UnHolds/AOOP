@@ -22,7 +22,7 @@ public class Client implements IClient, Runnable{
     private PrintWriter output;
     private Socket server;
     private boolean stop = false;
-    private List<IMessage> messages = new ArrayList<>();
+    private BlockingQueue<IMessage> messages = new LinkedBlockingQueue<>();
     private static Logger log = LogManager.getLogger(Client.class);
 
     private String id = UUID.randomUUID().toString();
@@ -83,11 +83,13 @@ public class Client implements IClient, Runnable{
     @Override
     public List<IMessage> getMessages() {
         synchronized (this){
-            List<IMessage> messages = this.messages;
-            this.messages = new ArrayList<>();
+            List<IMessage> messages = this.messages.stream().toList();
+            this.messages.clear();
             return messages;
         }
     }
+
+
 
     @Override
     public void sendMessage(IMessage message) {
@@ -103,6 +105,15 @@ public class Client implements IClient, Runnable{
             this.output.println(message.toBase64String());
         } catch (IOException e) {
             log.error("Could not send message to server", e);
+        }
+    }
+
+    @Override
+    public IMessage take() {
+        try {
+            return this.messages.take();
+        } catch (InterruptedException e) {
+            return null;
         }
     }
 

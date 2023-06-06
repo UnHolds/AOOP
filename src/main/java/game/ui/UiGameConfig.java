@@ -31,7 +31,7 @@ public class UiGameConfig implements IUiGameConfig {
 
     @Override
     public String getIp() {
-        return this.getIp();
+        return this.ip;
     }
 
     @Override
