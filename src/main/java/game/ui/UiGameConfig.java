@@ -8,15 +8,18 @@ public class UiGameConfig implements IUiGameConfig {
 
     private String playerName;
 
+    private StartScreenPanel startScreenPanel;
+
     public UiGameConfig(){
 
     }
 
-    public UiGameConfig(boolean isHost, String ip, String port, String playerName){
+    public UiGameConfig(boolean isHost, String ip, String port, String playerName, StartScreenPanel startScreenPanel){
         this.isHost = isHost;
         this.ip = ip;
         this.port = port;
         this.playerName = playerName;
+        this.startScreenPanel = startScreenPanel;
     }
 
     @Override

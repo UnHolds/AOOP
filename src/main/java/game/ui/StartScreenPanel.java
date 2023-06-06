@@ -316,7 +316,7 @@ public class StartScreenPanel extends JPanel implements ActionListener{
 
         @Override
         public void actionPerformed(ActionEvent e) {
-            StartScreenPanel.this.gameConfigs.add(new UiGameConfig(true, ip, this.portText.getText(), nameText.getText()));
+            StartScreenPanel.this.gameConfigs.add(new UiGameConfig(true, ip, this.portText.getText(), nameText.getText(), StartScreenPanel.this));
             StartScreenPanel.this.showHostNewGame(this.ip, this.portText.getText());
         }
     }
@@ -334,7 +334,7 @@ public class StartScreenPanel extends JPanel implements ActionListener{
 
         @Override
         public void actionPerformed(ActionEvent e) {
-            StartScreenPanel.this.gameConfigs.add(new UiGameConfig(false, this.ipText.getText(), this.portText.getText(), this.nameText.getText()));
+            StartScreenPanel.this.gameConfigs.add(new UiGameConfig(false, this.ipText.getText(), this.portText.getText(), this.nameText.getText(), StartScreenPanel.this));
         }
     }
 
