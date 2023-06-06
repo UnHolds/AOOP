@@ -69,7 +69,7 @@ public class Main {
                 List<IPlayer> players = new ArrayList<>();
                 int index = 0;
                 for(Map.Entry<String, String> entry : connectedClients.entrySet()){
-                    IPlayer p = new Player(entry.getKey(), index, entry.getValue(), playerPos.get(entry.getKey()), "cat1.png");
+                    IPlayer p = new Player(entry.getKey(), index, entry.getValue(), playerPos.get(entry.getKey()), "cat" + (index + 1) +".png");
                     index++;
                     players.add(p);
                 }
