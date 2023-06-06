@@ -24,8 +24,8 @@ import java.util.List;
 
 public class GameServer implements Runnable{
 
-    public static int rowCount = 1;
-    public static int colCount = 1;
+    public static int rowCount = 10;
+    public static int colCount = 10;
 
     private List<IPlayer> player = new ArrayList<>();
     private List<IMouse> mice = new ArrayList<>();
@@ -47,8 +47,8 @@ public class GameServer implements Runnable{
         }
 
 
-        startPositions.add(new Position(0,rowCount / 2));
-        startPositions.add(new Position(colCount - 1,rowCount / 2));
+        startPositions.add(new Position(0,colCount / 2));
+        startPositions.add(new Position(rowCount - 1,colCount / 2));
         startPositions.add(new Position(rowCount / 2,0));
         startPositions.add(new Position(rowCount / 2,colCount - 1));
 
