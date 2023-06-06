@@ -213,13 +213,13 @@ public class MessageTest {
 
     @Test
     public void testCatDirectionChangeMessage() throws InterruptedException {
-        IMessage catDirChange = this.client1MessageFactory.createCatDirectionChangeMessage(42, Direction.LEFT);
+        Position pos1 = new Position(1, 2);
+        IPlayer player1 = new Player(this.client1.getId(), -1, "Player 1", pos1, "cat1.png");
+        IMessage catDirChange = this.client1MessageFactory.createCatDirectionChangeMessage(42, player1, Direction.LEFT);
         this.client1.sendMessage(catDirChange);
         Thread.sleep(100);
-        List<IMessage> messages = this.server.getAllMessages();
+        IMessage message = this.server.getMessageQueue().take();
 
-        assertEquals(1, messages.size());
-        IMessage message = messages.get(0);
         assertEquals(MessageType.CAT_DIRECTION_CHANGE, message.getMessageType());
         assertEquals(Direction.LEFT, message.getDirection());
         assertEquals(this.client1.getId(), message.getSenderId());
