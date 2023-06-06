@@ -7,4 +7,5 @@ public interface IUiGameConfig {
     String getPort();
 
     String getPlayerName();
+    void addPlayer(String name);
 }

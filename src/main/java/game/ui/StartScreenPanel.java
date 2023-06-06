@@ -18,6 +18,8 @@ public class StartScreenPanel extends JPanel implements ActionListener{
     private Color cheese_orange = new Color(255, 118, 13);
     private BlockingQueue<IUiGameConfig> gameConfigs;
 
+    public PlayersJoinedPanel playersJoinedPanel;
+
     public StartScreenPanel(BlockingQueue<IUiGameConfig> gameConfigs){
         // panel configurations
         this.gameConfigs = gameConfigs;
@@ -159,7 +161,7 @@ public class StartScreenPanel extends JPanel implements ActionListener{
         this.repaint();
     }
 
-    private void showHostNewGame(String ip, String port){
+    private void showHostNewGame(String ip, String port, boolean showStartGameButton){
 
         // Remove the buttons from the panel
         Component[] componentList = this.getComponents();
@@ -209,14 +211,16 @@ public class StartScreenPanel extends JPanel implements ActionListener{
 
         this.add(createFillerWithSameValueForMinMaxAndPreferredDimension(25, 5));
 
-        JPanel playersJoinedPanel = new PlayersJoinedPanel(this.getWidth(), 100);
-        this.add(playersJoinedPanel);
+        this.playersJoinedPanel = new PlayersJoinedPanel(this.getWidth(), 100);
+        this.add(this.playersJoinedPanel);
 
         this.add(createFillerWithSameValueForMinMaxAndPreferredDimension(25, 0));
 
-        JButton connectButton = createCenteredButtonWithBasicLayout("Start mouse catching");
-        connectButton.addActionListener(new StartGameAsHostListener());
-        this.add(connectButton);
+        if(showStartGameButton) {
+            JButton connectButton = createCenteredButtonWithBasicLayout("Start mouse catching");
+            connectButton.addActionListener(new StartGameAsHostListener());
+            this.add(connectButton);
+        }
 
         this.revalidate();
         this.repaint();
@@ -317,7 +321,7 @@ public class StartScreenPanel extends JPanel implements ActionListener{
         @Override
         public void actionPerformed(ActionEvent e) {
             StartScreenPanel.this.gameConfigs.add(new UiGameConfig(true, ip, this.portText.getText(), nameText.getText(), StartScreenPanel.this));
-            StartScreenPanel.this.showHostNewGame(this.ip, this.portText.getText());
+            StartScreenPanel.this.showHostNewGame(this.ip, this.portText.getText(), true);
         }
     }
 
@@ -335,6 +339,7 @@ public class StartScreenPanel extends JPanel implements ActionListener{
         @Override
         public void actionPerformed(ActionEvent e) {
             StartScreenPanel.this.gameConfigs.add(new UiGameConfig(false, this.ipText.getText(), this.portText.getText(), this.nameText.getText(), StartScreenPanel.this));
+            StartScreenPanel.this.showHostNewGame(this.ipText.getText(), this.portText.getText(), false);
         }
     }
 

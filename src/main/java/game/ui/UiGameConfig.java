@@ -1,5 +1,7 @@
 package game.ui;
 
+import game.core.models.IPlayer;
+
 public class UiGameConfig implements IUiGameConfig {
 
     private boolean isHost;
@@ -40,5 +42,10 @@ public class UiGameConfig implements IUiGameConfig {
     @Override
     public String getPlayerName() {
         return this.playerName;
+    }
+
+    @Override
+    public void addPlayer(String name){
+        this.startScreenPanel.playersJoinedPanel.addPlayer(name);
     }
 }

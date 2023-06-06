@@ -19,7 +19,12 @@ public class PlayersJoinedPanel extends JPanel {
         this.joinedPlayers = new ArrayList<>();
         this.playerPanels = new ArrayList<>();
         this.catImages = new ArrayList<>();
-        this.nextEmptySlot = 1;
+        this.nextEmptySlot = 0;
+
+        this.joinedPlayers.add(null);
+        this.joinedPlayers.add(null);
+        this.joinedPlayers.add(null);
+        this.joinedPlayers.add(null);
 
         this.setMaximumSize(new Dimension(width, height));
         this.setOpaque(false);
@@ -59,9 +64,9 @@ public class PlayersJoinedPanel extends JPanel {
         return panel;
     }
 
-    public void addPlayer(String name){
+    public synchronized void addPlayer(String name){
         if (nextEmptySlot < 4){
-            joinedPlayers.add(name);
+            joinedPlayers.set(nextEmptySlot, name);
             JPanel panel = playerPanels.get(nextEmptySlot);
 
             JLabel nameLabel = (JLabel) panel.getComponent(0);
@@ -88,7 +93,7 @@ public class PlayersJoinedPanel extends JPanel {
         if(joinedPlayers.contains(name)){
             for (int i = 0; i < joinedPlayers.size(); i++) {
                 if (joinedPlayers.get(i).equals(name)){
-                    joinedPlayers.remove(i);
+                    joinedPlayers.set(i, null);
                     playerPanels.set(i, anonymousPlayerPanel());
                 }
             }
@@ -104,6 +109,7 @@ public class PlayersJoinedPanel extends JPanel {
         for (int i = 0; i < joinedPlayers.size(); i++) {
             if (joinedPlayers.get(i) == null){
                 nextEmptySlot = i;
+                break;
             }
         }
     }
