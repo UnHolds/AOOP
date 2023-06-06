@@ -1,5 +1,9 @@
 import game.core.GameClient;
 import game.core.GameServer;
+import game.core.models.IMouse;
+import game.core.models.IPlayer;
+import game.core.models.Position;
+import game.core.models.impl.*;
 import game.ui.GameWindow;
 import game.ui.IUiGameConfig;
 import game.ui.UiGameConfig;
@@ -10,8 +14,7 @@ import networking.client.Client;
 import networking.client.IClient;
 
 import java.io.IOException;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 public class Main {
 
@@ -42,11 +45,44 @@ public class Main {
 
 
         IMessage message;
+        Game game;
         Map<String,String> connectedClients = new HashMap<>();
         while(true){
             message = client.take();
 
             if(message.getMessageType() == MessageType.GAME_FIELD_INIT){
+                List<Subway> subways = message.getSubways();
+                message = client.take();
+                if(message.getMessageType() != MessageType.GAME_FIELD_UPDATE){
+                    throw new RuntimeException("Wrong init procedure");
+                }
+
+                Map<String, Position> playerPos = message.getPlayersPositions();
+                Map<String, Position> micePos = message.getMicePositions();
+
+                Map<Integer, Subway> subwaysMap = new HashMap<>();
+                for(int i = 0; i < subways.size(); i++){
+                    subwaysMap.put(i, subways.get(i));
+                }
+
+                Field field = new Field(GameServer.rowCount,GameServer.colCount, subwaysMap);
+                List<IPlayer> players = new ArrayList<>();
+                int index = 0;
+                for(Map.Entry<String, String> entry : connectedClients.entrySet()){
+                    IPlayer p = new Player(entry.getKey(), index, entry.getValue(), playerPos.get(entry.getKey()), "cat1.png");
+                    index++;
+                    players.add(p);
+                }
+
+                Set<IMouse> mice = new HashSet<>();
+                Random rand = new Random();
+                for(int i = 0; i < micePos.size(); i++){
+                    Subway s = subways.get(rand.nextInt() % subways.size());
+                    IMouse m = new Mouse("ID_MOUSE_" + i, micePos.get(0), "mouse.png", -1, 10 , s);
+                    mice.add(m);
+                }
+                game = new Game(field, players, mice);
+
                 break;
             }else if(message.getMessageType() == MessageType.CONNECTED_CLIENTS_UPDATE){
                 Map<String, String> clientUpdate = message.getClientIdAndName();
@@ -60,6 +96,7 @@ public class Main {
             }
         }
 
+        gw.setGame(game);
         gw.showGameFieldPanel();
         GameClient gameClient = new GameClient(client);
     }

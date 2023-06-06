@@ -41,6 +41,10 @@ public class GameWindow {
         this.window.setVisible(true);
     }
 
+    public void setGame(IGame game){
+        this.game = game;
+    }
+
     public void showGameFieldPanel() {
         this.window.remove(this.startScreenPanel);
         this.gameFieldPanel = new GameFieldPanel(this.game);
