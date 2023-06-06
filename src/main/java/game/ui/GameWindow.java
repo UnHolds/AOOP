@@ -15,7 +15,7 @@ public class GameWindow {
 
     public GameWindow(IGame game){
         this.window = new JFrame("Cat & Mouse Game");
-        gameFieldPanel = new GameFieldPanel(game);
+        //gameFieldPanel = new GameFieldPanel(game);
         startScreenPanel = new StartScreenPanel();
         this.game = game;
     }
