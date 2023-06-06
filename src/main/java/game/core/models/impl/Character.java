@@ -20,7 +20,7 @@ public class Character implements ICharacter {
         this.id = id;
     }
 
-    
+
     public Character(Position position, String imagePath) {
         this(UUID.randomUUID().toString(), position, imagePath);
     }

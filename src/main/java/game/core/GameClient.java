@@ -31,23 +31,6 @@ public class GameClient {
         this.controller = controller;
     }
 
-    public void run() {
-        while (true) {
-            IMessage msg;
-            try {
-                msg = networkClient.getMessageQueue().take();
-            } catch (InterruptedException e) {
-                throw new RuntimeException(e);
-            }
-
-            switch (msg.getMessageType()) {
-                case GAME_FIELD_UPDATE -> {
-                    updateCharacterPositions(game.getPlayers(), msg.getPlayersPositions());
-                    controller.updateGameWindow();
-                }
-            }
-        }
-    }
 
     public void sendDirectionChange(ICharacter player, Direction direction) {
         networkClient.sendMessage(messageFactory.createCatDirectionChangeMessage(0, player, direction));

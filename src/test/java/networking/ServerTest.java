@@ -114,10 +114,10 @@ public class ServerTest {
         Thread.sleep(100);
         server.startGame(new ArrayList<>());
         Thread.sleep(100);
-        client.getMessageQueue().clear();
+        client.getMessages();
         server.sendToAllClients(new Message(client.getId(), client.getName(), 420));
         Thread.sleep(100);
-        List<IMessage> messages = client.getMessageQueue().stream().toList();
+        List<IMessage> messages = client.getMessages();
         assertEquals(1, messages.size());
         IMessage message = messages.get(0);
         assertEquals(MessageType.GAME_TICK_UPDATE, message.getMessageType());
@@ -136,8 +136,8 @@ public class ServerTest {
         Thread.sleep(100);
         server.startGame(new ArrayList<>());
         Thread.sleep(100);
-        clientSender.getMessageQueue().clear();
-        clientReceiver.getMessageQueue().clear();
+        clientSender.getMessages();
+        clientReceiver.getMessages();
         clientSender.sendMessage(new Message(clientSender.getId(), clientSender.getName(), 666));
         Thread.sleep(100);
 
@@ -146,7 +146,7 @@ public class ServerTest {
         }
         Thread.sleep(100);
 
-        List<IMessage> messagesReceiver = clientReceiver.getMessageQueue().stream().toList();
+        List<IMessage> messagesReceiver = clientReceiver.getMessages();
         assertEquals(1, messagesReceiver.size());
         IMessage messageReceiver = messagesReceiver.get(0);
         assertEquals(MessageType.GAME_TICK_UPDATE, messageReceiver.getMessageType());
@@ -154,7 +154,7 @@ public class ServerTest {
         assertEquals(clientSender.getId(), messageReceiver.getSenderId());
         assertEquals("Sender", messageReceiver.getSenderName());
 
-        List<IMessage> messagesSender = clientSender.getMessageQueue().stream().toList();
+        List<IMessage> messagesSender = clientSender.getMessages();
         assertEquals(1, messagesSender.size());
         IMessage messageSender = messagesSender.get(0);
         assertEquals(MessageType.GAME_TICK_UPDATE, messageSender.getMessageType());
@@ -170,11 +170,11 @@ public class ServerTest {
         IClient client = new Client("Client");
         client.connect(LOCALHOST, SERVER_PORT);
         Thread.sleep(100);
-        client.getMessageQueue().clear();
+        client.getMessages();
         IMessageFactory messageFactory = new MessageFactory(server);
         server.startGame(Arrays.asList(messageFactory.createGameTickUpdateMessage(System.currentTimeMillis())));
         Thread.sleep(100);
-        List<IMessage> messages = client.getMessageQueue().stream().toList();
+        List<IMessage> messages = client.getMessages();
         assertEquals(1, messages.size());
         IMessage message = messages.get(0);
         assertEquals(MessageType.GAME_TICK_UPDATE, message.getMessageType());
@@ -219,16 +219,16 @@ public class ServerTest {
         Thread.sleep(100);
         server.startGame(new ArrayList<>());
         Thread.sleep(100);
-        clientConnected.getMessageQueue().clear();
-        clientDisconnect.getMessageQueue().clear();
+        clientConnected.getMessages();
+        clientDisconnect.getMessages();
         Thread.sleep(100);
         clientDisconnect.stop();
         Thread.sleep(100);
         server.sendToAllClients(new Message("server", "server", 123));
         Thread.sleep(100);
 
-        List<IMessage> messagesClientConnected = clientConnected.getMessageQueue().stream().toList();
-        List<IMessage> messagesClientDisconnected = clientDisconnect.getMessageQueue().stream().toList();
+        List<IMessage> messagesClientConnected = clientConnected.getMessages();
+        List<IMessage> messagesClientDisconnected = clientDisconnect.getMessages();
         assertEquals(0, messagesClientDisconnected.size());
         assertEquals(1, messagesClientConnected.size());
         assertEquals(123, messagesClientConnected.get(0).getCurrentGameTick());
@@ -302,7 +302,7 @@ public class ServerTest {
         Thread.sleep(100);
 
         for(IClient client : clients){
-            client.getMessageQueue().clear();
+            client.getMessages();
         }
 
         Thread.sleep(100);
@@ -370,9 +370,7 @@ public class ServerTest {
             List<IMessage> messages = new ArrayList<>();
             int timeoutCount = 0;
             while(messages.size() < numClients*numMessages && timeoutCount < timeout){
-                while(client.getMessageQueue().size() > 0) {
-                    messages.add(client.getMessageQueue().take());
-                }
+                messages.addAll(client.getMessages());
                 Thread.sleep(100);
                 timeoutCount ++;
             }
@@ -394,7 +392,7 @@ public class ServerTest {
         client.connect(LOCALHOST, SERVER_PORT);
         Thread.sleep(100);
 
-        IMessage message = client.getMessageQueue().stream().toList().get(0);
+        IMessage message = client.getMessages().get(0);
 
         assertEquals(MessageType.CONNECTED_CLIENTS_UPDATE, message.getMessageType());
         assertEquals(server.getId(), message.getSenderId());
@@ -408,33 +406,5 @@ public class ServerTest {
 
         server.stop();
         client.stop();
-    }
-
-    @Test
-    public void testIfBlockingMessageQueueWorks() throws IOException, InterruptedException {
-        IServer server = new Server();
-        server.start(SERVER_PORT);
-        Thread.sleep(100);
-        IClient client = new Client("Client");
-        client.connect(LOCALHOST, SERVER_PORT);
-        Thread.sleep(100);
-        client.getMessageQueue().clear();
-
-        Thread thread = new Thread(() -> {
-            try {
-                Thread.sleep(300);
-            } catch (InterruptedException e) {
-                throw new RuntimeException(e);
-            }
-            server.sendToAllClients(new Message(server.getId(), server.getName(),  123));
-        });
-        thread.start();
-        assertEquals(0, client.getMessageQueue().size());
-        IMessage message = client.getMessageQueue().take();
-        assertEquals(123, message.getCurrentGameTick());
-
-        client.stop();
-        server.stop();
-
     }
 }

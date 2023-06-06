@@ -9,6 +9,8 @@ import org.apache.logging.log4j.Logger;
 
 import java.io.*;
 import java.net.Socket;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
@@ -20,7 +22,7 @@ public class Client implements IClient, Runnable{
     private PrintWriter output;
     private Socket server;
     private boolean stop = false;
-    private BlockingQueue<IMessage> messages = new LinkedBlockingQueue<>();
+    private List<IMessage> messages = new ArrayList<>();
     private static Logger log = LogManager.getLogger(Client.class);
 
     private String id = UUID.randomUUID().toString();
@@ -79,8 +81,12 @@ public class Client implements IClient, Runnable{
     }
 
     @Override
-    public BlockingQueue<IMessage> getMessageQueue() {
-        return messages;
+    public List<IMessage> getMessages() {
+        synchronized (this){
+            List<IMessage> messages = this.messages;
+            this.messages = new ArrayList<>();
+            return messages;
+        }
     }
 
     @Override

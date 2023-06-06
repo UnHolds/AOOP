@@ -68,6 +68,6 @@ public class GameController implements IGameController {
         GameController gameController = new GameController(gameClient);
         gameController.initializeGameLogic();
         gameController.initializeGameUI();
-        gameClient.run();
+        //gameClient.run();
     }
 }

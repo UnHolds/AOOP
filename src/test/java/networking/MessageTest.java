@@ -79,8 +79,8 @@ public class MessageTest {
             Thread.sleep(100);
         }
 
-        this.client2.getMessageQueue().clear();
-        this.client1.getMessageQueue().clear();
+        this.client2.getMessages();
+        this.client1.getMessages();
 
     }
 
@@ -135,7 +135,7 @@ public class MessageTest {
 
         Thread.sleep(100);
 
-        List<IMessage> messages = this.client1.getMessageQueue().stream().toList();
+        List<IMessage> messages = this.client1.getMessages();
 
         assertEquals(1, messages.size());
         IMessage message = messages.get(0);
@@ -173,9 +173,9 @@ public class MessageTest {
 
         IMessage gameInitMessage = this.serverMessageFactory.createGameInitMessage(subways);
         this.server.sendToAllClients(gameInitMessage);
-
-        IMessage message = this.client1.getMessageQueue().take();
-        assertEquals(0, this.client1.getMessageQueue().size());
+        Thread.sleep(200);
+        IMessage message = this.client1.getMessages().get(0);
+        assertEquals(0, this.client1.getMessages().size());
         assertEquals(MessageType.GAME_FIELD_INIT, message.getMessageType());
         List<Subway> recSubways = message.getSubways();
         assertEquals(2, recSubways.size());
@@ -197,9 +197,10 @@ public class MessageTest {
     public void testGameInitMessageEmptyList() throws InterruptedException {
         IMessage gameInitMessage = this.serverMessageFactory.createGameInitMessage(new ArrayList<>());
         this.server.sendToAllClients(gameInitMessage);
-        IMessage message = this.client2.getMessageQueue().take();
+        Thread.sleep(200);
+        IMessage message = this.client2.getMessages().get(0);
 
-        assertEquals(0, this.client2.getMessageQueue().size());
+        assertEquals(0, this.client2.getMessages().size());
         assertEquals(0, message.getSubways().size());
         assertEquals(this.server.getId(), message.getSenderId());
         assertEquals(this.server.getName(), message.getSenderName());
@@ -209,9 +210,9 @@ public class MessageTest {
     public void testGameFieldUpdateMessageEmptyLists() throws InterruptedException {
         IMessage gameFieldUpdate = this.serverMessageFactory.createGameFieldUpdateMessage(-1, new ArrayList<>(), new ArrayList<>());
         this.server.sendToAllClients(gameFieldUpdate);
-
-        IMessage message = this.client1.getMessageQueue().take();
-        assertEquals(0, this.client1.getMessageQueue().size());
+        Thread.sleep(200);
+        IMessage message = this.client1.getMessages().get(0);
+        assertEquals(0, this.client1.getMessages().size());
         assertEquals(0, message.getPlayersPositions().size());
         assertEquals(0, message.getMicePositions().size());
         assertEquals(this.server.getId(), message.getSenderId());

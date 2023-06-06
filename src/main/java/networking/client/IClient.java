@@ -27,7 +27,7 @@ public interface IClient extends INetworkEntity {
      * Returns the received messages from the server
      * @return the received messages as list
      */
-    BlockingQueue<IMessage> getMessageQueue();
+    List<IMessage> getMessages();
 
     /**
      * sends a message to the server
