@@ -4,6 +4,7 @@ import game.core.models.IMouse;
 import game.core.models.IPlayer;
 import game.core.models.Position;
 import game.core.models.impl.Direction;
+import game.core.models.impl.Field;
 import game.core.models.impl.Mouse;
 import game.core.models.impl.Player;
 import game.core.models.impl.Subway;
@@ -107,12 +108,18 @@ public class MessageTest {
         Position pos2 = new Position(3, 4);
         Position pos3 = new Position(5, 6);
         Position pos4 = new Position(7, 8);
+        Position pos5 = new Position(0,0);
 
         IPlayer player1 = new Player(this.client1.getId(), -1, "Player 1", pos1, "cat1.png");
         IPlayer player2 = new Player(this.client2.getId(), -1, "Player 2", pos2, "cat2.png");
 
-        IMouse mouse1 = new Mouse("ID_MOUSE_1", pos3, "mouse.png");
-        IMouse mouse2 = new Mouse("ID_MOUSE_2", pos4, "mouse.png");
+        List<Position> sub = new ArrayList<>();
+        sub.add(pos5);
+        Subway subway = new Subway(sub);
+
+        Field field = null;
+        IMouse mouse1 = new Mouse("ID_MOUSE_1", pos3, "mouse.png", -1, 10,subway);
+        IMouse mouse2 = new Mouse("ID_MOUSE_2", pos4, "mouse.png", -1, 10,subway);
 
         List<IPlayer> players = new ArrayList<>();
         players.add(player1);

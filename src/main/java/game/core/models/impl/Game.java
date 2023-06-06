@@ -5,6 +5,7 @@ import game.core.models.IMouse;
 import game.core.models.IPlayer;
 
 import java.util.List;
+import java.util.Random;
 import java.util.Set;
 
 public class Game implements IGame {
@@ -28,5 +29,11 @@ public class Game implements IGame {
 
     public Set<IMouse> getMouses() {
         return mouses;
+    }
+
+    public Subway getGoal() {
+        Random rand = new Random();
+        int goal = rand.nextInt(field.getSubways().size());
+        return field.getSubways().get(goal);
     }
 }

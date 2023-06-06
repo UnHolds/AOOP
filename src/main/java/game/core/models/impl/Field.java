@@ -2,15 +2,15 @@ package game.core.models.impl;
 
 import game.core.models.IField;
 
-import java.util.Set;
+import java.util.Map;
 
 public class Field implements IField {
     private int rowCount;
     private int columnCount;
 
-    private Set<Subway> subways;
+    private Map<Integer, Subway> subways;
 
-    public Field(int rowCount, int columns, Set<Subway> subways) {
+    public Field(int rowCount, int columns, Map<Integer, Subway> subways) {
         this.rowCount = rowCount;
         this.columnCount = columns;
         this.subways = subways;
@@ -24,7 +24,7 @@ public class Field implements IField {
         return columnCount;
     }
 
-    public Set<Subway> getSubways() {
+    public Map<Integer, Subway> getSubways() {
         return subways;
     }
 }

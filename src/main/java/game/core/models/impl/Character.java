@@ -20,10 +20,12 @@ public class Character implements ICharacter {
         this.id = id;
     }
 
+    
     public Character(Position position, String imagePath) {
         this(UUID.randomUUID().toString(), position, imagePath);
     }
 
+    @Override
     public void move() {
         position =  position.move(movingDirection);
     }
@@ -33,6 +35,7 @@ public class Character implements ICharacter {
         return image;
     }
 
+    @Override
     public Position getPosition() {
         return position;
     }

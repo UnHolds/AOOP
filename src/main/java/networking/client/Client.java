@@ -17,7 +17,7 @@ import java.util.concurrent.LinkedBlockingQueue;
 public class Client implements IClient, Runnable{
 
     private BufferedReader input;
-    private  PrintWriter output;
+    private PrintWriter output;
     private Socket server;
     private boolean stop = false;
     private BlockingQueue<IMessage> messages = new LinkedBlockingQueue<>();
