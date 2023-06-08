@@ -16,7 +16,7 @@ import java.util.Map;
 
 public class FieldPanel extends JPanel implements ActionListener, KeyListener {
 
-    public static final int TILE_SIZE = 50;
+    public static int TILE_SIZE = 50;
     //public static final int ROWS = 12;
     //public static final int COLUMNS = 18;
 
@@ -79,6 +79,7 @@ public class FieldPanel extends JPanel implements ActionListener, KeyListener {
     @Override
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
+        TILE_SIZE = Math.min(this.getWidth() / game.getField().getColumnCount(), this.getHeight() / game.getField().getRowCount());
         drawBackground(g);
         drawSubways(g);
         drawCharacters(g);

@@ -24,8 +24,8 @@ import java.util.List;
 
 public class GameServer implements Runnable{
 
-    public static int rowCount = 10;
-    public static int colCount = 10;
+    public static int rowCount = 18;
+    public static int colCount = 25;
 
     private List<IPlayer> player = new ArrayList<>();
     private List<IMouse> mice = new ArrayList<>();
