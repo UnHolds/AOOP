@@ -21,14 +21,14 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import java.util.*;
 
 public class GameServer implements Runnable{
 
     public static int rowCount = 18;
     public static int colCount = 25;
+
+    public static float eatDistance = 0.5f;
 
     public static long sendInterval = 200;
     private List<IPlayer> players = new ArrayList<>();
@@ -123,6 +123,33 @@ public class GameServer implements Runnable{
     }
 
 
+    private void checkIfMouseWasEaten(){
+        Random rand = new Random();
+        List<IMouse> newMice = new ArrayList<>();
+        for(IMouse mouse : this.mice) {
+            List<IPlayer> playerThatEat = new ArrayList<>();
+            Position mPos = mouse.getPosition();
+            for (IPlayer player : this.players) {
+                Position pos = player.getPosition();
+                if(Math.abs(mPos.x() - pos.x()) + Math.abs(mPos.y() - pos.y()) < eatDistance){
+                    playerThatEat.add(player);
+                }
+            }
+
+            if(playerThatEat.size() > 0){
+               IPlayer p = playerThatEat.get(rand.nextInt(playerThatEat.size()));
+               IMessage message = this.messageFactory.createCatEatMouseMessage(-1, p, mouse);
+               log.info("Cat: " + p.getName() + " has eaten mouse: " + mouse.getId());
+               this.server.sendToAllClients(message);
+            }else{
+                newMice.add(mouse);
+            }
+        }
+
+        this.mice = newMice;
+    }
+
+
     @Override
     public void run() {
 
@@ -141,6 +168,7 @@ public class GameServer implements Runnable{
 
             if(lastUpdate + sendInterval <= System.currentTimeMillis()){
                 sendGameFieldUpdate();
+                checkIfMouseWasEaten();
                 lastUpdate = System.currentTimeMillis();
             }
 

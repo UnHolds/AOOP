@@ -23,4 +23,6 @@ public interface IMessageFactory {
     IMessage createGameInitMessage(List<Subway> subways);
 
     IMessage createCatDirectionChangeMessage(long gameTick, ICharacter player, Direction direction);
+
+    IMessage createCatEatMouseMessage(long gameTick, IPlayer player, IMouse mouse);
 }

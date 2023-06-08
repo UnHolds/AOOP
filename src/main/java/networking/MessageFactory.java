@@ -97,7 +97,12 @@ public class MessageFactory implements IMessageFactory{
 
     @Override
     public IMessage createCatDirectionChangeMessage(long gameTick, ICharacter player, Direction direction) {
-        return new Message(MessageType.CAT_DIRECTION_CHANGE, this.entity.getId(), this.entity.getName(), -1, player.getId() + "|" + direction.ordinal());
+        return new Message(MessageType.CAT_DIRECTION_CHANGE, this.entity.getId(), this.entity.getName(), gameTick, player.getId() + "|" + direction.ordinal());
+    }
+
+    @Override
+    public IMessage createCatEatMouseMessage(long gameTick, IPlayer player, IMouse mouse) {
+        return new Message(MessageType.CAT_EAT_MOUSE_MESSAGE, this.entity.getId(), this.entity.getName(), gameTick, player.getId() + "|" + mouse.getId());
     }
 
 

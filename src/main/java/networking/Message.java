@@ -186,11 +186,21 @@ public class Message implements IMessage, Serializable {
     }
 
     @Override
+    public String getMouseId() {
+        if(this.type != MessageType.CAT_EAT_MOUSE_MESSAGE){
+            return null;
+        }
+
+        return this.data.split("\\|")[1];
+    }
+
+    @Override
     public String getPlayerId() {
-        if(this.type != MessageType.CAT_DIRECTION_CHANGE){
+        if(this.type != MessageType.CAT_DIRECTION_CHANGE && this.type != MessageType.CAT_EAT_MOUSE_MESSAGE){
             return null;
         }
         return this.data.split("\\|")[0];
     }
+
 
 }

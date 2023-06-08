@@ -56,6 +56,8 @@ public interface IMessage {
 
     Direction getDirection();
 
+    String getMouseId();
+
     String getPlayerId();
 
 }
