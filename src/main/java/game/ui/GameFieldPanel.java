@@ -12,6 +12,8 @@ import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 
 public class GameFieldPanel extends JPanel implements ActionListener {
 
@@ -33,6 +35,7 @@ public class GameFieldPanel extends JPanel implements ActionListener {
     private int windowHeight = 600;
     private IGame game;
 
+    private Map<String, JLabel> scoreLabels = new HashMap<>();
 
     public GameFieldPanel(IGame game) {
         setPreferredSize(new Dimension(windowWidth, windowHeight));
@@ -116,8 +119,9 @@ public class GameFieldPanel extends JPanel implements ActionListener {
         c.weighty = 0.5;
         c.gridx = 0;
         c.gridy = 1;
-        panel.add(createBasicLabel(Integer.toString(player.getScore()), Color.black), c);
-
+        JLabel score = createBasicLabel(Integer.toString(player.getScore()), Color.black);
+        panel.add(score, c);
+        this.scoreLabels.put(player.getId(), score);
         // Image
         JLabel image = new JLabel(new ImageIcon(player.getImage().getScaledInstance(50, 50, Image.SCALE_SMOOTH)));
         c.weighty = 0.5;
@@ -142,10 +146,19 @@ public class GameFieldPanel extends JPanel implements ActionListener {
         return panel;
     }
 
+
+    private void updateScoreBoard(){
+        for(Map.Entry<String, JLabel> entry : scoreLabels.entrySet()){
+            IPlayer p = this.game.getPlayers().stream().filter(pp -> pp.getId().equals(entry.getKey())).findFirst().orElse(null);
+            entry.getValue().setText(p.getScore() + "");
+        }
+    }
+
     @Override
     protected void paintComponent(Graphics g)     {
         super.paintComponent(g);
         g.drawImage(background, 0, 0, getWidth(), getHeight(), null); // image scaled
+        updateScoreBoard();
     }
 
     @Override

@@ -42,12 +42,20 @@ public class GameClient {
         }
     }
 
+    private void updateScoreBoard(String playerId){
+        IPlayer player = this.game.getPlayers().stream().filter(p -> p.getId().equals(playerId)).findFirst().orElse(null);
+        player.setScore(player.getScore() + 1);
+    }
+
     public void gameLoop(){
         IMessage message = this.client.take();
 
         switch (message.getMessageType()){
             case GAME_FIELD_UPDATE:
                 updateGameField(message);
+                break;
+            case CAT_EAT_MOUSE_MESSAGE:
+                updateScoreBoard(message.getPlayerId());
                 break;
         }
     }

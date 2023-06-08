@@ -8,5 +8,7 @@ public interface IPlayer extends ICharacter{
 
     int getGameUIId();
 
+    void setScore(int score);
+
     String getName();
 }

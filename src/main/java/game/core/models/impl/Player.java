@@ -41,6 +41,11 @@ public class Player extends Character implements IPlayer {
     }
 
     @Override
+    public void setScore(int score) {
+        this.score = score;
+    }
+
+    @Override
     public String getName() {
         return this.name;
     }
