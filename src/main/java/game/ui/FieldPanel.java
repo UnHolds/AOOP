@@ -67,8 +67,8 @@ public class FieldPanel extends JPanel implements ActionListener, KeyListener {
         for (IPlayer player : game.getPlayers()) {
             g.drawImage(
                     player.getImage(),
-                    player.getPosition().x(),
-                    player.getPosition().y(),
+                    player.getPosition().x() * TILE_SIZE,
+                    player.getPosition().y() * TILE_SIZE,
                     TILE_SIZE,
                     TILE_SIZE,
                     null
