@@ -1,4 +1,5 @@
 package game.ui;
+import game.core.handler.CharacterMovementController;
 import game.core.models.IGame;
 
 import javax.swing.*;
@@ -43,11 +44,11 @@ public class GameWindow {
 
     public void setGame(IGame game){
         this.game = game;
+        this.gameFieldPanel = new GameFieldPanel(this.game);
     }
 
     public void showGameFieldPanel() {
         this.window.remove(this.startScreenPanel);
-        this.gameFieldPanel = new GameFieldPanel(this.game);
         this.window.add(gameFieldPanel);
         this.window.pack();
         this.window.setVisible(true);
@@ -65,7 +66,8 @@ public class GameWindow {
         window.repaint();
     }
 
-    public void registerMovementListener(KeyListener listener) {
-        window.addKeyListener(listener);
+    public void registerMovementListener(CharacterMovementController listener) {
+        listener.registerKeyBinding(this.gameFieldPanel);
+
     }
 }

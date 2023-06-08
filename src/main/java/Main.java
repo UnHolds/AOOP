@@ -1,5 +1,6 @@
 import game.core.GameClient;
 import game.core.GameServer;
+import game.core.handler.CharacterMovementController;
 import game.core.models.IMouse;
 import game.core.models.IPlayer;
 import game.core.models.Position;
@@ -43,6 +44,7 @@ public class Main {
             throw new RuntimeException(e);
         }
 
+        IPlayer selfPlayer = null;
 
         IMessage message;
         Game game;
@@ -70,6 +72,9 @@ public class Main {
                 int index = 0;
                 for(Map.Entry<String, String> entry : connectedClients.entrySet()){
                     IPlayer p = new Player(entry.getKey(), index, entry.getValue(), playerPos.get(entry.getKey()), "cat" + (index + 1) +".png");
+                    if(entry.getKey().equals(client.getId())){
+                        selfPlayer = p;
+                    }
                     index++;
                     players.add(p);
                 }
@@ -97,7 +102,19 @@ public class Main {
         }
 
         gw.setGame(game);
+
+        CharacterMovementController movementController = new CharacterMovementController(client, selfPlayer);
+        gw.registerMovementListener(movementController);
+
         gw.showGameFieldPanel();
-        GameClient gameClient = new GameClient(client);
+
+        GameClient gameClient = new GameClient(client, game);
+
+
+        while(true){
+            gameClient.gameLoop();
+            gw.update();
+        }
+
     }
 }

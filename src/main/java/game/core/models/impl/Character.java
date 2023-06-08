@@ -6,11 +6,13 @@ import game.core.models.ICharacter;
 import javax.imageio.ImageIO;
 import java.awt.*;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 public class Character implements ICharacter {
     private Position position;
-    private Direction movingDirection = Direction.STOP;
+    private List<Direction> movingDirections = new ArrayList<>();
     private Image image;
     private String id;
 
@@ -27,7 +29,9 @@ public class Character implements ICharacter {
 
     @Override
     public void move() {
-        position =  position.move(movingDirection);
+        for(Direction dir : movingDirections){
+            position =  position.move(dir);
+        }
     }
 
     @Override
@@ -46,13 +50,39 @@ public class Character implements ICharacter {
     }
 
     @Override
+    @Deprecated
     public void setMovingDirection(Direction direction) {
-        movingDirection = direction;
+        /*remove this*/
     }
 
     @Override
-    public Direction getMovingDirection() {
-        return movingDirection;
+    public void addMovingDirection(Direction direction) {
+        switch (direction){
+
+            case UP:
+            case DOWN:
+            case LEFT:
+            case RIGHT:
+                if(this.movingDirections.contains(direction) == false){
+                    this.movingDirections.add(direction);
+                }
+                break;
+            case STOP:
+                this.movingDirections = new ArrayList<>();
+                break;
+            case UP_STOP:
+                this.movingDirections.remove(Direction.UP);
+                break;
+            case DOWN_STOP:
+                this.movingDirections.remove(Direction.DOWN);
+                break;
+            case LEFT_STOP:
+                this.movingDirections.remove(Direction.LEFT);
+                break;
+            case RIGHT_STOP:
+                this.movingDirections.remove(Direction.RIGHT);
+                break;
+        }
     }
 
     @Override

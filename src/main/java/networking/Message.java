@@ -135,8 +135,8 @@ public class Message implements IMessage, Serializable {
             String id = mouse.split("~")[0];
             String[] coordinates = mouse.split("~")[1].split("\\|");
 
-            int row = Integer.parseInt(coordinates[0]);
-            int column = Integer.parseInt(coordinates[1]);
+            float row = Float.parseFloat(coordinates[0]);
+            float column = Float.parseFloat(coordinates[1]);
 
             Position pos = new Position(row, column);
 
@@ -164,8 +164,8 @@ public class Message implements IMessage, Serializable {
             for(String sExitPos : sSubway.split("#")){
 
                 String[] coordinates = sExitPos.split("\\|");
-                int row = Integer.parseInt(coordinates[0]);
-                int column = Integer.parseInt(coordinates[1]);
+                float row = Float.parseFloat(coordinates[0]);
+                float column = Float.parseFloat(coordinates[1]);
 
                 exits.add(new Position(row, column));
             }

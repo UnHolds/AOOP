@@ -55,8 +55,8 @@ public class FieldPanel extends JPanel implements ActionListener, KeyListener {
             for (Position exit : sub.getExits()) {
                 g.setColor(Color.BLACK);
                 g.drawOval(
-                        exit.x(),
-                        exit.y(),
+                        Math.round(exit.x()),
+                        Math.round(exit.y()),
                         TILE_SIZE, TILE_SIZE
                 );
             }
@@ -67,8 +67,8 @@ public class FieldPanel extends JPanel implements ActionListener, KeyListener {
         for (IPlayer player : game.getPlayers()) {
             g.drawImage(
                     player.getImage(),
-                    player.getPosition().x() * TILE_SIZE,
-                    player.getPosition().y() * TILE_SIZE,
+                    Math.round(player.getPosition().x() * TILE_SIZE),
+                    Math.round(player.getPosition().y() * TILE_SIZE),
                     TILE_SIZE,
                     TILE_SIZE,
                     null

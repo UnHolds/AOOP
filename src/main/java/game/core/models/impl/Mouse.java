@@ -45,10 +45,10 @@ public class Mouse extends Character implements IMouse {
     public void calculateNextMove(Position goal) {
         System.out.printf("Closest exit is : x = %d, y= %d",goal.x(),goal.y());
         System.out.println();
-        int mx = getPosition().x();
-        int my = getPosition().y();
-        int gx = goal.x();
-        int gy = goal.y();
+        int mx = Math.round(getPosition().x());
+        int my = Math.round(getPosition().y());
+        int gx = Math.round(goal.x());
+        int gy = Math.round(goal.y());
         if(getPosition() != goal) {
             if (Math.abs(mx - gx) != 0 || Math.abs(my - gy) != 0) {
                 System.out.println();

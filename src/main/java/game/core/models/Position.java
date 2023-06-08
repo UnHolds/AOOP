@@ -2,7 +2,9 @@ package game.core.models;
 
 import game.core.models.impl.Direction;
 
-public record Position(int y, int x) {
+public record Position(float y, float x) {
+
+    static float speed = 0.1f;
 
     public Position move(Direction direction) {
         switch (direction) {
@@ -21,19 +23,19 @@ public record Position(int y, int x) {
     }
 
     public Position up() {
-        return new Position(y -1, x);
+        return new Position(y - speed, x);
     }
 
     public Position down() {
-        return new Position(y +1, x);
+        return new Position(y + speed, x);
     }
 
     public Position left() {
-        return new Position(y, x -1);
+        return new Position(y, x - speed);
     }
 
     public Position right() {
-        return new Position(y, x +1);
+        return new Position(y, x + speed);
     }
 
     public Position stop() {

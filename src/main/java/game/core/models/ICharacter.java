@@ -17,9 +17,10 @@ public interface ICharacter {
 
     void setPosition(Position position);
 
+    @Deprecated
     void setMovingDirection(Direction direction);
 
-    Direction getMovingDirection();
+    void addMovingDirection(Direction direction);
 
     String getId();
 
