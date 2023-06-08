@@ -19,6 +19,11 @@ public class Game implements IGame {
         this.mouses = mouses;
     }
 
+
+    public void setMice(Set<IMouse> mice){
+        this.mouses = mice;
+    }
+
     public Field getField() {
         return field;
     }

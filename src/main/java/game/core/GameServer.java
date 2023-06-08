@@ -72,7 +72,7 @@ public class GameServer implements Runnable{
         Subway subway1 = new Subway(Arrays.asList(new Position(0,0), new Position(rowCount -1, colCount -1)));
         subways.add(subway1);
 
-        mice.add(new Mouse("0", new Position(5,5), "mouse.png", -1, 10 , subway1));
+        mice.add(new Mouse("ID_MOUSE_0", new Position(5,5), "mouse.png", -1, 10 , subway1));
 
         startMessages.add(this.messageFactory.createGameInitMessage(subways));
         startMessages.add(this.messageFactory.createGameFieldUpdateMessage(-1, players, mice));
@@ -107,7 +107,6 @@ public class GameServer implements Runnable{
                 break;
         }
     }
-
 
     private void sendGameFieldUpdate(){
 

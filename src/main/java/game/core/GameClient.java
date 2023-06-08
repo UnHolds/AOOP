@@ -13,6 +13,7 @@ import networking.client.IClient;
 
 import java.io.IOException;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 public class GameClient {
 
@@ -24,7 +25,6 @@ public class GameClient {
         this.game = game;
     }
 
-
     private void updateGameField(IMessage message){
         Map<String, Position> playerPos = message.getPlayersPositions();
         Map<String, Position> micePos = message.getMicePositions();
@@ -34,8 +34,11 @@ public class GameClient {
             player.setPosition(pos);
         }
 
+        //backup delete should never filter :)
+        this.game.setMice(this.game.getMouses().stream().filter(m -> micePos.containsKey(m.getId())).collect(Collectors.toSet()));
+
         for(IMouse mouse : this.game.getMouses()){
-            mouse.move();
+            mouse.setPosition(micePos.get(mouse.getId()));
         }
     }
 
