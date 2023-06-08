@@ -35,8 +35,7 @@ public class GameClient {
         }
 
         for(IMouse mouse : this.game.getMouses()){
-            Position pos = micePos.get(mouse.getId());
-            mouse.setPosition(pos);
+            mouse.move();
         }
     }
 

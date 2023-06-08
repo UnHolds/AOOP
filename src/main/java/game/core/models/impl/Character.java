@@ -50,12 +50,6 @@ public class Character implements ICharacter {
     }
 
     @Override
-    @Deprecated
-    public void setMovingDirection(Direction direction) {
-        /*remove this*/
-    }
-
-    @Override
     public void addMovingDirection(Direction direction) {
         switch (direction){
 

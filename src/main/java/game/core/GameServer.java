@@ -5,6 +5,7 @@ import game.core.models.IMouse;
 import game.core.models.IPlayer;
 import game.core.models.Position;
 import game.core.models.impl.Direction;
+import game.core.models.impl.Mouse;
 import game.core.models.impl.Player;
 import game.core.models.impl.Subway;
 import networking.IMessage;
@@ -21,6 +22,7 @@ import org.apache.logging.log4j.Logger;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class GameServer implements Runnable{
@@ -67,6 +69,10 @@ public class GameServer implements Runnable{
         List<IMessage> startMessages = new ArrayList<>();
 
         List<Subway> subways = new ArrayList<>();
+        Subway subway1 = new Subway(Arrays.asList(new Position(0,0), new Position(rowCount -1, colCount -1)));
+        subways.add(subway1);
+
+        mice.add(new Mouse("0", new Position(5,5), "mouse.png", -1, 10 , subway1));
 
         startMessages.add(this.messageFactory.createGameInitMessage(subways));
         startMessages.add(this.messageFactory.createGameFieldUpdateMessage(-1, players, mice));

@@ -41,72 +41,88 @@ public class Mouse extends Character implements IMouse {
 
     public Integer getMoveAmount(){return this.moveAmount;}
 
+
+    public void move(){
+        //TODO fix thix
+        calculateNextMove(new Position(10,10));
+        super.move();
+    }
+
     @Override
     public void calculateNextMove(Position goal) {
-        System.out.printf("Closest exit is : x = %d, y= %d",goal.x(),goal.y());
-        System.out.println();
         int mx = Math.round(getPosition().x());
         int my = Math.round(getPosition().y());
         int gx = Math.round(goal.x());
         int gy = Math.round(goal.y());
         if(getPosition() != goal) {
             if (Math.abs(mx - gx) != 0 || Math.abs(my - gy) != 0) {
-                System.out.println();
                 if (Math.abs(mx - gx) < Math.abs(my - gy) && Math.abs(mx - gx) != 0) {
                     //Move RIGHT
                     if (mx < gx) {
-                        setMovingDirection(Direction.RIGHT);
+                        addMovingDirection(Direction.STOP);
+                        addMovingDirection(Direction.RIGHT);
                     }
                     //Move LEFT
                     if (mx > gx) {
-                        setMovingDirection(Direction.LEFT);
+                        addMovingDirection(Direction.STOP);
+                        addMovingDirection(Direction.LEFT);
                     }
                 } else if (Math.abs(mx - gx) == Math.abs(my - gy)) {
                     //Move RIGHT
                     if (mx < gx) {
-                        setMovingDirection(Direction.RIGHT);
+                        addMovingDirection(Direction.STOP);
+                        addMovingDirection(Direction.RIGHT);
                     }
                     //Move LEFT
                     if (mx > gx) {
-                        setMovingDirection(Direction.LEFT);
+                        addMovingDirection(Direction.STOP);
+                        addMovingDirection(Direction.LEFT);
                     }
                 } else {
                     //Move DOWN
                     if (my < gy) {
-                        setMovingDirection(Direction.DOWN);
+                        addMovingDirection(Direction.STOP);
+                        addMovingDirection(Direction.DOWN);
                     }
                     //Move UP
                     if (my > gy) {
-                        setMovingDirection(Direction.UP);
+                        addMovingDirection(Direction.STOP);
+                        addMovingDirection(Direction.UP);
                     }
                     //Move RIGHT
                     if (mx < gx) {
-                        setMovingDirection(Direction.RIGHT);
+                        addMovingDirection(Direction.STOP);
+                        addMovingDirection(Direction.RIGHT);
                     }
                     //Move LEFT
                     if (mx > gx) {
-                        setMovingDirection(Direction.LEFT);
+                        addMovingDirection(Direction.STOP);
+                        addMovingDirection(Direction.LEFT);
                     }
                 }
             } else if (Math.abs(mx - gx) == 0 && Math.abs(my - gy) != 0) {
                 if (my < gy) {
-                    setMovingDirection(Direction.DOWN);
+                    addMovingDirection(Direction.STOP);
+                    addMovingDirection(Direction.DOWN);
                 }
                 //Move UP
                 if (my > gy) {
-                    setMovingDirection(Direction.UP);
+                    addMovingDirection(Direction.STOP);
+                    addMovingDirection(Direction.UP);
                 }
             } else if (Math.abs(my - gy) == 0 && Math.abs(mx - gx) != 0) {
                 //Move RIGHT
                 if (mx < gx) {
-                    setMovingDirection(Direction.RIGHT);
+                    addMovingDirection(Direction.STOP);
+                    addMovingDirection(Direction.RIGHT);
                 }
                 //Move LEFT
                 if (mx > gx) {
-                    setMovingDirection(Direction.LEFT);
+                    addMovingDirection(Direction.STOP);
+                    addMovingDirection(Direction.LEFT);
                 }
             } else if (Math.abs(my - gy) == 0 && Math.abs(mx - gx) == 0){
-                setMovingDirection(Direction.STOP);
+                addMovingDirection(Direction.STOP);
             }
         }
     }
@@ -172,8 +188,5 @@ public class Mouse extends Character implements IMouse {
             ret = update.get(rnd.nextInt(update.size()));
         }
         return ret;
-    }
-    public Mouse(Position position, String imagePath) {
-        super(position, imagePath);
     }
 }

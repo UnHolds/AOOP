@@ -80,10 +80,8 @@ public class Main {
                 }
 
                 Set<IMouse> mice = new HashSet<>();
-                Random rand = new Random();
                 for(int i = 0; i < micePos.size(); i++){
-                    Subway s = subways.get(rand.nextInt() % subways.size());
-                    IMouse m = new Mouse("ID_MOUSE_" + i, micePos.get(0), "mouse.png", -1, 10 , s);
+                    IMouse m = new Mouse("ID_MOUSE_" + i, micePos.get("" + i), "mouse.png", -1, 10 , null);
                     mice.add(m);
                 }
                 game = new Game(field, players, mice);

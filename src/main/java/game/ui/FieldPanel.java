@@ -1,6 +1,7 @@
 package game.ui;
 
 import game.core.models.IGame;
+import game.core.models.IMouse;
 import game.core.models.Position;
 import game.core.models.IPlayer;
 import game.core.models.impl.Subway;
@@ -11,7 +12,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
-import java.util.List;
 import java.util.Map;
 
 public class FieldPanel extends JPanel implements ActionListener, KeyListener {
@@ -55,15 +55,15 @@ public class FieldPanel extends JPanel implements ActionListener, KeyListener {
             for (Position exit : sub.getExits()) {
                 g.setColor(Color.BLACK);
                 g.drawOval(
-                        Math.round(exit.x()),
-                        Math.round(exit.y()),
+                        Math.round(exit.x() * TILE_SIZE),
+                        Math.round(exit.y() * TILE_SIZE),
                         TILE_SIZE, TILE_SIZE
                 );
             }
         }
     }
 
-    private void drawCharacters(Graphics g) {
+    private void drawPlayers(Graphics g) {
         for (IPlayer player : game.getPlayers()) {
             g.drawImage(
                     player.getImage(),
@@ -76,13 +76,27 @@ public class FieldPanel extends JPanel implements ActionListener, KeyListener {
         }
     }
 
+    private void drawMice(Graphics g){
+        for(IMouse mouse : game.getMouses()){
+            g.drawImage(
+                    mouse.getImage(),
+                    Math.round(mouse.getPosition().x() * TILE_SIZE),
+                    Math.round(mouse.getPosition().y() * TILE_SIZE),
+                    TILE_SIZE,
+                    TILE_SIZE,
+                    null
+            );
+        }
+    }
+
     @Override
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
         TILE_SIZE = Math.min(this.getWidth() / game.getField().getColumnCount(), this.getHeight() / game.getField().getRowCount());
         drawBackground(g);
         drawSubways(g);
-        drawCharacters(g);
+        drawMice(g);
+        drawPlayers(g);
 
 
         // this smooths out animations on some systems
