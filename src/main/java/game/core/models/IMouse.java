@@ -14,22 +14,7 @@ public interface IMouse extends ICharacter{
      */
     // public void deathAnimation();
 
-
-    /**
-     * Calculate where the mouse moves next based on if it is on the surface or in the tunnel and the moving algorithm
-     * the mouse applies
-     */
-    public void calculateNextMove(Position goal);
-
-    public Position searchNextExit(Subway sub, Position pos);
-
-    public Position closestSubway(Position pos, Game game);
-
-    public void setLastSubway(Integer lastSubway);
-
-    public void adjustDistance();
-
-    public Integer getMoveAmount();
+    void setMoveAlgorithm(IMoveAlgorithm algorithm);
 
     /**
      * TODO: maybe move somewhere else

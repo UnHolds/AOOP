@@ -2,9 +2,11 @@ import game.core.GameClient;
 import game.core.GameServer;
 import game.core.handler.CharacterMovementController;
 import game.core.models.IMouse;
+import game.core.models.IMoveAlgorithm;
 import game.core.models.IPlayer;
 import game.core.models.Position;
 import game.core.models.impl.*;
+import game.core.models.impl.moveAlgorithms.BasicAlgorithm;
 import game.ui.GameWindow;
 import game.ui.IUiGameConfig;
 import game.ui.UiGameConfig;
@@ -81,7 +83,10 @@ public class Main {
 
                 Set<IMouse> mice = new HashSet<>();
                 for(int i = 0; i < micePos.size(); i++){
-                    IMouse m = new Mouse("ID_MOUSE_" + i, micePos.get("" + i), "mouse.png", -1, 10 , null);
+
+                    IMouse m = new Mouse("ID_MOUSE_" + i, micePos.get("" + i), "mouse.png");
+                    IMoveAlgorithm alg = new BasicAlgorithm(m, -1, 10 , null);
+                    m.setMoveAlgorithm(alg);
                     mice.add(m);
                 }
                 game = new Game(field, players, mice);

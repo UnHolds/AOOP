@@ -1,6 +1,7 @@
 package networking;
 
 import game.core.models.IMouse;
+import game.core.models.IMoveAlgorithm;
 import game.core.models.IPlayer;
 import game.core.models.Position;
 import game.core.models.impl.Direction;
@@ -8,6 +9,7 @@ import game.core.models.impl.Field;
 import game.core.models.impl.Mouse;
 import game.core.models.impl.Player;
 import game.core.models.impl.Subway;
+import game.core.models.impl.moveAlgorithms.BasicAlgorithm;
 import networking.client.Client;
 import networking.client.IClient;
 import networking.server.IServer;
@@ -118,8 +120,12 @@ public class MessageTest {
         Subway subway = new Subway(sub);
 
         Field field = null;
-        IMouse mouse1 = new Mouse("ID_MOUSE_1", pos3, "mouse.png", -1, 10,subway);
-        IMouse mouse2 = new Mouse("ID_MOUSE_2", pos4, "mouse.png", -1, 10,subway);
+        IMouse mouse1 = new Mouse("ID_MOUSE_1", pos3, "mouse.png");
+        IMoveAlgorithm alg1 = new BasicAlgorithm(mouse1, -1, 10,subway);
+        mouse1.setMoveAlgorithm(alg1);
+        IMouse mouse2 = new Mouse("ID_MOUSE_2", pos4, "mouse.png");
+        IMoveAlgorithm alg2 = new BasicAlgorithm(mouse1, -1, 10,subway);
+        mouse2.setMoveAlgorithm(alg2);
 
         List<IPlayer> players = new ArrayList<>();
         players.add(player1);

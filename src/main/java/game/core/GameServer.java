@@ -2,12 +2,14 @@ package game.core;
 
 
 import game.core.models.IMouse;
+import game.core.models.IMoveAlgorithm;
 import game.core.models.IPlayer;
 import game.core.models.Position;
 import game.core.models.impl.Direction;
 import game.core.models.impl.Mouse;
 import game.core.models.impl.Player;
 import game.core.models.impl.Subway;
+import game.core.models.impl.moveAlgorithms.BasicAlgorithm;
 import networking.IMessage;
 import networking.IMessageFactory;
 import networking.MessageFactory;
@@ -72,7 +74,10 @@ public class GameServer implements Runnable{
         Subway subway1 = new Subway(Arrays.asList(new Position(0,0), new Position(rowCount -1, colCount -1)));
         subways.add(subway1);
 
-        mice.add(new Mouse("ID_MOUSE_0", new Position(5,5), "mouse.png", -1, 10 , subway1));
+        Mouse m = new Mouse("ID_MOUSE_0", new Position(5,5), "mouse.png");
+        IMoveAlgorithm alg = new BasicAlgorithm(m, -1, 10 , subway1);
+        m.setMoveAlgorithm(alg);
+        mice.add(m);
 
         startMessages.add(this.messageFactory.createGameInitMessage(subways));
         startMessages.add(this.messageFactory.createGameFieldUpdateMessage(-1, players, mice));
