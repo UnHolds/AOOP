@@ -2,9 +2,8 @@ package networking;
 
 import game.core.handler.Direction;
 import game.core.models.*;
-import game.core.models.impl.Mouse;
-import game.core.models.impl.Player;
-import game.core.models.impl.Position;
+import game.core.models.impl.*;
+import game.core.models.impl.moveAlgorithms.DirectAlgorithm;
 import networking.client.Client;
 import networking.client.IClient;
 import networking.server.IServer;
@@ -101,30 +100,32 @@ public class MessageTest {
 
     @Test
     public void testGameFieldUpdateMessage() throws InterruptedException {
-        IPosition pos1 = new Position(1, 2);
-        IPosition pos2 = new Position(3, 4);
-        IPosition pos3 = new Position(5, 6);
-        IPosition pos4 = new Position(7, 8);
-        IPosition pos5 = new Position(0,0);
+        IPosition pos1 = new game.core.models.impl.Position(1, 2);
+        IPosition pos2 = new game.core.models.impl.Position(3, 4);
+        IPosition pos3 = new game.core.models.impl.Position(5, 6);
+        IPosition pos4 = new game.core.models.impl.Position(7, 8);
+        IPosition pos5 = new game.core.models.impl.Position(0,0);
 
         IPlayer player1 = new Player(this.client1.getId(), "Player 1", pos1, "cat1.png");
         IPlayer player2 = new Player(this.client2.getId(), "Player 2", pos2, "cat2.png");
 
-        List<IPosition> sub = new ArrayList<>();
-        sub.add(pos5);
-        ISubway subway = new Subway(sub);
-
-        IField field = null;
-        IMouse mouse1 = new Mouse("ID_MOUSE_1", pos3, "mouse.png");
-        IMoveAlgorithm alg1 = new BasicAlgorithm(mouse1, -1, 10,subway);
-        mouse1.setMoveAlgorithm(alg1);
-        IMouse mouse2 = new Mouse("ID_MOUSE_2", pos4, "mouse.png");
-        IMoveAlgorithm alg2 = new BasicAlgorithm(mouse1, -1, 10,subway);
-        mouse2.setMoveAlgorithm(alg2);
+        List<IExit> exits = new ArrayList<>();
+        exits.add(new Exit(pos5));
+        ISubway subway = new Subway(exits);
+        List<ISubway> subways = new ArrayList<>();
+        subways.add(subway);
 
         List<IPlayer> players = new ArrayList<>();
         players.add(player1);
         players.add(player2);
+
+        IField field = null;
+        IMouse mouse1 = new Mouse("ID_MOUSE_1", pos3, "mouse.png");
+        IMoveAlgorithm alg1 = new DirectAlgorithm(mouse1, subways, players);
+        mouse1.setMoveAlgorithm(alg1);
+        IMouse mouse2 = new Mouse("ID_MOUSE_2", pos4, "mouse.png");
+        IMoveAlgorithm alg2 = new DirectAlgorithm(mouse1, subways, players);
+        mouse2.setMoveAlgorithm(alg2);
 
         List<IMouse> mice = new ArrayList<>();
         mice.add(mouse1);
@@ -164,8 +165,8 @@ public class MessageTest {
     @Test
     public void testGameInitMessage() throws InterruptedException {
 
-        List<Position> exits1 = Arrays.asList(new Position(1,2), new Position(2,3));
-        List<Position> exits2 = Arrays.asList(new Position(4,5), new Position(6,7), new Position(8,9));
+        List<IExit> exits1 = Arrays.asList(new Exit(new game.core.models.impl.Position(1,2)), new Exit(new game.core.models.impl.Position(2,3)));
+        List<IExit> exits2 = Arrays.asList(new Exit(new game.core.models.impl.Position(4,5)), new Exit(new game.core.models.impl.Position(6,7)), new Exit(new game.core.models.impl.Position(8,9)));
 
         ISubway subway1 = new Subway(exits1);
         ISubway subway2 = new Subway(exits2);
@@ -222,7 +223,7 @@ public class MessageTest {
 
     @Test
     public void testCatDirectionChangeMessage() throws InterruptedException {
-        Position pos1 = new Position(1, 2);
+        IPosition pos1 = new game.core.models.impl.Position(1, 2);
         IPlayer player1 = new Player(this.client1.getId(), "Player 1", pos1, "cat1.png");
         IMessage catDirChange = this.client1MessageFactory.createCatDirectionChangeMessage(42, player1, Direction.LEFT);
         this.client1.sendMessage(catDirChange);

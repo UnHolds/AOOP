@@ -56,7 +56,9 @@ public class GameServer implements Runnable{
 
     public void startGame(){
 
+        /*
         List<IServerClient> serverClients = this.server.getClients();
+
 
         for(int i = 0; i < serverClients.size(); i++){
             IServerClient sc = serverClients.get(i);
@@ -65,12 +67,12 @@ public class GameServer implements Runnable{
 
         List<IMessage> startMessages = new ArrayList<>();
 
-        //TODO init
-
         startMessages.add(this.messageFactory.createGameInitMessage(subways));
         startMessages.add(this.messageFactory.createGameFieldUpdateMessage(-1, players, mice));
         log.info("Sending start messages to clients");
         this.server.startGame(startMessages);
+
+        */
 
         try {
             Thread.sleep(100);

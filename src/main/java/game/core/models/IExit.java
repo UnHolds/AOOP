@@ -1,5 +1,4 @@
 package game.core.models;
 
-public interface IExit {
-    IPosition getPosition();
+public interface IExit extends Positionable{
 }

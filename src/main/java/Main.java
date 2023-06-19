@@ -63,7 +63,7 @@ public class Main {
                     subwaysMap.put(i, subways.get(i));
                 }
 
-                IField field = new Field(GameServer.rowCount,GameServer.colCount, subwaysMap);
+                //IField field = new Field(GameServer.rowCount,GameServer.colCount, subwaysMap);
                 List<IPlayer> players = new ArrayList<>();
                 int index = 0;
                 for(Map.Entry<String, String> entry : connectedClients.entrySet()){
@@ -79,11 +79,11 @@ public class Main {
                 for(int i = 0; i < micePos.size(); i++){
 
                     IMouse m = new Mouse("ID_MOUSE_" + i, micePos.get("" + i), "mouse.png");
-                    IMoveAlgorithm alg = new BasicAlgorithm(m, -1, 10 , null);
-                    m.setMoveAlgorithm(alg);
+                    //IMoveAlgorithm alg = new BasicAlgorithm(m, -1, 10 , null);
+                    //m.setMoveAlgorithm(alg);
                     mice.add(m);
                 }
-                game = new Game(field, players, mice);
+                //game = new Game(field, players, mice);
 
                 break;
             }else if(message.getMessageType() == MessageType.CONNECTED_CLIENTS_UPDATE){
@@ -98,18 +98,18 @@ public class Main {
             }
         }
 
-        gw.setGame(game);
+        //gw.setGame(game);
 
         CharacterMovementController movementController = new CharacterMovementController(client, selfPlayer);
         gw.registerMovementListener(movementController);
 
         gw.showGameFieldPanel();
 
-        GameClient gameClient = new GameClient(client, game);
+        //GameClient gameClient = new GameClient(client, game);
 
 
         while(true){
-            gameClient.gameLoop();
+            //gameClient.gameLoop();
             gw.update();
         }
 

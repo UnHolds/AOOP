@@ -1,8 +1,6 @@
 package game.ui;
 
-import game.core.models.IGame;
-import game.core.models.IMouse;
-import game.core.models.IPlayer;
+import game.core.models.*;
 
 import javax.swing.*;
 import java.awt.*;
@@ -46,15 +44,15 @@ public class FieldPanel extends JPanel implements ActionListener, KeyListener {
     }
 
     private void drawSubways(Graphics g) {
-        Map<Integer, Subway> subwayMap = game.getField().getSubways();
+        Map<Integer, ISubway> subwayMap = game.getField().getSubways();
         int subs = subwayMap.size();
         for (int i = 0; i <subs; i++) {
-            Subway sub =  subwayMap.get(i);
-            for (Position exit : sub.getExits()) {
+            ISubway sub =  subwayMap.get(i);
+            for (IExit exit : sub.getExits()) {
                 g.setColor(Color.BLACK);
                 g.drawOval(
-                        Math.round(exit.x() * TILE_SIZE),
-                        Math.round(exit.y() * TILE_SIZE),
+                        Math.round(exit.getPosition().getX() * TILE_SIZE),
+                        Math.round(exit.getPosition().getY() * TILE_SIZE),
                         TILE_SIZE, TILE_SIZE
                 );
             }
@@ -65,8 +63,8 @@ public class FieldPanel extends JPanel implements ActionListener, KeyListener {
         for (IPlayer player : game.getPlayers()) {
             g.drawImage(
                     player.getImage(),
-                    Math.round(player.getPosition().x() * TILE_SIZE),
-                    Math.round(player.getPosition().y() * TILE_SIZE),
+                    Math.round(player.getPosition().getX() * TILE_SIZE),
+                    Math.round(player.getPosition().getY() * TILE_SIZE),
                     TILE_SIZE,
                     TILE_SIZE,
                     null
@@ -78,8 +76,8 @@ public class FieldPanel extends JPanel implements ActionListener, KeyListener {
         for(IMouse mouse : game.getMouses()){
             g.drawImage(
                     mouse.getImage(),
-                    Math.round(mouse.getPosition().x() * TILE_SIZE),
-                    Math.round(mouse.getPosition().y() * TILE_SIZE),
+                    Math.round(mouse.getPosition().getX() * TILE_SIZE),
+                    Math.round(mouse.getPosition().getY() * TILE_SIZE),
                     TILE_SIZE,
                     TILE_SIZE,
                     null

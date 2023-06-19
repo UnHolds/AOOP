@@ -1,9 +1,12 @@
 package networking;
 
 import game.core.handler.Direction;
+import game.core.models.IExit;
 import game.core.models.IPosition;
 import game.core.models.ISubway;
+import game.core.models.impl.Exit;
 import game.core.models.impl.Position;
+import game.core.models.impl.Subway;
 
 import java.io.*;
 import java.util.*;
@@ -159,14 +162,13 @@ public class Message implements IMessage, Serializable {
         List<ISubway> subways = new ArrayList<>();
 
         for(String sSubway : this.data.split("@")){
-            List<Position> exits = new ArrayList<>();
+            List<IExit> exits = new ArrayList<>();
             for(String sExitPos : sSubway.split("#")){
 
                 String[] coordinates = sExitPos.split("\\|");
                 float row = Float.parseFloat(coordinates[0]);
                 float column = Float.parseFloat(coordinates[1]);
-                //TODO create IExit
-                exits.add(new Position(row, column));
+                exits.add(new Exit(new Position(row, column)));
             }
             subways.add(new Subway(exits));
         }
