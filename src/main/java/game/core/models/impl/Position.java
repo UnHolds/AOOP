@@ -7,8 +7,8 @@ public class Position implements IPosition {
 
     private static final float COMPARE_DIFF = 0.000001f;
 
-    float x;
-    float y;
+    private float x;
+    private float y;
 
     public Position(float x, float y){
         this.x = x;
