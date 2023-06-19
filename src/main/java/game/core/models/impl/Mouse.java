@@ -8,10 +8,11 @@ import java.awt.*;
 
 public class Mouse implements IMouse {
 
-    IPosition position;
+    private IPosition position;
+    private String id;
 
     public Mouse(String id, String picturePath){
-
+        this.id = id;
     }
 
     @Override
@@ -26,7 +27,7 @@ public class Mouse implements IMouse {
 
     @Override
     public String getId() {
-        return null;
+        return this.id;
     }
 
     @Override

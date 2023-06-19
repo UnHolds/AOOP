@@ -18,6 +18,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentLinkedQueue;
+import java.util.stream.Collectors;
 
 import static org.junit.Assert.*;
 
@@ -189,8 +190,8 @@ public class MessageTest {
         assertEquals(2, recSubway1.getExits().size());
         assertEquals(3, recSubway2.getExits().size());
 
-        assertEquals(exits1, recSubway1.getExits());
-        assertEquals(exits2, recSubway2.getExits());
+        assertEquals(exits1.stream().map(e -> e.getPosition()).collect(Collectors.toList()), recSubway1.getExits().stream().map(e -> e.getPosition()).collect(Collectors.toList()));
+        assertEquals(exits2.stream().map(e -> e.getPosition()).collect(Collectors.toList()), recSubway2.getExits().stream().map(e -> e.getPosition()).collect(Collectors.toList()));
 
         assertEquals(this.server.getId(), message.getSenderId());
         assertEquals(this.server.getName(), message.getSenderName());

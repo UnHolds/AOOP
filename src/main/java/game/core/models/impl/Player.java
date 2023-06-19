@@ -8,10 +8,15 @@ import java.awt.*;
 
 public class Player implements IPlayer {
 
-    IPosition position;
+    private IPosition position;
+    private String id;
+    private String name;
+    private int uiID;
 
     public Player(String id, String name, IPosition startPosition, String picturePath){
         this.position = startPosition;
+        this.id = id;
+        this.name = name;
     }
 
     @Override
@@ -25,18 +30,23 @@ public class Player implements IPlayer {
     }
 
     @Override
-    public String getId() {
-        return null;
-    }
-
-    @Override
     public int getScore() {
         return 0;
     }
 
     @Override
-    public int getGameUIId() {
-        return 0;
+    public int getUiID() {
+        return this.uiID;
+    }
+
+    @Override
+    public void setUiID(int uiID) {
+        this.uiID = uiID;
+    }
+
+    @Override
+    public String getId() {
+        return this.id;
     }
 
     @Override
@@ -46,7 +56,7 @@ public class Player implements IPlayer {
 
     @Override
     public String getName() {
-        return null;
+        return this.name;
     }
 
     @Override

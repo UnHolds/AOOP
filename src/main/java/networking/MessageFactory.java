@@ -46,7 +46,7 @@ public class MessageFactory implements IMessageFactory{
 
         for(IPlayer player : players){
             playersData += player.getId() + "~";
-            playersData += player.getPosition().getY() + "|" + player.getPosition().getX();
+            playersData += player.getPosition().getX() + "|" + player.getPosition().getY();
             playersData += "#";
         }
 
@@ -56,7 +56,7 @@ public class MessageFactory implements IMessageFactory{
 
         for(IMouse mouse : mice){
             miceData += mouse.getId() + "~";
-            miceData += mouse.getPosition().getY() + "|" + mouse.getPosition().getX();
+            miceData += mouse.getPosition().getX() + "|" + mouse.getPosition().getY();
             miceData += "#";
         }
 
@@ -76,7 +76,7 @@ public class MessageFactory implements IMessageFactory{
         for(ISubway subway : subways){
             List<IExit> exits = subway.getExits();
             for(IExit exit : exits){
-                data += exit.getPosition().getY() + "|" + exit.getPosition().getX();
+                data += exit.getPosition().getX() + "|" + exit.getPosition().getY();
                 data += "#";
             }
 

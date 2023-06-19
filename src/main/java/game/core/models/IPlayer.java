@@ -6,7 +6,9 @@ public interface IPlayer extends ICharacter{
 
     int getScore();
 
-    int getGameUIId();
+    int getUiID();
+
+    void setUiID(int uiID);
 
     void setScore(int score);
 
