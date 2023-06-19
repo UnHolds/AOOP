@@ -1,9 +1,10 @@
 package networking;
 
 import game.core.handler.Direction;
-import game.core.models.IMouse;
-import game.core.models.IMoveAlgorithm;
-import game.core.models.IPlayer;
+import game.core.models.*;
+import game.core.models.impl.Mouse;
+import game.core.models.impl.Player;
+import game.core.models.impl.Position;
 import networking.client.Client;
 import networking.client.IClient;
 import networking.server.IServer;
@@ -100,20 +101,20 @@ public class MessageTest {
 
     @Test
     public void testGameFieldUpdateMessage() throws InterruptedException {
-        Position pos1 = new Position(1, 2);
-        Position pos2 = new Position(3, 4);
-        Position pos3 = new Position(5, 6);
-        Position pos4 = new Position(7, 8);
-        Position pos5 = new Position(0,0);
+        IPosition pos1 = new Position(1, 2);
+        IPosition pos2 = new Position(3, 4);
+        IPosition pos3 = new Position(5, 6);
+        IPosition pos4 = new Position(7, 8);
+        IPosition pos5 = new Position(0,0);
 
-        IPlayer player1 = new Player(this.client1.getId(), -1, "Player 1", pos1, "cat1.png");
-        IPlayer player2 = new Player(this.client2.getId(), -1, "Player 2", pos2, "cat2.png");
+        IPlayer player1 = new Player(this.client1.getId(), "Player 1", pos1, "cat1.png");
+        IPlayer player2 = new Player(this.client2.getId(), "Player 2", pos2, "cat2.png");
 
-        List<Position> sub = new ArrayList<>();
+        List<IPosition> sub = new ArrayList<>();
         sub.add(pos5);
-        Subway subway = new Subway(sub);
+        ISubway subway = new Subway(sub);
 
-        Field field = null;
+        IField field = null;
         IMouse mouse1 = new Mouse("ID_MOUSE_1", pos3, "mouse.png");
         IMoveAlgorithm alg1 = new BasicAlgorithm(mouse1, -1, 10,subway);
         mouse1.setMoveAlgorithm(alg1);
@@ -141,8 +142,8 @@ public class MessageTest {
         IMessage message = messages.get(0);
         assertEquals(MessageType.GAME_FIELD_UPDATE, message.getMessageType());
 
-        Map<String, Position> playerPos = message.getPlayersPositions();
-        Map<String, Position> micePos = message.getMicePositions();
+        Map<String, IPosition> playerPos = message.getPlayersPositions();
+        Map<String, IPosition> micePos = message.getMicePositions();
 
         assertEquals(2, playerPos.size());
         assertEquals(2, micePos.size());
@@ -166,10 +167,10 @@ public class MessageTest {
         List<Position> exits1 = Arrays.asList(new Position(1,2), new Position(2,3));
         List<Position> exits2 = Arrays.asList(new Position(4,5), new Position(6,7), new Position(8,9));
 
-        Subway subway1 = new Subway(exits1);
-        Subway subway2 = new Subway(exits2);
+        ISubway subway1 = new Subway(exits1);
+        ISubway subway2 = new Subway(exits2);
 
-        List<Subway> subways = Arrays.asList(subway1, subway2);
+        List<ISubway> subways = Arrays.asList(subway1, subway2);
 
         IMessage gameInitMessage = this.serverMessageFactory.createGameInitMessage(subways);
         this.server.sendToAllClients(gameInitMessage);
@@ -177,10 +178,10 @@ public class MessageTest {
         IMessage message = this.client1.getMessages().get(0);
         assertEquals(0, this.client1.getMessages().size());
         assertEquals(MessageType.GAME_FIELD_INIT, message.getMessageType());
-        List<Subway> recSubways = message.getSubways();
+        List<ISubway> recSubways = message.getSubways();
         assertEquals(2, recSubways.size());
-        Subway recSubway1 = recSubways.get(0);
-        Subway recSubway2 = recSubways.get(1);
+        ISubway recSubway1 = recSubways.get(0);
+        ISubway recSubway2 = recSubways.get(1);
 
         assertEquals(2, recSubway1.getExits().size());
         assertEquals(3, recSubway2.getExits().size());
@@ -222,7 +223,7 @@ public class MessageTest {
     @Test
     public void testCatDirectionChangeMessage() throws InterruptedException {
         Position pos1 = new Position(1, 2);
-        IPlayer player1 = new Player(this.client1.getId(), -1, "Player 1", pos1, "cat1.png");
+        IPlayer player1 = new Player(this.client1.getId(), "Player 1", pos1, "cat1.png");
         IMessage catDirChange = this.client1MessageFactory.createCatDirectionChangeMessage(42, player1, Direction.LEFT);
         this.client1.sendMessage(catDirChange);
         Thread.sleep(100);

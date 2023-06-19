@@ -2,6 +2,8 @@ import game.core.GameClient;
 import game.core.GameServer;
 import game.core.handler.CharacterMovementController;
 import game.core.models.*;
+import game.core.models.impl.Mouse;
+import game.core.models.impl.Player;
 import game.ui.GameWindow;
 import game.ui.IUiGameConfig;
 import networking.IMessage;
@@ -65,7 +67,7 @@ public class Main {
                 List<IPlayer> players = new ArrayList<>();
                 int index = 0;
                 for(Map.Entry<String, String> entry : connectedClients.entrySet()){
-                    IPlayer p = new Player(entry.getKey(), index, entry.getValue(), playerPos.get(entry.getKey()), "cat" + (index + 1) +".png");
+                    IPlayer p = new Player(entry.getKey(), entry.getValue(), playerPos.get(entry.getKey()), "cat" + (index + 1) +".png");
                     if(entry.getKey().equals(client.getId())){
                         selfPlayer = p;
                     }

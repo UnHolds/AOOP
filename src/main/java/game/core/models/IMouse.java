@@ -6,19 +6,6 @@ package game.core.models;
  */
 public interface IMouse extends ICharacter{
 
-    /**
-     *
-     */
-    // public void deathAnimation();
-
     void setMoveAlgorithm(IMoveAlgorithm algorithm);
-
-    /**
-     * TODO: maybe move somewhere else
-     * broadCastCatLocationsToMiceNearby - notifies the other mice about the cat's position given the current mouse
-     * is in a tunnel and other mice are in the same place
-     */
-    // public void broadCastCatLocationsToMiceNearby();
-
 
 }

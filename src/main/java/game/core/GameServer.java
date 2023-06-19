@@ -6,6 +6,7 @@ import game.core.models.IMouse;
 import game.core.models.IMoveAlgorithm;
 import game.core.models.IPlayer;
 import game.core.models.IPosition;
+import game.core.models.impl.Player;
 import game.core.models.impl.Position;
 import networking.IMessage;
 import networking.IMessageFactory;
@@ -59,7 +60,7 @@ public class GameServer implements Runnable{
 
         for(int i = 0; i < serverClients.size(); i++){
             IServerClient sc = serverClients.get(i);
-            players.add(new Player(sc.getId(), i, sc.getName(), startPositions.get(i), "cat1.png"));
+            players.add(new Player(sc.getId(), sc.getName(), startPositions.get(i), "cat1.png"));
         }
 
         List<IMessage> startMessages = new ArrayList<>();
