@@ -8,9 +8,10 @@ import java.awt.*;
 
 public class Player implements IPlayer {
 
+    IPosition position;
 
     public Player(String id, String name, IPosition startPosition, String picturePath){
-
+        this.position = startPosition;
     }
 
     @Override
@@ -55,11 +56,11 @@ public class Player implements IPlayer {
 
     @Override
     public IPosition getPosition() {
-        return null;
+        return this.position;
     }
 
     @Override
     public void setPosition(IPosition position) {
-
+        this.position = position;
     }
 }

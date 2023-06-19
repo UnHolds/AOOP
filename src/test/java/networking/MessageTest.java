@@ -120,10 +120,12 @@ public class MessageTest {
         players.add(player2);
 
         IField field = null;
-        IMouse mouse1 = new Mouse("ID_MOUSE_1", pos3, "mouse.png");
+        IMouse mouse1 = new Mouse("ID_MOUSE_1", "mouse.png");
+        mouse1.setPosition(pos3);
         IMoveAlgorithm alg1 = new DirectAlgorithm(mouse1, subways, players);
         mouse1.setMoveAlgorithm(alg1);
-        IMouse mouse2 = new Mouse("ID_MOUSE_2", pos4, "mouse.png");
+        IMouse mouse2 = new Mouse("ID_MOUSE_2", "mouse.png");
+        mouse2.setPosition(pos4);
         IMoveAlgorithm alg2 = new DirectAlgorithm(mouse1, subways, players);
         mouse2.setMoveAlgorithm(alg2);
 

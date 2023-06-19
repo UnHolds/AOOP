@@ -6,17 +6,19 @@ import game.core.models.IPosition;
 public class Exit implements IExit {
 
 
-    public Exit(IPosition position){
+    private IPosition position;
 
+    public Exit(IPosition position){
+        this.position = position;
     }
 
     @Override
     public IPosition getPosition() {
-        return null;
+        return this.position;
     }
 
     @Override
     public void setPosition(IPosition position) {
-
+        this.position = position;
     }
 }

@@ -7,12 +7,15 @@ import java.util.List;
 
 public class Subway implements ISubway {
 
-    public Subway(List<IExit> exits){
 
+    private List<IExit> exits;
+
+    public Subway(List<IExit> exits){
+        this.exits = exits;
     }
 
     @Override
     public List<IExit> getExits() {
-        return null;
+        return this.exits;
     }
 }

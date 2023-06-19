@@ -78,7 +78,8 @@ public class Main {
                 Set<IMouse> mice = new HashSet<>();
                 for(int i = 0; i < micePos.size(); i++){
 
-                    IMouse m = new Mouse("ID_MOUSE_" + i, micePos.get("" + i), "mouse.png");
+                    IMouse m = new Mouse("ID_MOUSE_" + i, "mouse.png");
+                    m.setPosition(micePos.get("" + i));
                     //IMoveAlgorithm alg = new BasicAlgorithm(m, -1, 10 , null);
                     //m.setMoveAlgorithm(alg);
                     mice.add(m);
