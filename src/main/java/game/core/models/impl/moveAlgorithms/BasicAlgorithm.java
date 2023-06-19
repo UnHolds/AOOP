@@ -179,7 +179,8 @@ public class BasicAlgorithm implements IMoveAlgorithm {
     }
 
     public Position searchNextExit(Subway sub, Position pos){
-        List<IPlayer> cats = sub.getSnapMap();
+        /*
+        //List<IPlayer> cats = sub.getSnapMap();
         List<Position> catsPos = new ArrayList<>();
         for (IPlayer player : cats){
             catsPos.add(player.getPosition());
@@ -191,6 +192,8 @@ public class BasicAlgorithm implements IMoveAlgorithm {
             Random rnd = new Random();
             ret = update.get(rnd.nextInt(update.size()));
         }
-        return ret;
+      return ret;
+         */
+        return null;
     }
 }

@@ -17,20 +17,13 @@ public class Subway {
 
     public void mouseEnter(IMouse mouse, List<IPlayer> cats) {
         mouses.add(mouse);
-        setSnapMap(cats);
+        snapMap = cats;
     }
 
     public void mouseExit(IMouse mouse) {
         mouses.remove(mouse);
     }
 
-    private void setSnapMap(List<IPlayer> cats){
-        snapMap = cats;
-    }
-
-    public List<IPlayer>  getSnapMap(){
-        return snapMap;
-    }
 
     public Set<IMouse> getMouses() {
         return mouses;
