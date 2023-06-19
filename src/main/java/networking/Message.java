@@ -1,5 +1,10 @@
 package networking;
 
+import game.core.handler.Direction;
+import game.core.models.IPosition;
+import game.core.models.ISubway;
+import game.core.models.impl.Position;
+
 import java.io.*;
 import java.util.*;
 
@@ -93,7 +98,7 @@ public class Message implements IMessage, Serializable {
     }
 
     @Override
-    public Map<String, Position> getPlayersPositions() {
+    public Map<String, IPosition> getPlayersPositions() {
 
         if(this.type != MessageType.GAME_FIELD_UPDATE){
             return null;
@@ -106,7 +111,7 @@ public class Message implements IMessage, Serializable {
     }
 
     @Override
-    public Map<String, Position> getMicePositions() {
+    public Map<String, IPosition> getMicePositions() {
 
         if(this.type != MessageType.GAME_FIELD_UPDATE){
             return null;
@@ -117,9 +122,9 @@ public class Message implements IMessage, Serializable {
         return getPositionMap(miceData);
     }
 
-    private Map<String, Position> getPositionMap(String dataString) {
+    private Map<String, IPosition> getPositionMap(String dataString) {
 
-        HashMap<String, Position> positions = new HashMap<>();
+        HashMap<String, IPosition> positions = new HashMap<>();
 
         if(dataString.isEmpty()){
             return positions;
@@ -132,7 +137,7 @@ public class Message implements IMessage, Serializable {
             float row = Float.parseFloat(coordinates[0]);
             float column = Float.parseFloat(coordinates[1]);
 
-            Position pos = new Position(row, column);
+            IPosition pos = new Position(row, column);
 
             positions.put(id, pos);
         }
@@ -141,7 +146,7 @@ public class Message implements IMessage, Serializable {
     }
 
     @Override
-    public List<Subway> getSubways() {
+    public List<ISubway> getSubways() {
 
         if(this.type != MessageType.GAME_FIELD_INIT){
             return null;
@@ -151,7 +156,7 @@ public class Message implements IMessage, Serializable {
             return new ArrayList<>();
         }
 
-        List<Subway> subways = new ArrayList<>();
+        List<ISubway> subways = new ArrayList<>();
 
         for(String sSubway : this.data.split("@")){
             List<Position> exits = new ArrayList<>();
@@ -160,7 +165,7 @@ public class Message implements IMessage, Serializable {
                 String[] coordinates = sExitPos.split("\\|");
                 float row = Float.parseFloat(coordinates[0]);
                 float column = Float.parseFloat(coordinates[1]);
-
+                //TODO create IExit
                 exits.add(new Position(row, column));
             }
             subways.add(new Subway(exits));

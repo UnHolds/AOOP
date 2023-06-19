@@ -1,8 +1,7 @@
 package networking;
 
-import game.core.models.ICharacter;
-import game.core.models.IMouse;
-import game.core.models.IPlayer;
+import game.core.handler.Direction;
+import game.core.models.*;
 import networking.server.IServerClient;
 
 import java.util.Base64;
@@ -47,7 +46,7 @@ public class MessageFactory implements IMessageFactory{
 
         for(IPlayer player : players){
             playersData += player.getId() + "~";
-            playersData += player.getPosition().y() + "|" + player.getPosition().x();
+            playersData += player.getPosition().getY() + "|" + player.getPosition().getX();
             playersData += "#";
         }
 
@@ -57,7 +56,7 @@ public class MessageFactory implements IMessageFactory{
 
         for(IMouse mouse : mice){
             miceData += mouse.getId() + "~";
-            miceData += mouse.getPosition().y() + "|" + mouse.getPosition().x();
+            miceData += mouse.getPosition().getY() + "|" + mouse.getPosition().getX();
             miceData += "#";
         }
 
@@ -70,14 +69,14 @@ public class MessageFactory implements IMessageFactory{
     }
 
     @Override
-    public IMessage createGameInitMessage(List<Subway> subways) {
+    public IMessage createGameInitMessage(List<ISubway> subways) {
 
         String data = "";
 
-        for(Subway subway : subways){
-            List<Position> exits = subway.getExits();
-            for(Position exit : exits){
-                data += exit.y() + "|" + exit.x();
+        for(ISubway subway : subways){
+            List<IExit> exits = subway.getExits();
+            for(IExit exit : exits){
+                data += exit.getPosition().getY() + "|" + exit.getPosition().getX();
                 data += "#";
             }
 

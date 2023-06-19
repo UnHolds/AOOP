@@ -1,9 +1,12 @@
 package game.core;
 
 
+import game.core.handler.Direction;
 import game.core.models.IMouse;
 import game.core.models.IMoveAlgorithm;
 import game.core.models.IPlayer;
+import game.core.models.IPosition;
+import game.core.models.impl.Position;
 import networking.IMessage;
 import networking.IMessageFactory;
 import networking.MessageFactory;
@@ -26,7 +29,7 @@ public class GameServer implements Runnable{
     public static long sendInterval = 200;
     private List<IPlayer> players = new ArrayList<>();
     private List<IMouse> mice = new ArrayList<>();
-    private List<Position> startPositions = new ArrayList<>();
+    private List<IPosition> startPositions = new ArrayList<>();
     private IServer server;
     private IMessageFactory messageFactory;
     private Thread thread;
@@ -117,10 +120,10 @@ public class GameServer implements Runnable{
         List<IMouse> newMice = new ArrayList<>();
         for(IMouse mouse : this.mice) {
             List<IPlayer> playerThatEat = new ArrayList<>();
-            Position mPos = mouse.getPosition();
+            IPosition mPos = mouse.getPosition();
             for (IPlayer player : this.players) {
-                Position pos = player.getPosition();
-                if(Math.abs(mPos.x() - pos.x()) + Math.abs(mPos.y() - pos.y()) < eatDistance){
+                IPosition pos = player.getPosition();
+                if(Math.abs(mPos.getX() - pos.getX()) + Math.abs(mPos.getY() - pos.getY()) < eatDistance){
                     playerThatEat.add(player);
                 }
             }

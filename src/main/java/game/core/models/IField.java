@@ -8,5 +8,5 @@ public interface IField {
 
     int getColumnCount();
 
-    Map<Integer, Subway> getSubways();
+    Map<Integer, ISubway> getSubways();
 }

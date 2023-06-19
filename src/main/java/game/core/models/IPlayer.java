@@ -1,6 +1,6 @@
 package game.core.models;
 
-import java.awt.*;
+import game.core.handler.Direction;
 
 public interface IPlayer extends ICharacter{
 
@@ -11,4 +11,7 @@ public interface IPlayer extends ICharacter{
     void setScore(int score);
 
     String getName();
+
+    void addMovingDirection(Direction direction);
+
 }

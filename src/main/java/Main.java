@@ -1,9 +1,7 @@
 import game.core.GameClient;
 import game.core.GameServer;
 import game.core.handler.CharacterMovementController;
-import game.core.models.IMouse;
-import game.core.models.IMoveAlgorithm;
-import game.core.models.IPlayer;
+import game.core.models.*;
 import game.ui.GameWindow;
 import game.ui.IUiGameConfig;
 import networking.IMessage;
@@ -44,27 +42,26 @@ public class Main {
         IPlayer selfPlayer = null;
 
         IMessage message;
-        Game game;
         Map<String,String> connectedClients = new HashMap<>();
         while(true){
             message = client.take();
 
             if(message.getMessageType() == MessageType.GAME_FIELD_INIT){
-                List<Subway> subways = message.getSubways();
+                List<ISubway> subways = message.getSubways();
                 message = client.take();
                 if(message.getMessageType() != MessageType.GAME_FIELD_UPDATE){
                     throw new RuntimeException("Wrong init procedure");
                 }
 
-                Map<String, Position> playerPos = message.getPlayersPositions();
-                Map<String, Position> micePos = message.getMicePositions();
+                Map<String, IPosition> playerPos = message.getPlayersPositions();
+                Map<String, IPosition> micePos = message.getMicePositions();
 
-                Map<Integer, Subway> subwaysMap = new HashMap<>();
+                Map<Integer, ISubway> subwaysMap = new HashMap<>();
                 for(int i = 0; i < subways.size(); i++){
                     subwaysMap.put(i, subways.get(i));
                 }
 
-                Field field = new Field(GameServer.rowCount,GameServer.colCount, subwaysMap);
+                IField field = new Field(GameServer.rowCount,GameServer.colCount, subwaysMap);
                 List<IPlayer> players = new ArrayList<>();
                 int index = 0;
                 for(Map.Entry<String, String> entry : connectedClients.entrySet()){

@@ -1,5 +1,6 @@
 package networking;
 
+import game.core.handler.Direction;
 import game.core.models.IMouse;
 import game.core.models.IMoveAlgorithm;
 import game.core.models.IPlayer;

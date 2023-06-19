@@ -1,5 +1,9 @@
 package networking;
 
+import game.core.handler.Direction;
+import game.core.models.IPosition;
+import game.core.models.ISubway;
+
 import java.io.IOException;
 import java.util.List;
 import java.util.Map;
@@ -43,11 +47,11 @@ public interface IMessage {
 
     Map<String, String> getClientIdAndName();
 
-    Map<String, Position> getPlayersPositions();
+    Map<String, IPosition> getPlayersPositions();
 
-    Map<String, Position> getMicePositions();
+    Map<String, IPosition> getMicePositions();
 
-    List<Subway> getSubways();
+    List<ISubway> getSubways();
 
     Direction getDirection();
 

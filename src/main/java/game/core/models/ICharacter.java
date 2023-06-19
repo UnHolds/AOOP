@@ -11,11 +11,9 @@ public interface ICharacter {
 
     Image getImage();
 
-    Position getPosition();
+    IPosition getPosition();
 
-    void setPosition(Position position);
-
-    void addMovingDirection(Direction direction);
+    void setPosition(IPosition position);
 
     String getId();
 

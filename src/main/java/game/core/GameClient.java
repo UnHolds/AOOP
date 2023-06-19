@@ -1,7 +1,9 @@
 package game.core;
 
+import game.core.models.IGame;
 import game.core.models.IMouse;
 import game.core.models.IPlayer;
+import game.core.models.IPosition;
 import networking.IMessage;
 import networking.client.IClient;
 
@@ -11,24 +13,24 @@ import java.util.stream.Collectors;
 public class GameClient {
 
     private IClient client;
-    private Game game;
+    private IGame game;
 
-    public GameClient(IClient client, Game game){
+    public GameClient(IClient client, IGame game){
         this.client = client;
         this.game = game;
     }
 
     private void updateGameField(IMessage message){
-        Map<String, Position> playerPos = message.getPlayersPositions();
-        Map<String, Position> micePos = message.getMicePositions();
+        Map<String, IPosition> playerPos = message.getPlayersPositions();
+        Map<String, IPosition> micePos = message.getMicePositions();
 
         for(IPlayer player : this.game.getPlayers()){
-            Position pos = playerPos.get(player.getId());
+            IPosition pos = playerPos.get(player.getId());
             player.setPosition(pos);
         }
 
         //backup delete should never filter :)
-        this.game.setMice(this.game.getMouses().stream().filter(m -> micePos.containsKey(m.getId())).collect(Collectors.toSet()));
+        this.game.setMice(this.game.getMouses().stream().filter(m -> micePos.containsKey(m.getId())).collect(Collectors.toList()));
 
         for(IMouse mouse : this.game.getMouses()){
             mouse.setPosition(micePos.get(mouse.getId()));

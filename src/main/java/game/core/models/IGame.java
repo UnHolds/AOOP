@@ -4,7 +4,9 @@ import java.util.List;
 import java.util.Set;
 
 public interface IGame {
-    Field getField();
+    IField getField();
+
+    void setMice(List<IMouse> mice);
 
     List<IPlayer> getPlayers();
 
