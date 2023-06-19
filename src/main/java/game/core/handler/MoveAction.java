@@ -1,7 +1,6 @@
 package game.core.handler;
 
 import game.core.models.IPlayer;
-import game.core.models.impl.Direction;
 import networking.MessageFactory;
 import networking.client.IClient;
 

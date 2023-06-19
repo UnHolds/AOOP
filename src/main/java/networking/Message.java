@@ -1,11 +1,5 @@
 package networking;
 
-import game.core.models.Position;
-import game.core.models.impl.Direction;
-import game.core.models.impl.Subway;
-import networking.client.IClient;
-import networking.server.IServer;
-
 import java.io.*;
 import java.util.*;
 

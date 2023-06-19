@@ -1,7 +1,5 @@
 package game.core.models;
 
-import game.core.models.impl.Direction;
-
 import java.awt.*;
 
 /**

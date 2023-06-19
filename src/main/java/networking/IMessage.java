@@ -1,11 +1,6 @@
 package networking;
 
-import game.core.models.Position;
-import game.core.models.impl.Direction;
-import game.core.models.impl.Subway;
-
 import java.io.IOException;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 

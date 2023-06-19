@@ -1,18 +1,13 @@
 package game.core.handler;
 
-import game.core.GameServer;
-import game.core.models.ICharacter;
 import game.core.models.IPlayer;
-import game.core.models.impl.Direction;
 import networking.MessageFactory;
 import networking.client.IClient;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import javax.swing.*;
-import java.awt.*;
 import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
 
 public class CharacterMovementController{
 

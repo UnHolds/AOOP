@@ -2,9 +2,7 @@ package game.ui;
 
 import game.core.models.IGame;
 import game.core.models.IMouse;
-import game.core.models.Position;
 import game.core.models.IPlayer;
-import game.core.models.impl.Subway;
 
 import javax.swing.*;
 import java.awt.*;

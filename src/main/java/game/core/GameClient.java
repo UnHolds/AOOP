@@ -1,17 +1,10 @@
 package game.core;
 
-import game.core.handler.CharacterMovementController;
 import game.core.models.IMouse;
 import game.core.models.IPlayer;
-import game.core.models.Position;
-import game.core.models.impl.Game;
-import game.ui.GameWindow;
-import game.ui.IUiGameConfig;
 import networking.IMessage;
-import networking.client.Client;
 import networking.client.IClient;
 
-import java.io.IOException;
 import java.util.Map;
 import java.util.stream.Collectors;
 

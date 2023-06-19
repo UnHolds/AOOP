@@ -3,11 +3,6 @@ package networking;
 import game.core.models.ICharacter;
 import game.core.models.IMouse;
 import game.core.models.IPlayer;
-import game.core.models.Position;
-import game.core.models.impl.Direction;
-import game.core.models.impl.Subway;
-import networking.client.IClient;
-import networking.server.IServer;
 import networking.server.IServerClient;
 
 import java.util.Base64;
