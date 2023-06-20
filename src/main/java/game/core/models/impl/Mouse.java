@@ -10,9 +10,12 @@ public class Mouse implements IMouse {
 
     private IPosition position;
     private String id;
+    private String picturePath;
+    private IMoveAlgorithm algorithm;
 
     public Mouse(String id, String picturePath){
         this.id = id;
+        this.picturePath = picturePath;
     }
 
     @Override
@@ -32,7 +35,12 @@ public class Mouse implements IMouse {
 
     @Override
     public void setMoveAlgorithm(IMoveAlgorithm algorithm) {
+        this.algorithm = algorithm;
+    }
 
+    @Override
+    public IMoveAlgorithm getAlgorithm() {
+        return this.algorithm;
     }
 
     @Override

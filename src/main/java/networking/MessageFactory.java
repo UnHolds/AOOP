@@ -5,7 +5,10 @@ import game.core.models.*;
 import networking.server.IServerClient;
 
 import java.util.Base64;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 public class MessageFactory implements IMessageFactory{
 
@@ -82,6 +85,18 @@ public class MessageFactory implements IMessageFactory{
 
             data = data.substring(0, data.length() - 1);
             data += "@";
+        }
+
+        data = data.length() > 0 ? data.substring(0, data.length() - 1) : "";
+
+        data += "$";
+
+        //returns the mice
+        Set<String> filterSet = new HashSet<>();
+        List<IMouse> mice = subways.stream().map(s -> s.getMice()).flatMap(List::stream).filter(m -> filterSet.add(m.getId())).collect(Collectors.toList());
+
+        for(IMouse mouse : mice){
+            data += mouse.getId() + "#" + mouse.getImage() + "@";
         }
 
         data = data.length() > 0 ? data.substring(0, data.length() - 1) : "";

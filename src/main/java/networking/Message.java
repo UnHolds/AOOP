@@ -2,9 +2,11 @@ package networking;
 
 import game.core.handler.Direction;
 import game.core.models.IExit;
+import game.core.models.IMouse;
 import game.core.models.IPosition;
 import game.core.models.ISubway;
 import game.core.models.impl.Exit;
+import game.core.models.impl.Mouse;
 import game.core.models.impl.Position;
 import game.core.models.impl.Subway;
 
@@ -149,6 +151,31 @@ public class Message implements IMessage, Serializable {
     }
 
     @Override
+    public List<IMouse> getMice(){
+
+        if(this.type != MessageType.GAME_FIELD_INIT){
+            return null;
+        }
+
+        if(data.isEmpty()){
+            return new ArrayList<>();
+        }
+
+        List<IMouse> mice = new ArrayList<>();
+
+        String miceData =  this.data.split("\\$")[1];
+
+        for(String sMouse : miceData.split("@")){
+            String id = sMouse.split("#")[0];
+            String imagePath = sMouse.split("#")[1];
+            IMouse mouse = new Mouse(id, imagePath);
+            mouse.setPosition(new Position(-1,-1));
+            mice.add(mouse);
+        }
+        return mice;
+    }
+
+    @Override
     public List<ISubway> getSubways() {
 
         if(this.type != MessageType.GAME_FIELD_INIT){
@@ -161,7 +188,9 @@ public class Message implements IMessage, Serializable {
 
         List<ISubway> subways = new ArrayList<>();
 
-        for(String sSubway : this.data.split("@")){
+        String subwayData =  this.data.split("\\$")[0];
+
+        for(String sSubway : subwayData.split("@")){
             List<IExit> exits = new ArrayList<>();
             for(String sExitPos : sSubway.split("#")){
 

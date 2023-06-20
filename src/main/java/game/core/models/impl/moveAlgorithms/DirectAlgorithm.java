@@ -18,4 +18,9 @@ public class DirectAlgorithm implements IMoveAlgorithm {
     public void move() {
 
     }
+
+    @Override
+    public AlgorithmType getType() {
+        return null;
+    }
 }

@@ -120,7 +120,6 @@ public class MessageTest {
         players.add(player1);
         players.add(player2);
 
-        IField field = null;
         IMouse mouse1 = new Mouse("ID_MOUSE_1", "mouse.png");
         mouse1.setPosition(pos3);
         IMoveAlgorithm alg1 = new DirectAlgorithm(mouse1, subways, players);
@@ -129,6 +128,7 @@ public class MessageTest {
         mouse2.setPosition(pos4);
         IMoveAlgorithm alg2 = new DirectAlgorithm(mouse1, subways, players);
         mouse2.setMoveAlgorithm(alg2);
+
 
         List<IMouse> mice = new ArrayList<>();
         mice.add(mouse1);
@@ -176,6 +176,28 @@ public class MessageTest {
 
         List<ISubway> subways = Arrays.asList(subway1, subway2);
 
+        IPosition pos3 = new game.core.models.impl.Position(5, 6);
+        IPosition pos4 = new game.core.models.impl.Position(7, 8);
+
+        IMouse mouse1 = new Mouse("ID_MOUSE_1", "mouse.png");
+        IMoveAlgorithm alg1 = new DirectAlgorithm(mouse1, subways, new ArrayList<>());
+        mouse1.setPosition(pos3);
+        mouse1.setMoveAlgorithm(alg1);
+        IMouse mouse2 = new Mouse("ID_MOUSE_2", "mouse.png");
+        IMoveAlgorithm alg2 = new DirectAlgorithm(mouse1, subways, new ArrayList<>());
+        mouse2.setPosition(pos4);
+        mouse2.setMoveAlgorithm(alg2);
+
+        subway1.enter(mouse1);
+        subway1.enter(mouse2);
+
+        List<IMouse> mice = new ArrayList<>();
+        mice.add(mouse1);
+        mice.add(mouse2);
+
+        subway2.setGoal(true);
+
+
         IMessage gameInitMessage = this.serverMessageFactory.createGameInitMessage(subways);
         this.server.sendToAllClients(gameInitMessage);
         Thread.sleep(200);
@@ -192,6 +214,10 @@ public class MessageTest {
 
         assertEquals(exits1.stream().map(e -> e.getPosition()).collect(Collectors.toList()), recSubway1.getExits().stream().map(e -> e.getPosition()).collect(Collectors.toList()));
         assertEquals(exits2.stream().map(e -> e.getPosition()).collect(Collectors.toList()), recSubway2.getExits().stream().map(e -> e.getPosition()).collect(Collectors.toList()));
+
+        List<IMouse> recMice = message.getMice();
+        assertEquals(2, recMice.size());
+        assertEquals(mice.stream().map(m -> m.getId()).collect(Collectors.toList()), recMice.stream().map(m -> m.getId()).collect(Collectors.toList()));
 
         assertEquals(this.server.getId(), message.getSenderId());
         assertEquals(this.server.getName(), message.getSenderName());
