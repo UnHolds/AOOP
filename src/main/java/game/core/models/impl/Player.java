@@ -17,11 +17,18 @@ public class Player implements IPlayer {
     private String name;
     private int uiID;
 
+    private int score = 0;
+
     private List<Direction> directions = new ArrayList();
 
-    private static float speed = 0.1f;
+    private static float speed = 0.8f;
 
     private Image image;
+
+    private float minXBound;
+    private float minYBound;
+    private float maxXBound;
+    private float maxYBound;
 
     public Player(String id, String name, IPosition startPosition, String picturePath){
         this.position = startPosition;
@@ -34,23 +41,45 @@ public class Player implements IPlayer {
         }
     }
 
+
+    private IPosition boundsCheck(IPosition newPosition){
+
+        if(newPosition.getX() < this.minXBound){
+            newPosition = new Position(this.minXBound, newPosition.getY());
+        }else if(newPosition.getX() > this.maxXBound){
+            newPosition = new Position(this.maxXBound, newPosition.getY());
+        }
+
+        if(newPosition.getY() < this.minYBound){
+            newPosition = new Position(newPosition.getX(), this.minYBound);
+        }else if(newPosition.getY() > this.maxYBound){
+            newPosition = new Position(newPosition.getX(), this.maxYBound);
+        }
+
+        return newPosition;
+    }
+
     @Override
     public void move() {
         for(Direction direction : this.directions){
+            IPosition newPosition;
             switch (direction) {
                 case LEFT:
-                    this.position = new Position(this.position.getX() - this.speed, this.position.getY());
+                    newPosition = new Position(this.position.getX() - this.speed, this.position.getY());
                     break;
                 case DOWN:
-                    this.position = new Position(this.position.getX(), this.position.getY() + this.speed);
+                    newPosition = new Position(this.position.getX(), this.position.getY() + this.speed);
                     break;
                 case UP:
-                    this.position = new Position(this.position.getX(), this.position.getY() - this.speed);
+                    newPosition = new Position(this.position.getX(), this.position.getY() - this.speed);
                     break;
                 case RIGHT:
-                    this.position = new Position(this.position.getX() + this.speed, this.position.getY());
+                    newPosition = new Position(this.position.getX() + this.speed, this.position.getY());
                     break;
+                default:
+                    throw new RuntimeException("Invalid direction in directions list");
             }
+            this.position = boundsCheck(newPosition);
         }
     }
 
@@ -61,7 +90,7 @@ public class Player implements IPlayer {
 
     @Override
     public int getScore() {
-        return 0;
+        return this.score;
     }
 
     @Override
@@ -81,7 +110,7 @@ public class Player implements IPlayer {
 
     @Override
     public void setScore(int score) {
-
+        this.score = score;
     }
 
     @Override
@@ -123,5 +152,13 @@ public class Player implements IPlayer {
     @Override
     public void setPosition(IPosition position) {
         this.position = position;
+    }
+
+    @Override
+    public void setBounds(float minX, float minY, float maxX, float maxY) {
+        this.minXBound = minX;
+        this.minYBound = minY;
+        this.maxXBound = maxX - 1;
+        this.maxYBound = maxY - 1;
     }
 }

@@ -67,6 +67,11 @@ public class GameServer implements Runnable{
         startPositions.add(new Position(rowCount / 2,colCount - 1));
         for(int i = 0; i < players.size(); i++){
             players.get(i).setPosition(startPositions.get(i));
+            players.get(i).setBounds(0,0, colCount, rowCount);
+        }
+
+        for(IMouse mouse : this.mice){
+            mouse.setBounds(0,0, colCount, rowCount);
         }
 
         startMessages.add(this.messageFactory.createGameFieldUpdateMessage(-1, players, mice));
@@ -101,6 +106,7 @@ public class GameServer implements Runnable{
                 break;
         }
     }
+
 
     private void sendGameFieldUpdate(){
 
