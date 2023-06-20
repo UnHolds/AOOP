@@ -16,4 +16,8 @@ public interface ISubway {
 
     void exits(IMouse mouse);
 
+    void setCatPositions(List<IPosition> catPositions);
+
+    List<IPosition> getCatPositions();
+
 }

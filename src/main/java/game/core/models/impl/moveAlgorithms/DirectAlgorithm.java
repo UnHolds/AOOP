@@ -81,6 +81,7 @@ public class DirectAlgorithm implements IMoveAlgorithm {
             this.isInSubway = true;
             this.residingSubway = this.subways.stream().filter(s -> s.getExits().contains(this.goalHole)).findFirst().orElse(null);
             this.residingSubway.enter(this.mouse);
+            this.residingSubway.setCatPositions(this.cats.stream().map(c -> c.getPosition()).collect(Collectors.toList()));
             if(this.residingSubway == null){
                 throw new RuntimeException("Could not find subway to hole");
             }

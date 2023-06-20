@@ -2,6 +2,7 @@ package game.core.models.impl;
 
 import game.core.models.IExit;
 import game.core.models.IMouse;
+import game.core.models.IPosition;
 import game.core.models.ISubway;
 
 import java.util.ArrayList;
@@ -12,6 +13,8 @@ public class Subway implements ISubway {
 
     private List<IExit> exits;
     private List<IMouse> mice;
+
+    private List<IPosition> catPositions = new ArrayList<>();
 
     private boolean goal;
 
@@ -49,5 +52,15 @@ public class Subway implements ISubway {
     @Override
     public void exits(IMouse mouse) {
         this.mice.remove(mouse);
+    }
+
+    @Override
+    public void setCatPositions(List<IPosition> catPositions) {
+        this.catPositions = catPositions;
+    }
+
+    @Override
+    public List<IPosition> getCatPositions() {
+        return this.catPositions;
     }
 }
