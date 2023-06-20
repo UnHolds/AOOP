@@ -4,13 +4,16 @@ import game.core.models.IMouse;
 import game.core.models.IMoveAlgorithm;
 import game.core.models.IPosition;
 
+import javax.imageio.ImageIO;
 import java.awt.*;
+import java.io.IOException;
 
 public class Mouse implements IMouse {
 
     private IPosition position;
     private String id;
-    private String picturePath;
+
+    private Image image;
     private IMoveAlgorithm algorithm;
     private float minXBound;
     private float minYBound;
@@ -19,7 +22,11 @@ public class Mouse implements IMouse {
 
     public Mouse(String id, String picturePath){
         this.id = id;
-        this.picturePath = picturePath;
+        try {
+            this.image = ImageIO.read(getClass().getClassLoader().getResourceAsStream(picturePath));
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     @Override
@@ -30,7 +37,7 @@ public class Mouse implements IMouse {
 
     @Override
     public Image getImage() {
-        return null;
+        return this.image;
     }
 
     @Override
