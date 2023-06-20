@@ -15,7 +15,7 @@ public class Exit implements IExit {
     public Exit(IPosition position){
         this.position = position;
         try {
-            this.image = ImageIO.read(getClass().getClassLoader().getResourceAsStream("mouse.png")); //TODO change this to hole.png
+            this.image = ImageIO.read(getClass().getClassLoader().getResourceAsStream("hole.png"));
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
