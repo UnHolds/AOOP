@@ -24,7 +24,8 @@ public class Mouse implements IMouse {
 
     @Override
     public void move() {
-
+        IPosition newPosition = this.algorithm.getNextPosition();
+        this.position = boundsCheck(newPosition);
     }
 
     @Override

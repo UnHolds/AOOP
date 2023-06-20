@@ -1,9 +1,6 @@
 package game.core.models.impl.moveAlgorithms;
 
-import game.core.models.IMouse;
-import game.core.models.IMoveAlgorithm;
-import game.core.models.IPlayer;
-import game.core.models.ISubway;
+import game.core.models.*;
 
 import java.util.List;
 
@@ -14,9 +11,10 @@ public class DirectAlgorithm implements IMoveAlgorithm {
 
     }
 
-    @Override
-    public void move() {
 
+    @Override
+    public IPosition getNextPosition() {
+        return null;
     }
 
     @Override
