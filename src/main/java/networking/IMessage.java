@@ -2,6 +2,7 @@ package networking;
 
 import game.core.handler.Direction;
 import game.core.models.IMouse;
+import game.core.models.IPlayer;
 import game.core.models.IPosition;
 import game.core.models.ISubway;
 
@@ -46,7 +47,7 @@ public interface IMessage {
     long getCurrentGameTick();
 
 
-    Map<String, String> getClientIdAndName();
+    List<IPlayer> getPlayers();
 
     Map<String, IPosition> getPlayersPositions();
 

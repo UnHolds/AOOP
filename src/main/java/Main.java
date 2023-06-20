@@ -41,62 +41,26 @@ public class Main {
             throw new RuntimeException(e);
         }
 
-        IPlayer selfPlayer = null;
 
         IMessage message;
-        Map<String,String> connectedClients = new HashMap<>();
+        List<IPlayer> players = new ArrayList<>();
         while(true){
             message = client.take();
 
             if(message.getMessageType() == MessageType.GAME_FIELD_INIT){
                 List<ISubway> subways = message.getSubways();
-                message = client.take();
-                if(message.getMessageType() != MessageType.GAME_FIELD_UPDATE){
-                    throw new RuntimeException("Wrong init procedure");
-                }
-
-                Map<String, IPosition> playerPos = message.getPlayersPositions();
-                Map<String, IPosition> micePos = message.getMicePositions();
-
-                Map<Integer, ISubway> subwaysMap = new HashMap<>();
-                for(int i = 0; i < subways.size(); i++){
-                    subwaysMap.put(i, subways.get(i));
-                }
-
-                //IField field = new Field(GameServer.rowCount,GameServer.colCount, subwaysMap);
-                List<IPlayer> players = new ArrayList<>();
-                int index = 0;
-                for(Map.Entry<String, String> entry : connectedClients.entrySet()){
-                    IPlayer p = new Player(entry.getKey(), entry.getValue(), playerPos.get(entry.getKey()), "cat" + (index + 1) +".png");
-                    if(entry.getKey().equals(client.getId())){
-                        selfPlayer = p;
-                    }
-                    index++;
-                    players.add(p);
-                }
-
-                Set<IMouse> mice = new HashSet<>();
-                for(int i = 0; i < micePos.size(); i++){
-
-                    IMouse m = new Mouse("ID_MOUSE_" + i, "mouse.png");
-                    m.setPosition(micePos.get("" + i));
-                    //IMoveAlgorithm alg = new BasicAlgorithm(m, -1, 10 , null);
-                    //m.setMoveAlgorithm(alg);
-                    mice.add(m);
-                }
-                //game = new Game(field, players, mice);
-
+                List<IMouse> mice = message.getMice();
                 break;
-            }else if(message.getMessageType() == MessageType.CONNECTED_CLIENTS_UPDATE){
-                Map<String, String> clientUpdate = message.getClientIdAndName();
 
-                for(Map.Entry<String, String> entry : clientUpdate.entrySet()){
-                    if(connectedClients.containsKey(entry.getKey()) == false){
-                        uiGameConfig.addPlayer(entry.getValue());
-                        connectedClients.put(entry.getKey(), entry.getValue());
-                    }
-                }
+            }else if(message.getMessageType() == MessageType.CONNECTED_CLIENTS_UPDATE){
+                players = message.getPlayers();
             }
+        }
+
+        IPlayer selfPlayer = players.stream().filter(p -> p.getId().equals(client.getId())).findFirst().orElse(null);
+
+        if(selfPlayer == null){
+            throw new RuntimeException("Could not find self player");
         }
 
         //gw.setGame(game);

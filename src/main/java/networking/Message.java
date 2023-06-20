@@ -1,14 +1,8 @@
 package networking;
 
 import game.core.handler.Direction;
-import game.core.models.IExit;
-import game.core.models.IMouse;
-import game.core.models.IPosition;
-import game.core.models.ISubway;
-import game.core.models.impl.Exit;
-import game.core.models.impl.Mouse;
-import game.core.models.impl.Position;
-import game.core.models.impl.Subway;
+import game.core.models.*;
+import game.core.models.impl.*;
 
 import java.io.*;
 import java.util.*;
@@ -85,21 +79,24 @@ public class Message implements IMessage, Serializable {
     }
 
     @Override
-    public Map<String, String> getClientIdAndName() {
+    public List<IPlayer> getPlayers() {
 
         if(this.type != MessageType.CONNECTED_CLIENTS_UPDATE){
             return null;
         }
 
-        HashMap<String, String> clients = new HashMap<>();
-
+        List<IPlayer> players = new ArrayList<>();
+        int index = 1;
         for(String clientData : data.split("#")){
             String[] clientIdAndName = clientData.split("\\|");
             String name = new String(Base64.getDecoder().decode(clientIdAndName[1]));
-            clients.put(clientIdAndName[0], name);
+            String id = clientIdAndName[0];
+            IPlayer player = new Player(id, name, new Position(-1, -1), "cat" + index + ".png");
+            index++;
+            players.add(player);
         }
 
-        return clients;
+        return players;
     }
 
     @Override
