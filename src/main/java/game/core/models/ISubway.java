@@ -13,4 +13,5 @@ public interface ISubway {
     List<IMouse> getMice();
 
     void enter(IMouse mouse);
+
 }

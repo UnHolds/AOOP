@@ -26,6 +26,31 @@ public class Position implements IPosition {
     }
 
     @Override
+    public IPosition subtract(IPosition position) {
+        return new Position(this.x - position.getX(), this.y - position.getY());
+    }
+
+    @Override
+    public IPosition add(IPosition position) {
+        return new Position(this.x + position.getX(), this.y + position.getY());
+    }
+
+    @Override
+    public IPosition multiply(float factor) {
+        return new Position(this.x * factor, this.y * factor);
+    }
+
+    @Override
+    public IPosition divide(float factor) {
+        return new Position(this.x / factor, this.y / factor);
+    }
+
+    @Override
+    public float length() {
+        return (float) Math.sqrt(x * x + y * y);
+    }
+
+    @Override
     public boolean equals(Object obj){
         if(obj instanceof IPosition == false){
             return false;

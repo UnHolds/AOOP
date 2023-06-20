@@ -33,7 +33,7 @@ public class Subway implements ISubway {
 
     @Override
     public void setGoal(boolean goal) {
-        this.goal = true;
+        this.goal = goal;
     }
 
     @Override

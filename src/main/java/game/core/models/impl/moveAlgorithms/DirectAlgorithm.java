@@ -19,7 +19,7 @@ public class DirectAlgorithm implements IMoveAlgorithm {
 
     private int ticksRemainingInSubway;
 
-    private IPosition goalPosition;
+    private IExit goalHole;
     private Random random;
 
     public DirectAlgorithm(IMouse mouse, List<ISubway> subways, List<IPlayer> cats){
@@ -38,32 +38,53 @@ public class DirectAlgorithm implements IMoveAlgorithm {
     }
 
 
-    private IPosition getNextGoalPosition(){
+    private IExit getNextGoalHole(){
         List<IExit> allExits = this.subways.stream().map(s -> s.getExits()).flatMap(List::stream).collect(Collectors.toList());
-        return allExits.get(random.nextInt(allExits.size())).getPosition();
+        return allExits.get(random.nextInt(allExits.size()));
     }
 
     private IPosition getRandomExitHolePosition(ISubway subway){
         return subway.getExits().get(random.nextInt(subway.getExits().size())).getPosition();
     }
 
+    private IPosition calculateNextPosition(){
+        IPosition direction = this.goalHole.getPosition().subtract(this.mouse.getPosition());
+        IPosition nextPosition = direction.multiply((mouse.getSpeed() / direction.length()));
+
+        if(direction.length() < nextPosition.length()){
+            return this.goalHole.getPosition();
+        }else{
+            return nextPosition.add(this.mouse.getPosition());
+        }
+    }
+
     @Override
     public IPosition getNextPosition() {
 
-        if(this.isInSubway && this.ticksRemainingInSubway > 0){
+        if(this.isInSubway && (this.ticksRemainingInSubway > 0 || this.residingSubway.isGoal())){
             this.ticksRemainingInSubway--;
             return new Position(-1, -1); // has no position
         }else if(this.isInSubway && this.ticksRemainingInSubway == 0){
             //exit subway
             this.isInSubway = false;
-            this.goalPosition = getNextGoalPosition();
+            this.goalHole = getNextGoalHole();
             return getRandomExitHolePosition(this.residingSubway);
         }
 
-        if(this.isInSubway == false){
-            //move to next subway
+        if(this.isInSubway == false && this.goalHole.getPosition().equals(this.mouse.getPosition()) == false){
+            //move to next exit
+            return calculateNextPosition();
+        }else{
+            //mouse may enter subway
+            this.ticksRemainingInSubway = 10 + random.nextInt(10); //TODO change later;
+            this.isInSubway = true;
+            this.residingSubway = this.subways.stream().filter(s -> s.getExits().contains(this.goalHole)).findFirst().orElse(null);
+            if(this.residingSubway == null){
+                throw new RuntimeException("Could not find subway to hole");
+            }
+            return new Position(-1, -1);
         }
-        return mouse.getPosition(); //TODO remove
+
     }
 
     @Override
