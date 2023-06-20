@@ -14,6 +14,7 @@ import networking.client.IClient;
 
 import java.io.IOException;
 import java.util.*;
+import java.util.stream.Collectors;
 
 public class Main {
 
@@ -45,17 +46,24 @@ public class Main {
 
         IMessage message;
         List<IPlayer> players = new ArrayList<>();
-        List<ISubway> subways = new ArrayList<>();
-        List<IMouse> mice = new ArrayList<>();
+        List<ISubway> subways;
+        List<IMouse> mice;
+        int rowCount;
+        int colCount;
         while(true){
             message = client.take();
 
             if(message.getMessageType() == MessageType.GAME_FIELD_INIT){
                 subways = message.getSubways();
                 mice = message.getMice();
+                rowCount = message.getRowCount();
+                colCount = message.getColCount();
                 break;
 
             }else if(message.getMessageType() == MessageType.CONNECTED_CLIENTS_UPDATE){
+                List<IPlayer> finalPlayers = players;
+                IPlayer newPlayer = message.getPlayers().stream().filter(p -> finalPlayers.stream().map(pp -> pp.getId()).collect(Collectors.toList()).contains(p.getId()) == false).findFirst().orElse(null);
+                uiGameConfig.addPlayer(newPlayer.getName());
                 players = message.getPlayers();
             }
         }
@@ -66,7 +74,7 @@ public class Main {
             throw new RuntimeException("Could not find self player");
         }
 
-        IGame game = new Game(players, mice, subways);
+        IGame game = new Game(players, mice, subways, rowCount, colCount);
 
         gw.setGame(game);
 

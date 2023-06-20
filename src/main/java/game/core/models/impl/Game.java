@@ -9,17 +9,18 @@ public class Game implements IGame {
 
     private List<IPlayer> players;
     private List<IMouse> mice;
-    private List<ISubway> subways;
 
-    public Game(List<IPlayer> players, List<IMouse> mice, List<ISubway> subways){
+    private IField field;
+
+    public Game(List<IPlayer> players, List<IMouse> mice, List<ISubway> subways, int rowCount, int colCount){
         this.players = players;
         this.mice = mice;
-        this.subways = subways;
+        this.field = new Field(rowCount, colCount, subways);
     }
 
     @Override
     public IField getField() {
-        return null;
+        return this.field;
     }
 
 

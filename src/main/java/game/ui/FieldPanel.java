@@ -44,11 +44,8 @@ public class FieldPanel extends JPanel implements ActionListener, KeyListener {
     }
 
     private void drawSubways(Graphics g) {
-        Map<Integer, ISubway> subwayMap = game.getField().getSubways();
-        int subs = subwayMap.size();
-        for (int i = 0; i <subs; i++) {
-            ISubway sub =  subwayMap.get(i);
-            for (IExit exit : sub.getExits()) {
+        for (ISubway subway : game.getField().getSubways()) {
+            for (IExit exit : subway.getExits()) {
                 g.setColor(Color.BLACK);
                 g.drawOval(
                         Math.round(exit.getPosition().getX() * TILE_SIZE),
