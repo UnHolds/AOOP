@@ -2,10 +2,7 @@ package game.core;
 
 
 import game.core.handler.Direction;
-import game.core.models.IMouse;
-import game.core.models.IMoveAlgorithm;
-import game.core.models.IPlayer;
-import game.core.models.IPosition;
+import game.core.models.*;
 import game.core.models.impl.Player;
 import game.core.models.impl.Position;
 import networking.IMessage;
@@ -22,15 +19,17 @@ import java.util.*;
 
 public class GameServer implements Runnable{
 
-    public static int rowCount = 18;
-    public static int colCount = 25;
+    private int rowCount;
+    private int colCount;
 
-    public static float eatDistance = 0.5f;
+    private static float eatDistance = 0.5f;
 
-    public static long sendInterval = 200;
+    private static long sendInterval = 200;
+
     private List<IPlayer> players = new ArrayList<>();
     private List<IMouse> mice = new ArrayList<>();
-    private List<IPosition> startPositions = new ArrayList<>();
+    private List<ISubway> subways = new ArrayList<>();
+
     private IServer server;
     private IMessageFactory messageFactory;
     private Thread thread;
@@ -46,33 +45,33 @@ public class GameServer implements Runnable{
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
+    }
 
+    public void startGame(GameInit gameInit){
 
+        this.rowCount = gameInit.getRowCount();
+        this.colCount = gameInit.getColCount();
+        this.players = gameInit.getPlayers();
+        this.subways = gameInit.getSubways();
+        this.mice = gameInit.getMice();
+
+        List<IMessage> startMessages = new ArrayList<>();
+
+        startMessages.add(this.messageFactory.createGameInitMessage(gameInit.getSubways(), this.rowCount, this.colCount));
+
+        //init the start positions
+        List<IPosition> startPositions = new ArrayList<>();
         startPositions.add(new Position(0,colCount / 2));
         startPositions.add(new Position(rowCount - 1,colCount / 2));
         startPositions.add(new Position(rowCount / 2,0));
         startPositions.add(new Position(rowCount / 2,colCount - 1));
-    }
-
-    public void startGame(){
-
-        /*
-        List<IServerClient> serverClients = this.server.getClients();
-
-
-        for(int i = 0; i < serverClients.size(); i++){
-            IServerClient sc = serverClients.get(i);
-            players.add(new Player(sc.getId(), sc.getName(), startPositions.get(i), "cat1.png"));
+        for(int i = 0; i < players.size(); i++){
+            players.get(i).setPosition(startPositions.get(i));
         }
 
-        List<IMessage> startMessages = new ArrayList<>();
-
-        startMessages.add(this.messageFactory.createGameInitMessage(subways));
         startMessages.add(this.messageFactory.createGameFieldUpdateMessage(-1, players, mice));
         log.info("Sending start messages to clients");
         this.server.startGame(startMessages);
-
-        */
 
         try {
             Thread.sleep(100);

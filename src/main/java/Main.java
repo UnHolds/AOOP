@@ -1,4 +1,5 @@
 import game.core.GameClient;
+import game.core.GameInit;
 import game.core.GameServer;
 import game.core.handler.CharacterMovementController;
 import game.core.models.*;
@@ -21,6 +22,7 @@ public class Main {
     public static void main(String[] args) throws InterruptedException {
 
         GameWindow gw = new GameWindow();
+        GameInit gameInit = new GameInit();
         gw.initWindow();
         IUiGameConfig uiGameConfig = gw.getGameConfig();
         GameServer server;
@@ -29,8 +31,8 @@ public class Main {
             server = new GameServer(uiGameConfig.getPort());
 
             Thread thread = new Thread(() -> {
-                gw.getGameConfig();
-                server.startGame();
+                gw.getGameConfig(); //blocks until host game button is pressed
+                server.startGame(gameInit);
             });
 
             thread.start();
@@ -65,6 +67,7 @@ public class Main {
                 IPlayer newPlayer = message.getPlayers().stream().filter(p -> finalPlayers.stream().map(pp -> pp.getId()).collect(Collectors.toList()).contains(p.getId()) == false).findFirst().orElse(null);
                 uiGameConfig.addPlayer(newPlayer.getName());
                 players = message.getPlayers();
+                gameInit.setPlayers(players);
             }
         }
 
