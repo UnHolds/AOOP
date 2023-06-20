@@ -96,7 +96,7 @@ public class MessageFactory implements IMessageFactory{
         List<IMouse> mice = subways.stream().map(s -> s.getMice()).flatMap(List::stream).filter(m -> filterSet.add(m.getId())).collect(Collectors.toList());
 
         for(IMouse mouse : mice){
-            data += mouse.getId() + "#" + mouse.getImage() + "@";
+            data += mouse.getId() + "#" + "mouse.png" + "@";
         }
 
         if(mice.size() > 0){

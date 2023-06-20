@@ -52,7 +52,7 @@ public class DirectAlgorithm implements IMoveAlgorithm {
 
         if(this.isInSubway && this.ticksRemainingInSubway > 0){
             this.ticksRemainingInSubway--;
-            return null; // has no position
+            return new Position(-1, -1); // has no position
         }else if(this.isInSubway && this.ticksRemainingInSubway == 0){
             //exit subway
             this.isInSubway = false;
@@ -68,6 +68,6 @@ public class DirectAlgorithm implements IMoveAlgorithm {
 
     @Override
     public AlgorithmType getType() {
-        return null;
+        return AlgorithmType.DIRECT;
     }
 }

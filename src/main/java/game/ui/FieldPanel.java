@@ -73,6 +73,11 @@ public class FieldPanel extends JPanel implements ActionListener, KeyListener {
 
     private void drawMice(Graphics g){
         for(IMouse mouse : game.getMouses()){
+
+            if(mouse.getPosition().getX() == -1 && mouse.getPosition().getY() == -1){
+                continue;
+            }
+
             g.drawImage(
                     mouse.getImage(),
                     Math.round(mouse.getPosition().getX() * TILE_SIZE),

@@ -2,8 +2,10 @@ package game.core;
 
 import game.core.models.*;
 import game.core.models.impl.Exit;
+import game.core.models.impl.Mouse;
 import game.core.models.impl.Position;
 import game.core.models.impl.Subway;
+import game.core.models.impl.moveAlgorithms.DirectAlgorithm;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -64,8 +66,14 @@ public class GameInit {
 
 
     private void generateMice(){
+        Random rand = new Random();
         this.mice = new ArrayList<>();
-        //TODO create mice
+        List<ISubway> validSubways = this.subways.subList(1, this.subways.size());
+        for(int i = 0; i < numberOfMice; i++){
+            IMouse mouse = new Mouse("MOUSE_ID_" + i, "mouse.png");
+            validSubways.get(rand.nextInt(validSubways.size())).enter(mouse);
+            this.mice.add(mouse);
+        }
     }
 
 
@@ -87,6 +95,10 @@ public class GameInit {
 
     public void setPlayers(List<IPlayer> players){
         this.players = players;
+        //update mice algorithm
+        for(IMouse mouse : this.mice){
+            mouse.setMoveAlgorithm(new DirectAlgorithm(mouse, this.subways, players));
+        }
     }
 
     public List<IPlayer> getPlayers(){

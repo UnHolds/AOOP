@@ -24,6 +24,7 @@ public class Mouse implements IMouse {
 
     public Mouse(String id, String picturePath){
         this.id = id;
+        this.position = new Position(-1, -1);
         try {
             this.image = ImageIO.read(getClass().getClassLoader().getResourceAsStream(picturePath));
         } catch (IOException e) {
@@ -35,8 +36,8 @@ public class Mouse implements IMouse {
     public void move() {
         IPosition newPosition = this.algorithm.getNextPosition();
 
-        if(newPosition == null){
-            this.position = null;
+        if(newPosition.getX() == -1 && newPosition.getY() == -1){
+            this.position = newPosition;
             return;
         }
 
