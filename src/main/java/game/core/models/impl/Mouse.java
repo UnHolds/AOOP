@@ -20,6 +20,8 @@ public class Mouse implements IMouse {
     private float maxXBound;
     private float maxYBound;
 
+    private float speed = 0.1f;
+
     public Mouse(String id, String picturePath){
         this.id = id;
         try {
@@ -32,6 +34,12 @@ public class Mouse implements IMouse {
     @Override
     public void move() {
         IPosition newPosition = this.algorithm.getNextPosition();
+
+        if(newPosition == null){
+            this.position = null;
+            return;
+        }
+
         this.position = boundsCheck(newPosition);
     }
 
@@ -53,6 +61,11 @@ public class Mouse implements IMouse {
     @Override
     public IMoveAlgorithm getAlgorithm() {
         return this.algorithm;
+    }
+
+    @Override
+    public float getSpeed() {
+        return this.speed;
     }
 
     @Override

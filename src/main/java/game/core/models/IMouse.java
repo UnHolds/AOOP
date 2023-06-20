@@ -8,4 +8,6 @@ public interface IMouse extends ICharacter{
 
     void setMoveAlgorithm(IMoveAlgorithm algorithm);
     IMoveAlgorithm getAlgorithm();
+
+    float getSpeed();
 }
