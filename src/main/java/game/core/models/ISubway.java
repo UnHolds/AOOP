@@ -14,4 +14,6 @@ public interface ISubway {
 
     void enter(IMouse mouse);
 
+    void exits(IMouse mouse);
+
 }

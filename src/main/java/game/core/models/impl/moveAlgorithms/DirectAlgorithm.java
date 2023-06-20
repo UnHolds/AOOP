@@ -68,6 +68,7 @@ public class DirectAlgorithm implements IMoveAlgorithm {
             //exit subway
             this.isInSubway = false;
             this.goalHole = getNextGoalHole();
+            this.residingSubway.exits(this.mouse);
             return getRandomExitHolePosition(this.residingSubway);
         }
 
@@ -79,6 +80,7 @@ public class DirectAlgorithm implements IMoveAlgorithm {
             this.ticksRemainingInSubway = 10 + random.nextInt(10); //TODO change later;
             this.isInSubway = true;
             this.residingSubway = this.subways.stream().filter(s -> s.getExits().contains(this.goalHole)).findFirst().orElse(null);
+            this.residingSubway.enter(this.mouse);
             if(this.residingSubway == null){
                 throw new RuntimeException("Could not find subway to hole");
             }

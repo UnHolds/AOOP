@@ -45,4 +45,9 @@ public class Subway implements ISubway {
     public void enter(IMouse mouse) {
         this.mice.add(mouse);
     }
+
+    @Override
+    public void exits(IMouse mouse) {
+        this.mice.remove(mouse);
+    }
 }
