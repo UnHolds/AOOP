@@ -162,6 +162,10 @@ public class Message implements IMessage, Serializable {
 
         String miceData =  this.data.split("\\$")[1];
 
+        if(miceData.isEmpty()){
+            return new ArrayList<>();
+        }
+
         for(String sMouse : miceData.split("@")){
             String id = sMouse.split("#")[0];
             String imagePath = sMouse.split("#")[1];
