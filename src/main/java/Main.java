@@ -2,6 +2,7 @@ import game.core.GameClient;
 import game.core.GameServer;
 import game.core.handler.CharacterMovementController;
 import game.core.models.*;
+import game.core.models.impl.Game;
 import game.core.models.impl.Mouse;
 import game.core.models.impl.Player;
 import game.ui.GameWindow;
@@ -44,12 +45,14 @@ public class Main {
 
         IMessage message;
         List<IPlayer> players = new ArrayList<>();
+        List<ISubway> subways = new ArrayList<>();
+        List<IMouse> mice = new ArrayList<>();
         while(true){
             message = client.take();
 
             if(message.getMessageType() == MessageType.GAME_FIELD_INIT){
-                List<ISubway> subways = message.getSubways();
-                List<IMouse> mice = message.getMice();
+                subways = message.getSubways();
+                mice = message.getMice();
                 break;
 
             }else if(message.getMessageType() == MessageType.CONNECTED_CLIENTS_UPDATE){
@@ -63,18 +66,19 @@ public class Main {
             throw new RuntimeException("Could not find self player");
         }
 
-        //gw.setGame(game);
+        IGame game = new Game(players, mice, subways);
+
+        gw.setGame(game);
 
         CharacterMovementController movementController = new CharacterMovementController(client, selfPlayer);
         gw.registerMovementListener(movementController);
 
         gw.showGameFieldPanel();
-
-        //GameClient gameClient = new GameClient(client, game);
+        GameClient gameClient = new GameClient(client, game);
 
 
         while(true){
-            //gameClient.gameLoop();
+            gameClient.gameLoop();
             gw.update();
         }
 

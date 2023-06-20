@@ -72,7 +72,7 @@ public class MessageFactory implements IMessageFactory{
     }
 
     @Override
-    public IMessage createGameInitMessage(List<ISubway> subways) {
+    public IMessage createGameInitMessage(List<ISubway> subways, int rowCount, int colCount) {
 
         String data = "";
 
@@ -99,7 +99,12 @@ public class MessageFactory implements IMessageFactory{
             data += mouse.getId() + "#" + mouse.getImage() + "@";
         }
 
-        data = data.length() > 0 ? data.substring(0, data.length() - 1) : "";
+        if(mice.size() > 0){
+            data = data.length() > 0 ? data.substring(0, data.length() - 1) : "";
+        }
+
+
+        data += "$" + rowCount + "#" + colCount;
 
         return new Message(MessageType.GAME_FIELD_INIT, this.entity.getId(), this.entity.getName(), -1, data);
     }

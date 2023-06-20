@@ -1,5 +1,6 @@
 package networking;
 
+import game.core.models.IPlayer;
 import networking.client.Client;
 import networking.client.IClient;
 import networking.server.IServer;
@@ -397,10 +398,10 @@ public class ServerTest {
         assertEquals(MessageType.CONNECTED_CLIENTS_UPDATE, message.getMessageType());
         assertEquals(server.getId(), message.getSenderId());
         assertEquals(server.getName(), message.getSenderName());
-        Map<String, String> clients = message.getClientIdAndName();
-        assertEquals(1, clients.size());
-        assertEquals(client.getId(), clients.keySet().toArray()[0]);
-        assertEquals(client.getName(), clients.values().toArray()[0]);
+        List<IPlayer> players = message.getPlayers();
+        assertEquals(1, players.size());
+        assertEquals(client.getId(), players.get(0).getId());
+        assertEquals(client.getName(), players.get(0).getName());
 
         server.startGame(new ArrayList<>());
 

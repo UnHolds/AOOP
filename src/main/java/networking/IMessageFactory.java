@@ -19,7 +19,7 @@ public interface IMessageFactory {
 
     IMessage createGameFieldUpdateMessage(long gameTick, List<IPlayer> players, List<IMouse> mice);
 
-    IMessage createGameInitMessage(List<ISubway> subways);
+    IMessage createGameInitMessage(List<ISubway> subways, int rowCount, int colCount);
 
     IMessage createCatDirectionChangeMessage(long gameTick, ICharacter player, Direction direction);
 

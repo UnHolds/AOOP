@@ -61,4 +61,8 @@ public interface IMessage {
 
     String getPlayerId();
     List<IMouse> getMice();
+
+    int getRowCount();
+
+    int getColCount();
 }

@@ -67,7 +67,7 @@ public class MessageTest {
         this.client2.connect(LOCALHOST, SERVER_PORT);
         Thread.sleep(100);
         List<IMessage> startMessages = new ArrayList<>();
-        startMessages.add(client1MessageFactory.createGameInitMessage(new ArrayList<>())); //here would be a list of subways
+        startMessages.add(client1MessageFactory.createGameInitMessage(new ArrayList<>(),0,0)); //here would be a list of subways
         startMessages.add(client1MessageFactory.createGameFieldUpdateMessage(-1, new ArrayList<>(), new ArrayList<>())); //were would be a list of mice and players
         this.server.startGame(startMessages);
         Thread.sleep(100);
@@ -198,7 +198,7 @@ public class MessageTest {
         subway2.setGoal(true);
 
 
-        IMessage gameInitMessage = this.serverMessageFactory.createGameInitMessage(subways);
+        IMessage gameInitMessage = this.serverMessageFactory.createGameInitMessage(subways,5,6);
         this.server.sendToAllClients(gameInitMessage);
         Thread.sleep(200);
         IMessage message = this.client1.getMessages().get(0);
@@ -215,6 +215,9 @@ public class MessageTest {
         assertEquals(exits1.stream().map(e -> e.getPosition()).collect(Collectors.toList()), recSubway1.getExits().stream().map(e -> e.getPosition()).collect(Collectors.toList()));
         assertEquals(exits2.stream().map(e -> e.getPosition()).collect(Collectors.toList()), recSubway2.getExits().stream().map(e -> e.getPosition()).collect(Collectors.toList()));
 
+        assertEquals(5, message.getRowCount());
+        assertEquals(6, message.getColCount());
+
         List<IMouse> recMice = message.getMice();
         assertEquals(2, recMice.size());
         assertEquals(mice.stream().map(m -> m.getId()).collect(Collectors.toList()), recMice.stream().map(m -> m.getId()).collect(Collectors.toList()));
@@ -226,7 +229,7 @@ public class MessageTest {
 
     @Test
     public void testGameInitMessageEmptyList() throws InterruptedException {
-        IMessage gameInitMessage = this.serverMessageFactory.createGameInitMessage(new ArrayList<>());
+        IMessage gameInitMessage = this.serverMessageFactory.createGameInitMessage(new ArrayList<>(),0,0);
         this.server.sendToAllClients(gameInitMessage);
         Thread.sleep(200);
         IMessage message = this.client2.getMessages().get(0);

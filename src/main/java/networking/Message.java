@@ -173,6 +173,26 @@ public class Message implements IMessage, Serializable {
     }
 
     @Override
+    public int getRowCount() {
+
+        if(this.type != MessageType.GAME_FIELD_INIT){
+            return -1;
+        }
+
+        return Integer.parseInt(this.data.split("\\$")[2].split("#")[0]);
+    }
+
+    @Override
+    public int getColCount() {
+
+        if(this.type != MessageType.GAME_FIELD_INIT){
+            return -1;
+        }
+
+        return Integer.parseInt(this.data.split("\\$")[2].split("#")[1]);
+    }
+
+    @Override
     public List<ISubway> getSubways() {
 
         if(this.type != MessageType.GAME_FIELD_INIT){
@@ -186,6 +206,11 @@ public class Message implements IMessage, Serializable {
         List<ISubway> subways = new ArrayList<>();
 
         String subwayData =  this.data.split("\\$")[0];
+
+        if(subwayData.isEmpty()){
+            return new ArrayList<>();
+        }
+
 
         for(String sSubway : subwayData.split("@")){
             List<IExit> exits = new ArrayList<>();

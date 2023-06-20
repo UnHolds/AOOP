@@ -30,7 +30,7 @@ public class GameClient {
         }
 
         //backup delete should never filter :)
-        this.game.setMice(this.game.getMouses().stream().filter(m -> micePos.containsKey(m.getId())).collect(Collectors.toList()));
+        //this.game.setMice(this.game.getMouses().stream().filter(m -> micePos.containsKey(m.getId())).collect(Collectors.toList()));
 
         for(IMouse mouse : this.game.getMouses()){
             mouse.setPosition(micePos.get(mouse.getId()));
