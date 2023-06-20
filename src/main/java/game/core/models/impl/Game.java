@@ -30,7 +30,7 @@ public class Game implements IGame {
     }
 
     @Override
-    public List<IMouse> getMouses() {
+    public List<IMouse> getMice() {
         return this.mice;
     }
 }

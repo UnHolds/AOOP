@@ -9,7 +9,6 @@ import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.util.List;
-import java.util.Map;
 import java.util.stream.Collectors;
 
 public class FieldPanel extends JPanel implements ActionListener, KeyListener {
@@ -72,7 +71,7 @@ public class FieldPanel extends JPanel implements ActionListener, KeyListener {
     }
 
     private void drawMice(Graphics g){
-        for(IMouse mouse : game.getMouses()){
+        for(IMouse mouse : game.getMice()){
 
             if(mouse.getPosition().getX() == -1 && mouse.getPosition().getY() == -1){
                 continue;

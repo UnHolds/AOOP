@@ -8,7 +8,6 @@ import networking.IMessage;
 import networking.client.IClient;
 
 import java.util.Map;
-import java.util.stream.Collectors;
 
 public class GameClient {
 
@@ -32,7 +31,7 @@ public class GameClient {
         //backup delete should never filter :)
         //this.game.setMice(this.game.getMouses().stream().filter(m -> micePos.containsKey(m.getId())).collect(Collectors.toList()));
 
-        for(IMouse mouse : this.game.getMouses()){
+        for(IMouse mouse : this.game.getMice()){
             mouse.setPosition(micePos.get(mouse.getId()));
         }
     }
@@ -40,6 +39,16 @@ public class GameClient {
     private void updateScoreBoard(String playerId){
         IPlayer player = this.game.getPlayers().stream().filter(p -> p.getId().equals(playerId)).findFirst().orElse(null);
         player.setScore(player.getScore() + 1);
+    }
+
+    private void removeMouse(String id){
+        IMouse mouse = this.game.getMice().stream().filter(m -> m.getId().equals(id)).findFirst().orElse(null);
+
+        if(mouse == null){
+            throw new RuntimeException("Eaten mouse not found");
+        }
+
+        this.game.getMice().remove(mouse);
     }
 
     public void gameLoop(){
@@ -51,6 +60,7 @@ public class GameClient {
                 break;
             case CAT_EAT_MOUSE_MESSAGE:
                 updateScoreBoard(message.getPlayerId());
+                removeMouse(message.getMouseId());
                 break;
         }
     }
