@@ -8,7 +8,9 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 public class FieldPanel extends JPanel implements ActionListener, KeyListener {
 
@@ -44,15 +46,15 @@ public class FieldPanel extends JPanel implements ActionListener, KeyListener {
     }
 
     private void drawSubways(Graphics g) {
-        for (ISubway subway : game.getField().getSubways()) {
-            for (IExit exit : subway.getExits()) {
-                g.setColor(Color.BLACK);
-                g.drawOval(
-                        Math.round(exit.getPosition().getX() * TILE_SIZE),
-                        Math.round(exit.getPosition().getY() * TILE_SIZE),
-                        TILE_SIZE, TILE_SIZE
-                );
-            }
+        for(IExit exit : game.getField().getSubways().stream().map(s -> s.getExits()).flatMap(List::stream).collect(Collectors.toList())){
+            g.drawImage(
+                    exit.getImage(),
+                    Math.round(exit.getPosition().getX() * TILE_SIZE),
+                    Math.round(exit.getPosition().getY() * TILE_SIZE),
+                    TILE_SIZE,
+                    TILE_SIZE,
+                    null
+            );
         }
     }
 
