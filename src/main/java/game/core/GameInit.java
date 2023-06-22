@@ -5,6 +5,7 @@ import game.core.models.impl.Exit;
 import game.core.models.impl.Mouse;
 import game.core.models.impl.Position;
 import game.core.models.impl.Subway;
+import game.core.models.impl.moveAlgorithms.AlgorithmType;
 import game.core.models.impl.moveAlgorithms.AvoidAlgorithm;
 import game.core.models.impl.moveAlgorithms.DirectAlgorithm;
 
@@ -108,8 +109,27 @@ public class GameInit {
     public void setPlayers(List<IPlayer> players){
         this.players = players;
         //update mice algorithm
+
+        Random rand = new Random();
+
         for(IMouse mouse : this.mice){
-            mouse.setMoveAlgorithm(new AvoidAlgorithm(mouse, this.subways, players));
+
+            int type = rand.nextInt(AlgorithmType.values().length);
+
+            IMoveAlgorithm moveAlgorithm;
+
+            switch (AlgorithmType.values()[type]){
+                case AVOID:
+                    moveAlgorithm = new AvoidAlgorithm(mouse, this.subways, players);
+                    break;
+                case DIRECT:
+                    moveAlgorithm = new DirectAlgorithm(mouse, this.subways, players);
+                    break;
+                default:
+                    throw new RuntimeException("Invalid algorithm selected");
+            }
+
+            mouse.setMoveAlgorithm(moveAlgorithm);
         }
     }
 
