@@ -87,9 +87,9 @@ public class Main {
         gw.setGame(game);
 
         CharacterMovementController movementController = new CharacterMovementController(client, selfPlayer);
-        gw.registerMovementListener(movementController);
 
         gw.showGameFieldPanel();
+        gw.registerMovementListener(movementController);
         GameClient gameClient = new GameClient(client, game);
 
 

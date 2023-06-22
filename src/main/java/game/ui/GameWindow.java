@@ -68,6 +68,7 @@ public class GameWindow {
 
     public void registerMovementListener(CharacterMovementController listener) {
         listener.registerKeyBinding(this.gameFieldPanel);
+        this.gameFieldPanel.requestFocusInWindow();
 
     }
 }
