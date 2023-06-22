@@ -2,6 +2,7 @@ package game.core.models.impl;
 
 import game.core.models.*;
 
+import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Set;
@@ -28,7 +29,9 @@ public class Game implements IGame {
 
     @Override
     public List<IPlayer> getPlayers() {
-        return this.players.stream().sorted(Comparator.comparing(p -> p.getScore())).collect(Collectors.toList());
+        List<IPlayer> ps =  this.players.stream().sorted(Comparator.comparing(p -> p.getScore())).collect(Collectors.toList());
+        Collections.reverse(ps);
+        return ps;
     }
 
     @Override

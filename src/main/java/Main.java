@@ -70,7 +70,7 @@ public class Main {
                 for(IPlayer newPlayer : newPlayers){
                     uiGameConfig.addPlayer(newPlayer.getName());
                 }
-                
+
                 players = message.getPlayers();
                 gameInit.setPlayers(players);
             }
