@@ -14,6 +14,8 @@ public class GameClient {
     private IClient client;
     private IGame game;
 
+    private boolean gameOver = false;
+
     public GameClient(IClient client, IGame game){
         this.client = client;
         this.game = game;
@@ -51,6 +53,10 @@ public class GameClient {
         this.game.getMice().remove(mouse);
     }
 
+    public boolean isGameOver(){
+        return this.gameOver;
+    }
+
     public void gameLoop(){
         IMessage message = this.client.take();
 
@@ -61,6 +67,9 @@ public class GameClient {
             case CAT_EAT_MOUSE_MESSAGE:
                 updateScoreBoard(message.getPlayerId());
                 removeMouse(message.getMouseId());
+                break;
+            case GAME_OVER:
+                this.gameOver = true;
                 break;
         }
     }

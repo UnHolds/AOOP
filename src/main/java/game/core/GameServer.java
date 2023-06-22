@@ -171,7 +171,8 @@ public class GameServer implements Runnable{
     }
 
     private void sendGameEndMessage(){
-
+        this.running = false;
+        this.server.sendToAllClients(this.messageFactory.createGameOverMessage());
     }
 
     @Override

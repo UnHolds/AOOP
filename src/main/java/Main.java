@@ -23,6 +23,7 @@ public class Main {
 
         GameWindow gw = new GameWindow();
         GameInit gameInit = new GameInit();
+        gameInit.setGameTime(12);
         gw.initWindow();
         IUiGameConfig uiGameConfig = gw.getGameConfig();
         GameServer server;
@@ -88,10 +89,12 @@ public class Main {
         GameClient gameClient = new GameClient(client, game);
 
 
-        while(true){
+        while(gameClient.isGameOver() == false){
             gameClient.gameLoop();
             gw.update();
         }
+
+        gw.showWinScreenPanel();
 
     }
 }

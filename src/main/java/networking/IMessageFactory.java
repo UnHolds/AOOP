@@ -24,4 +24,6 @@ public interface IMessageFactory {
     IMessage createCatDirectionChangeMessage(long gameTick, ICharacter player, Direction direction);
 
     IMessage createCatEatMouseMessage(long gameTick, IPlayer player, IMouse mouse);
+
+    IMessage createGameOverMessage();
 }

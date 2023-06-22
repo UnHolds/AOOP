@@ -119,5 +119,10 @@ public class MessageFactory implements IMessageFactory{
         return new Message(MessageType.CAT_EAT_MOUSE_MESSAGE, this.entity.getId(), this.entity.getName(), gameTick, player.getId() + "|" + mouse.getId());
     }
 
+    @Override
+    public IMessage createGameOverMessage() {
+        return new Message(MessageType.GAME_OVER, this.entity.getId(), this.entity.getName(), -1, "");
+    }
+
 
 }

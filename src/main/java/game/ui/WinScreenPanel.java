@@ -29,10 +29,10 @@ public class WinScreenPanel extends JPanel implements ActionListener {
 
         loadResources();
         // IMPORTANT winner info list must be sorted
-        initializeWinScreenPanel("winnername");
+        initializeWinScreenPanel();
     }
 
-    private void initializeWinScreenPanel(String winnername){
+    private void initializeWinScreenPanel(){
         this.add(createFillerWithSameValueForMinMaxAndPreferredDimension(50, 0));
         JLabel welcomeLabel = new JLabel();
         welcomeLabel.setText("Congrats");
@@ -42,7 +42,7 @@ public class WinScreenPanel extends JPanel implements ActionListener {
         this.add(welcomeLabel);
 
         JLabel welcomeLabel2 = new JLabel();
-        welcomeLabel2.setText(winnername + " won!");
+        welcomeLabel2.setText(this.game.getPlayers().get(0).getName() + " won!");
         welcomeLabel2.setFont(moon_cheese.deriveFont(70f));
         welcomeLabel2.setForeground(Color.BLACK);
         welcomeLabel2.setAlignmentX(this.CENTER_ALIGNMENT);
@@ -61,7 +61,7 @@ public class WinScreenPanel extends JPanel implements ActionListener {
 
         for (int i = 0; i < game.getPlayers().size(); i++) {
             String text = (i+1) + ". " + game.getPlayers().get(i).getName() + " - " + game.getPlayers().get(i).getScore();
-            if(i <= 2){
+            if(i < game.getPlayers().size() - 1){
                 text += " *** ";
             }
             scoreBoard.add(createBasicLabel(text, Color.black));
@@ -104,7 +104,7 @@ public class WinScreenPanel extends JPanel implements ActionListener {
         panel.add(createBasicLabel(player.getName(), Color.black), c);
 
         // Image
-        JLabel image = new JLabel(new ImageIcon(catImages.get(player.getUiID() - 1).getScaledInstance(50, 50, Image.SCALE_SMOOTH)));
+        JLabel image = new JLabel(new ImageIcon(catImages.get(player.getUiID()).getScaledInstance(50, 50, Image.SCALE_SMOOTH)));
         c.weighty = 0.5;
         c.gridx = 0;
         c.gridy = 2;
@@ -131,20 +131,23 @@ public class WinScreenPanel extends JPanel implements ActionListener {
         podiumPanel.add(firstPlace,c);
 
         // 2nd place
-        JPanel secondPlace = playerPanel(game.getPlayers().get(1));
-        c.fill = GridBagConstraints.HORIZONTAL;
-        c.weightx = 0.5;
-        c.gridx = 0;
-        c.gridy = 0;
-        podiumPanel.add(secondPlace,c);
-
+        if(game.getPlayers().size() > 1) {
+            JPanel secondPlace = playerPanel(game.getPlayers().get(1));
+            c.fill = GridBagConstraints.HORIZONTAL;
+            c.weightx = 0.5;
+            c.gridx = 0;
+            c.gridy = 0;
+            podiumPanel.add(secondPlace, c);
+        }
         // 3rd place
-        JPanel thirdPlace = playerPanel(game.getPlayers().get(2));
-        c.fill = GridBagConstraints.HORIZONTAL;
-        c.weightx = 0.5;
-        c.gridx = 2;
-        c.gridy = 0;
-        podiumPanel.add(thirdPlace,c);
+        if(game.getPlayers().size() > 2) {
+            JPanel thirdPlace = playerPanel(game.getPlayers().get(2));
+            c.fill = GridBagConstraints.HORIZONTAL;
+            c.weightx = 0.5;
+            c.gridx = 2;
+            c.gridy = 0;
+            podiumPanel.add(thirdPlace, c);
+        }
 
         // Winner podium
         JLabel podiumImage = new JLabel(new ImageIcon(podium.getScaledInstance(300, 150, Image.SCALE_SMOOTH)));
