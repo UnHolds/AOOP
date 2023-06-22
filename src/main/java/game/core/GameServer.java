@@ -68,10 +68,10 @@ public class GameServer implements Runnable{
 
         //init the start positions
         List<IPosition> startPositions = new ArrayList<>();
-        startPositions.add(new Position(0,colCount / 2));
-        startPositions.add(new Position(rowCount - 1,colCount / 2));
-        startPositions.add(new Position(rowCount / 2,0));
-        startPositions.add(new Position(rowCount / 2,colCount - 1));
+        startPositions.add(new Position(0,rowCount / 2));
+        startPositions.add(new Position(colCount - 1,rowCount / 2));
+        startPositions.add(new Position(colCount / 2,0));
+        startPositions.add(new Position(colCount / 2,rowCount - 1));
         for(int i = 0; i < players.size(); i++){
             players.get(i).setPosition(startPositions.get(i));
             players.get(i).setBounds(0,0, colCount, rowCount);
