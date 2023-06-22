@@ -23,7 +23,7 @@ public class Main {
 
         GameWindow gw = new GameWindow();
         GameInit gameInit = new GameInit();
-        gameInit.setGameTime(12);
+        gameInit.setGameTime(120);
         gw.initWindow();
         IUiGameConfig uiGameConfig = gw.getGameConfig();
         GameServer server;
