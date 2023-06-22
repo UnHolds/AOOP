@@ -65,8 +65,12 @@ public class Main {
 
             }else if(message.getMessageType() == MessageType.CONNECTED_CLIENTS_UPDATE){
                 List<IPlayer> finalPlayers = players;
-                IPlayer newPlayer = message.getPlayers().stream().filter(p -> finalPlayers.stream().map(pp -> pp.getId()).collect(Collectors.toList()).contains(p.getId()) == false).findFirst().orElse(null);
-                uiGameConfig.addPlayer(newPlayer.getName());
+                List<IPlayer> newPlayers = message.getPlayers().stream().filter(p -> finalPlayers.stream().map(pp -> pp.getId()).collect(Collectors.toList()).contains(p.getId()) == false).collect(Collectors.toList());
+
+                for(IPlayer newPlayer : newPlayers){
+                    uiGameConfig.addPlayer(newPlayer.getName());
+                }
+                
                 players = message.getPlayers();
                 gameInit.setPlayers(players);
             }
