@@ -104,7 +104,7 @@ public class WinScreenPanel extends JPanel implements ActionListener {
         panel.add(createBasicLabel(player.getName(), Color.black), c);
 
         // Image
-        JLabel image = new JLabel(new ImageIcon(catImages.get(player.getUiID()).getScaledInstance(50, 50, Image.SCALE_SMOOTH)));
+        JLabel image = new JLabel(new ImageIcon(catImages.get(player.getUiID() - 1).getScaledInstance(50, 50, Image.SCALE_SMOOTH)));
         c.weighty = 0.5;
         c.gridx = 0;
         c.gridy = 2;

@@ -92,6 +92,7 @@ public class Message implements IMessage, Serializable {
             String name = new String(Base64.getDecoder().decode(clientIdAndName[1]));
             String id = clientIdAndName[0];
             IPlayer player = new Player(id, name, new Position(-1, -1), "cat" + index + ".png");
+            player.setUiID(index);
             index++;
             players.add(player);
         }
