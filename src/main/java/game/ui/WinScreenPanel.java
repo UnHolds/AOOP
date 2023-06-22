@@ -101,14 +101,26 @@ public class WinScreenPanel extends JPanel implements ActionListener {
         c.weighty = 0.5;
         c.gridx = 0;
         c.gridy = 1;
-        panel.add(createBasicLabel(player.getName(), Color.black), c);
+        if(player == null){
+            panel.add(createBasicLabel("", Color.black), c);
+        }else{
+            panel.add(createBasicLabel(player.getName(), Color.black), c);
+        }
 
-        // Image
-        JLabel image = new JLabel(new ImageIcon(catImages.get(player.getUiID() - 1).getScaledInstance(50, 50, Image.SCALE_SMOOTH)));
+
         c.weighty = 0.5;
         c.gridx = 0;
         c.gridy = 2;
-        panel.add(image,c);
+        // Image
+        if(player == null){
+            //panel.add(createBasicLabel("", Color.black), c);
+            JLabel image = new JLabel(new ImageIcon(catImages.get(4).getScaledInstance(50, 50, Image.SCALE_SMOOTH)));
+            panel.add(image,c);
+        }else{
+            JLabel image = new JLabel(new ImageIcon(catImages.get(player.getUiID() - 1).getScaledInstance(50, 50, Image.SCALE_SMOOTH)));
+            panel.add(image,c);
+        }
+
 
         return panel;
     }
@@ -131,23 +143,21 @@ public class WinScreenPanel extends JPanel implements ActionListener {
         podiumPanel.add(firstPlace,c);
 
         // 2nd place
-        if(game.getPlayers().size() > 1) {
-            JPanel secondPlace = playerPanel(game.getPlayers().get(1));
-            c.fill = GridBagConstraints.HORIZONTAL;
-            c.weightx = 0.5;
-            c.gridx = 0;
-            c.gridy = 0;
-            podiumPanel.add(secondPlace, c);
-        }
+        JPanel secondPlace = playerPanel(game.getPlayers().size() > 1 ? game.getPlayers().get(1) : null);
+        c.fill = GridBagConstraints.HORIZONTAL;
+        c.weightx = 0.5;
+        c.gridx = 0;
+        c.gridy = 0;
+        podiumPanel.add(secondPlace, c);
+
         // 3rd place
-        if(game.getPlayers().size() > 2) {
-            JPanel thirdPlace = playerPanel(game.getPlayers().get(2));
-            c.fill = GridBagConstraints.HORIZONTAL;
-            c.weightx = 0.5;
-            c.gridx = 2;
-            c.gridy = 0;
-            podiumPanel.add(thirdPlace, c);
-        }
+        JPanel thirdPlace = playerPanel(game.getPlayers().size() > 2 ? game.getPlayers().get(2) : null);
+        c.fill = GridBagConstraints.HORIZONTAL;
+        c.weightx = 0.5;
+        c.gridx = 2;
+        c.gridy = 0;
+        podiumPanel.add(thirdPlace, c);
+
 
         // Winner podium
         JLabel podiumImage = new JLabel(new ImageIcon(podium.getScaledInstance(300, 150, Image.SCALE_SMOOTH)));
@@ -172,6 +182,7 @@ public class WinScreenPanel extends JPanel implements ActionListener {
             catImages.add(ImageIO.read(getClass().getClassLoader().getResourceAsStream("cat2.png")));
             catImages.add(ImageIO.read(getClass().getClassLoader().getResourceAsStream("cat3.png")));
             catImages.add(ImageIO.read(getClass().getClassLoader().getResourceAsStream("cat4.png")));
+            catImages.add(ImageIO.read(getClass().getClassLoader().getResourceAsStream("cat_trans.png")));
             podium = ImageIO.read(getClass().getClassLoader().getResourceAsStream("Podest.png"));
         } catch (IOException | FontFormatException e) {
             e.printStackTrace(); // TODO use another way of error handling
