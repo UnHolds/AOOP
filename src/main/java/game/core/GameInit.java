@@ -25,6 +25,8 @@ public class GameInit {
 
     private int numberOfMice = 5;
 
+    private long gameTime = 120;
+
 
     public GameInit() {
         generateSubways();
@@ -74,6 +76,15 @@ public class GameInit {
             validSubways.get(rand.nextInt(validSubways.size())).enter(mouse);
             this.mice.add(mouse);
         }
+    }
+
+
+    public long getGameTime(){
+        return this.gameTime;
+    }
+
+    public void setGameTime(long seconds){
+        this.gameTime = seconds;
     }
 
 

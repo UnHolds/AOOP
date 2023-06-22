@@ -35,6 +35,8 @@ public class GameServer implements Runnable{
     private Thread thread;
     private boolean running = true;
 
+    private long gameEndTime;
+
     private static Logger log = LogManager.getLogger(GameServer.class);
 
     public GameServer(int port) {
@@ -58,6 +60,7 @@ public class GameServer implements Runnable{
         this.players = gameInit.getPlayers();
         this.subways = gameInit.getSubways();
         this.mice = gameInit.getMice();
+        this.gameEndTime = System.currentTimeMillis() + gameInit.getGameTime() * 1000;
 
         List<IMessage> startMessages = new ArrayList<>();
 
@@ -154,6 +157,23 @@ public class GameServer implements Runnable{
     }
 
 
+    private boolean checkIfGameIsOver(){
+
+        boolean gameEnded = System.currentTimeMillis() > this.gameEndTime;
+        boolean allMiceEaten = this.mice.size() == 0;
+        boolean allMiceInGoal = subways.stream().filter(s -> s.isGoal()).findFirst().orElse(null).getMice().size() == this.mice.size();
+
+        if(gameEnded || allMiceEaten || allMiceInGoal){
+            log.info("Game is over due to: time ran out: " + gameEnded + "    all mice eaten: " + allMiceEaten + "    all mice in goal: " + allMiceInGoal);
+        }
+
+        return gameEnded || allMiceEaten || allMiceInGoal;
+    }
+
+    private void sendGameEndMessage(){
+
+    }
+
     @Override
     public void run() {
 
@@ -174,6 +194,9 @@ public class GameServer implements Runnable{
                 sendGameFieldUpdate();
                 checkIfMouseWasEaten();
                 lastUpdate = System.currentTimeMillis();
+                if(checkIfGameIsOver()){
+                    sendGameEndMessage();
+                }
             }
 
             //do not fry my CPU
