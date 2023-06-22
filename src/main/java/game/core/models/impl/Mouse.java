@@ -20,7 +20,7 @@ public class Mouse implements IMouse {
     private float maxXBound;
     private float maxYBound;
 
-    private float speed = 0.1f;
+    private float speed = 1f;
 
     public Mouse(String id, String picturePath){
         this.id = id;

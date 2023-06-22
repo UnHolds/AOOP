@@ -47,6 +47,10 @@ public class GameServer implements Runnable{
         }
     }
 
+    private long getCurrentGameTick(){
+        return System.currentTimeMillis();
+    }
+
     public void startGame(GameInit gameInit){
 
         this.rowCount = gameInit.getRowCount();
@@ -74,7 +78,7 @@ public class GameServer implements Runnable{
             mouse.setBounds(0,0, colCount, rowCount);
         }
 
-        startMessages.add(this.messageFactory.createGameFieldUpdateMessage(-1, players, mice));
+        startMessages.add(this.messageFactory.createGameFieldUpdateMessage(getCurrentGameTick(), players, mice));
         log.info("Sending start messages to clients");
         this.server.startGame(startMessages);
 
@@ -118,7 +122,7 @@ public class GameServer implements Runnable{
             mouse.move();
         }
 
-        IMessage message = this.messageFactory.createGameFieldUpdateMessage(0, players, mice);
+        IMessage message = this.messageFactory.createGameFieldUpdateMessage(getCurrentGameTick(), players, mice);
         this.server.sendToAllClients(message);
     }
 
@@ -138,7 +142,7 @@ public class GameServer implements Runnable{
 
             if(playerThatEat.size() > 0){
                IPlayer p = playerThatEat.get(rand.nextInt(playerThatEat.size()));
-               IMessage message = this.messageFactory.createCatEatMouseMessage(-1, p, mouse);
+               IMessage message = this.messageFactory.createCatEatMouseMessage(getCurrentGameTick(), p, mouse);
                log.info("Cat: " + p.getName() + " has eaten mouse: " + mouse.getId());
                this.server.sendToAllClients(message);
             }else{

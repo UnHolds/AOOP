@@ -21,7 +21,7 @@ public class Player implements IPlayer {
 
     private List<Direction> directions = new ArrayList();
 
-    private static float speed = 0.8f;
+    private static float speed = 1.2f;
 
     private Image image;
 
@@ -29,6 +29,8 @@ public class Player implements IPlayer {
     private float minYBound;
     private float maxXBound;
     private float maxYBound;
+
+    private long lastMoveTime = -1;
 
     public Player(String id, String name, IPosition startPosition, String picturePath){
         this.position = startPosition;
@@ -61,26 +63,36 @@ public class Player implements IPlayer {
 
     @Override
     public void move() {
+
+        if(this.lastMoveTime == -1){
+            this.lastMoveTime = System.currentTimeMillis();
+        }
+
+        float scaledSpeed = this.speed * ( System.currentTimeMillis() - this.lastMoveTime) / 1000;
+
+
         for(Direction direction : this.directions){
             IPosition newPosition;
             switch (direction) {
                 case LEFT:
-                    newPosition = new Position(this.position.getX() - this.speed, this.position.getY());
+                    newPosition = new Position(this.position.getX() - scaledSpeed, this.position.getY());
                     break;
                 case DOWN:
-                    newPosition = new Position(this.position.getX(), this.position.getY() + this.speed);
+                    newPosition = new Position(this.position.getX(), this.position.getY() + scaledSpeed);
                     break;
                 case UP:
-                    newPosition = new Position(this.position.getX(), this.position.getY() - this.speed);
+                    newPosition = new Position(this.position.getX(), this.position.getY() - scaledSpeed);
                     break;
                 case RIGHT:
-                    newPosition = new Position(this.position.getX() + this.speed, this.position.getY());
+                    newPosition = new Position(this.position.getX() + scaledSpeed, this.position.getY());
                     break;
                 default:
                     throw new RuntimeException("Invalid direction in directions list");
             }
             this.position = boundsCheck(newPosition);
         }
+
+        this.lastMoveTime = System.currentTimeMillis();
     }
 
     @Override

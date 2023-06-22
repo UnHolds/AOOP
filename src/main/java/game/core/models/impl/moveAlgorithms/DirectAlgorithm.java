@@ -17,10 +17,11 @@ public class DirectAlgorithm implements IMoveAlgorithm {
     boolean isInSubway;
     private ISubway residingSubway;
 
-    private int ticksRemainingInSubway;
+    private long timeUntilRemainingInSubway;
 
     private IExit goalHole;
     private Random random;
+    private long lastMoveTime = -1;
 
     public DirectAlgorithm(IMouse mouse, List<ISubway> subways, List<IPlayer> cats){
         this.mouse = mouse;
@@ -33,7 +34,7 @@ public class DirectAlgorithm implements IMoveAlgorithm {
             throw new RuntimeException("Residing subway can't be found, mouse needs to be in a subway");
         }
 
-        this.ticksRemainingInSubway = 5 + random.nextInt(5); //TODO change later
+        this.timeUntilRemainingInSubway = System.currentTimeMillis() + (5 + random.nextInt(5)) * 1000; //TODO change later
 
     }
 
@@ -48,8 +49,12 @@ public class DirectAlgorithm implements IMoveAlgorithm {
     }
 
     private IPosition calculateNextPosition(){
+        float speed = mouse.getSpeed();
+
+        float diff = (System.currentTimeMillis() - this.lastMoveTime) / 1000.0f;
+
         IPosition direction = this.goalHole.getPosition().subtract(this.mouse.getPosition());
-        IPosition nextPosition = direction.multiply((mouse.getSpeed() / direction.length()));
+        IPosition nextPosition = direction.multiply(((speed * diff) / direction.length()));
 
         if(direction.length() < nextPosition.length()){
             return this.goalHole.getPosition();
@@ -61,23 +66,30 @@ public class DirectAlgorithm implements IMoveAlgorithm {
     @Override
     public IPosition getNextPosition() {
 
-        if(this.isInSubway && (this.ticksRemainingInSubway > 0 || this.residingSubway.isGoal())){
-            this.ticksRemainingInSubway--;
+        if(this.lastMoveTime == -1){
+            this.lastMoveTime = System.currentTimeMillis();
+        }
+
+        if(this.isInSubway && (this.timeUntilRemainingInSubway > System.currentTimeMillis() || this.residingSubway.isGoal())){
+            this.lastMoveTime = System.currentTimeMillis();
             return new Position(-1, -1); // has no position
-        }else if(this.isInSubway && this.ticksRemainingInSubway == 0){
+        }else if(this.isInSubway && this.timeUntilRemainingInSubway <= System.currentTimeMillis()){
             //exit subway
             this.isInSubway = false;
             this.goalHole = getNextGoalHole();
             this.residingSubway.exits(this.mouse);
+            this.lastMoveTime = System.currentTimeMillis();
             return getRandomExitHolePosition(this.residingSubway);
         }
 
         if(this.isInSubway == false && this.goalHole.getPosition().equals(this.mouse.getPosition()) == false){
             //move to next exit
-            return calculateNextPosition();
+            IPosition nextPosition = calculateNextPosition();
+            this.lastMoveTime = System.currentTimeMillis();
+            return nextPosition;
         }else{
             //mouse may enter subway
-            this.ticksRemainingInSubway = 10 + random.nextInt(10); //TODO change later;
+            this.timeUntilRemainingInSubway = System.currentTimeMillis() + (5 + random.nextInt(5)) * 1000; //TODO change later;
             this.isInSubway = true;
             this.residingSubway = this.subways.stream().filter(s -> s.getExits().contains(this.goalHole)).findFirst().orElse(null);
             this.residingSubway.enter(this.mouse);
@@ -85,6 +97,7 @@ public class DirectAlgorithm implements IMoveAlgorithm {
             if(this.residingSubway == null){
                 throw new RuntimeException("Could not find subway to hole");
             }
+            this.lastMoveTime = System.currentTimeMillis();
             return new Position(-1, -1);
         }
 
