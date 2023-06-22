@@ -5,6 +5,7 @@ import game.core.models.impl.Exit;
 import game.core.models.impl.Mouse;
 import game.core.models.impl.Position;
 import game.core.models.impl.Subway;
+import game.core.models.impl.moveAlgorithms.AvoidAlgorithm;
 import game.core.models.impl.moveAlgorithms.DirectAlgorithm;
 
 import java.util.ArrayList;
@@ -108,7 +109,7 @@ public class GameInit {
         this.players = players;
         //update mice algorithm
         for(IMouse mouse : this.mice){
-            mouse.setMoveAlgorithm(new DirectAlgorithm(mouse, this.subways, players));
+            mouse.setMoveAlgorithm(new AvoidAlgorithm(mouse, this.subways, players));
         }
     }
 
