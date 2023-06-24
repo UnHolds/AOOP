@@ -3,14 +3,18 @@ package networking;
 public interface INetworkEntity {
 
     /**
-     * returns the id of the client
-     * @return id of client
+     * PRE: INetworkEntity is not null, id has been set previously
+     * POST: Returns the id of the network entity
+     *
+     * @return id of network entity
      */
     String getId();
 
     /**
-     * returns the name of the client
-     * @return name of the clients
+     * PRE: INetworkEntity is not null, name has been set previously
+     * POST: Returns the name of the network entity
+     *
+     * @return name of the network entity
      */
     String getName();
 }

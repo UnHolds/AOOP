@@ -1,49 +1,55 @@
 package networking.server;
 
 import networking.IMessage;
+import networking.INetworkEntity;
 
 import java.io.IOException;
-import java.util.List;
-import java.util.concurrent.ConcurrentLinkedQueue;
 
-public interface IServerClient {
+public interface IServerClient extends INetworkEntity {
 
     /**
-     * dispatches the server client to a new thread (listen to new messages thread)
+     * PRE: IServerClient is not null, Server parent is not null
+     * POST: Server client is not dispatched to a new thread (listen to new messages thread)
      */
     void dispatch();
 
     /**
-     * returns the thread in which the serverClient is currently running in
+     * PRE: IServerClient is not null, Server parent is not null
+     * POST: Returns thread of server client or null if no thread has been dispatched
+     *
      * @return the thread of the serverClient
      */
     Thread getThread();
 
     /**
-     * stops the serverClient and closes it socket
+     * PRE: IServerClient is not null, Server parent is not null
+     * POST: Stops the serverClient and closes its socket if it is possible
      */
     void stop();
 
     /**
-     * sends the given message to the connected client
+     * PRE: IServerClient is not null and has not been stopped, Server parent is not null, message is not null
+     * POST: Sends the given message to the connected clients
+     *
      * @param message the message to send
      * @throws IOException
      */
     void sendMessage(IMessage message) throws IOException;
 
     /**
-     * returns the address (IP) of the connected client
+     * PRE: IServerClient is not null and has a connected client
+     * POST: Returns the ip address of the connected client
+     *
      * @return ip of the connected client
      */
     String getAddress();
 
     /**
-     * returns whether the client is disconnected or not
+     * PRE: IServerClient is not null
+     * POST: Returns true if there is a client connected and false otherwise
+
      * @return whether the client is disconnected or not
      */
     boolean isDisconnected();
 
-    String getName();
-
-    String getId();
 }
